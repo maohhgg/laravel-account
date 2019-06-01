@@ -43,7 +43,7 @@
                             <div class="row text-center mt-2">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-primary addChangeType"
-                                            data-type="{{$type->id}}" data-type-name="{{$type->name}}" >
+                                            data-type="{{$type->id}}" data-type-name="{{$type->name}}">
                                         添加新的{{ $type->name }}
                                     </button>
                                 </div>
@@ -55,8 +55,9 @@
         @endif
     </div>
 
-    <div class="modal fade" id="createActionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="createActionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">添加新<span id="actionModalLabel" class="text-c-blue"></span></h5>
@@ -65,15 +66,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="create-change-form" action="{{ route('admin.change.create') }}" >
+                    <form method="post" id="create-change-form" action="{{ route('admin.change.create') }}">
                         @csrf
                         <div class="form-group">
                             <input type="hidden" name="change_type_id" id="change-type-id">
                             <label for="recipient-name" class="col-form-label">名称</label>
                             <input name="name" type="text"
-                                   class="form-control @error('name') border-danger @enderror"
+                                   class="form-control tooltip-test @error('name') border-danger @enderror"
                                    placeholder="充值"
-                                   @error('name') data-toggle="tooltip" data-placement="top"
+                                   @error('name') data-toggle="tooltip" data-placement="top" data-container="#createActionModal"
                                    title="{{ $message }}" @enderror
                                    value="{{ old('name') }}" required>
                         </div>
@@ -94,14 +95,16 @@
 @endsection
 
 @section('script')
-
     <script src="{{ asset('js/pages/change-ajax.js') }}"></script>
     <script>
         const CSRFTOKEN = '{{ csrf_token() }}';
         const UPDATEURL = '{{ route('admin.change.save') }}';
         const DELETEURL = '{{ route('admin.change.delete') }}';
         $(document).ready(function () {
-            @error('name') $('#createActionModal').modal('show'); @enderror
+            @error('name')
+            $('#createActionModal').modal('show');
+            $('#actionModalLabel').html(this.getAttribute('data-type-name'));
+            @enderror
         })
     </script>
 @endsection

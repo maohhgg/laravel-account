@@ -6,16 +6,20 @@ $(document).ready(function () {
         let input = '#changeAction' + actionId;
         $.post(
             UPDATEURL,
-            {'_token':CSRFTOKEN, 'id': actionId, 'change_type_id': typeId, 'name': $(input).val()}
-        );
+            {'_token': CSRFTOKEN, 'id': actionId, 'change_type_id': typeId, 'name': $(input).val()}
+        ).done(function () {
+            window.location.reload();
+        });
     });
 
     $('.deleteChangeType').click(function () {
         let actionId = this.getAttribute('data-action');
         $.post(
             DELETEURL,
-            {'_token':CSRFTOKEN, 'id': actionId}
-        );
+            {'_token': CSRFTOKEN, 'id': actionId}
+        ).done(function () {
+            window.location.reload();
+        });
     });
 
     $('button.addChangeType').click(function () {

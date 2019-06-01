@@ -30,7 +30,6 @@
 <script src="{{ asset('js/pcoded.min.js') }}"></script>
 
 <!-- Tooltip Js -->
-<script src="{{ asset('js/tooltip.js') }}"></script>
 @yield('script')
 
 </body>

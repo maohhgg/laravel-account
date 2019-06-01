@@ -22,7 +22,7 @@ class ChangeController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|string|unique:users,name',
+            'name' => 'required|string|unique:change_actions,name',
             'change_type_id' => 'required|exists:change_types,id',
         ]);
         $data = $request->input();

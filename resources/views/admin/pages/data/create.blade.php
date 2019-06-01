@@ -85,7 +85,6 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('js/tooltip.js') }}"></script>
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function () {
