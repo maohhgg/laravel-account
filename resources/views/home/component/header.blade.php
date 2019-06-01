@@ -1,7 +1,7 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light">
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse1"href="#"><span></span></a>
-        <a href="{{ route('admin') }}" class="b-brand">
+        <a href="{{ route('home') }}" class="b-brand">
             <div class="b-bg">
                 <i class="feather icon-trending-up"></i>
             </div>
