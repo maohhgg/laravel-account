@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -14,7 +15,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/dash';
+    protected $redirectTo = '/admin/';
+    protected $username;
 
     /**
      * Create a new controller instance.
@@ -24,6 +26,36 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest:admin')->except('logout');
+        $this->username = $this->findUsername();
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function findUsername()
+    {
+        $login = request()->input('login');
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            $fieldType = 'email';
+        }  else {
+            $fieldType = 'name';
+        }
+        request()->merge([$fieldType => $login]);
+
+        return $fieldType;
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+
+    public function username()
+    {
+        return $this->username;
     }
 
     /**
@@ -34,14 +66,9 @@ class LoginController extends Controller
         return view('admin.pages.auth.login');
     }
 
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
+    protected function authenticated(Request $request)
     {
-        return 'email';
+        return redirect($this->redirectTo); //put your redirect url here
     }
 
     /**

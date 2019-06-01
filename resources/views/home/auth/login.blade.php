@@ -17,14 +17,11 @@
                         <i class="feather icon-unlock auth-icon"></i>
                     </div>
                     <h3 class="mb-4">登录</h3>
-{{--                    @error('email') {{ $message }} @enderror--}}
-{{--                    @error('phone') {{ $message }} @enderror--}}
-                    @error('name') {{ $message }} @enderror
                     <div class="form-group mb-3">
                         <input name="login" type="text"
-                               class="form-control @error('email') border-danger @enderror" placeholder="用户名/电话/邮箱"
-                               @error('phone') data-toggle="tooltip" data-placement="top" title="{{ $message }}"
-                               @enderror
+                               class="form-control @if($errors->any()) border-danger @endif" placeholder="用户名/电话/邮箱"
+                               @if($errors->any()) data-toggle="tooltip" data-placement="top" title="{{ $errors->first() }}"
+                               @endif
                                value="{{ old('login') }}" required>
                     </div>
                     <div class="form-group mb-4">

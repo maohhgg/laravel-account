@@ -64,14 +64,8 @@ Route::prefix('admin')->namespace('Admin\Auth')->group(function ($router) {
     // 管理员登录注销
     $router->get('login', 'LoginController@showLogin')->name('admin.login');
     $router->post('login', 'LoginController@login');
-    $router->get('logout', 'oginController@logout')->name('admin.logout');
+    $router->get('logout', 'LoginController@logout')->name('admin.logout');
     $router->post('logout', 'LoginController@logout');
-
-    // 管理员账户更改密码
-    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
-    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
-    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('admin.password.reset');
-    Route::post('password/reset', 'ResetPasswordController@reset');
 
 });
 

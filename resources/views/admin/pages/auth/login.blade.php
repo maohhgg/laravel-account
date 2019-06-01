@@ -17,13 +17,12 @@
 
                                 <div class="col-sm-10">
                                     <h3 class="mb-4">登录</h3>
-                                    <div class="input-group mb-3">
-                                        <input name="email" type="email"
-                                               class="form-control @error('email') border-danger @enderror"
-                                               placeholder="邮箱"
-                                               @error('email') data-toggle="tooltip" data-placement="top"
-                                               title="{{ $message }}" @enderror
-                                               value="{{ old('email') }}" required>
+                                    <div class="form-group mb-3">
+                                        <input name="login" type="text"
+                                               class="form-control @if($errors->any()) border-danger @endif" placeholder="用户名/电话/邮箱"
+                                               @if($errors->any()) data-toggle="tooltip" data-placement="top" title="{{ $errors->first() }}"
+                                               @endif
+                                               value="{{ old('login') }}" required>
                                     </div>
                                     <div class="input-group mb-4">
                                         <input name="password" type="password" class="form-control" placeholder="密码"
