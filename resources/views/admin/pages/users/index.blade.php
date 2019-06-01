@@ -43,11 +43,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">描述
-                                        <small>(<span class="text-c-red">可以为空</span>)</small>
+                                    <label class="form-label">
+                                        详细 <small>为类型的补充，和类型一起显示(<span class="text-c-red">* 可以为空</span>)</small>
                                     </label>
-                                    <input name="detail" type="text" id="turnover-detail" class="form-control"
-                                           value="{{ old('detail') }}"
+                                    <input name="description" type="text" id="turnover-detail" class="form-control"
+                                           value="{{ old('description') }}"
                                            placeholder="添加描述"/>
                                 </div>
 
@@ -133,12 +133,13 @@
                 if (desc) {
                     data.description = desc;
                 }
-                $.post(
-                    ADDURL,
-                    data
-                ).done(function () {
-                    window.location.reload();
-                });
+                console.log(data);
+                // $.post(
+                //     ADDURL,
+                //     data
+                // ).done(function () {
+                //     window.location.reload();
+                // });
             })
         })
     </script>

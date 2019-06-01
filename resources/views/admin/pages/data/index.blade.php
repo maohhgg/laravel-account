@@ -1,23 +1,26 @@
 @extends('layouts.admin')
 @section('content')
     <!-- [ Main Content ] start -->
-    @if($results)
+    @if(!$results->isEmpty())
         @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
             @slot('title')
                 数据
+            @endslot
+            @slot('confrimMessage')
+                删除记录将会还原数据
             @endslot
 
             @foreach($results as $v)
                 <tr>
                     <td><h6 class="m-0">{{ $v->id }}</h6></td>
                     <td>
-{{--                        <img class="rounded-circle" style="width:40px;"--}}
-{{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
+                        {{--                        <img class="rounded-circle" style="width:40px;"--}}
+                        {{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
                         <span>{{ $v->user->name }}</span>
                     </td>
 
                     <td>
-                        <h6 class="m-0 @if($v->type->type->action == 'income') text-c-green  @else text-c-red @endif">{{ $v->type->name }}</h6>
+                        <h6 class="m-0 @if($v->type->type->action == 'income') text-c-green  @else text-c-red @endif">{{ $v->type->name.$v->description}}</h6>
                     </td>
                     <td>
                         <h6 class="m-0">
@@ -28,7 +31,7 @@
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"
-                           data-url = "{{ route('admin.data.update', [$v->id]) }}"
+                           data-url="{{ route('admin.data.update', [$v->id]) }}"
                            data-content="{{ $v->id }}">
                             <i class="icon feather icon-settings"></i>
                         </a>

@@ -39,8 +39,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
     Route::prefix('data')->group(function ($router) {
         $router->get('/', 'DataController@index')->name('admin.data');
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
-        $router->post('create', 'DataController@create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
+        $router->post('create', 'DataController@create');
         $router->post('save', 'DataController@update')->name('admin.data.save');
         $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
     });

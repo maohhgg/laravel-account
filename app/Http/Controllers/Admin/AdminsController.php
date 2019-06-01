@@ -12,10 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminsController extends Controller
 {
     public $module = 'admins';
+
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -30,7 +31,7 @@ class AdminsController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Admin
      */
     protected function create(array $data)
@@ -65,7 +66,7 @@ class AdminsController extends Controller
             'action' => '操作'];
 
         $results = Admin::paginate(10);
-        return view('admin.pages.admins.index',compact('items','results'));
+        return view('admin.pages.admins.index', compact('items', 'results'));
     }
 
     public function showCreateForm()
@@ -85,7 +86,8 @@ class AdminsController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        Admin::where('id',$request->input('id'))->delete();
+        $id = $request->input('id');
+        Admin::where('id', $id)->delete();
         return redirect()->route('admin.admins');
     }
 

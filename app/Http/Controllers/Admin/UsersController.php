@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\ChangeType;
+use App\Turnover;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -129,7 +130,9 @@ class UsersController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        User::where('id', $request->input('id'))->delete();
+        $id = $request->input('id');
+        Turnover::where('user_id', $id)->delete();
+        User::where('id', $id)->delete();
         return redirect()->route('admin.users');
     }
 }

@@ -33,7 +33,57 @@ class DataController extends Controller
     {
         $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
         $user = !empty($id) ? User::where('id', $id)->select('id', 'name')->first() : null;
-        return view('admin.pages.data.create', compact('changeTypes', 'user'));
+        $results = [];
+        return view('admin.pages.data.edit', compact('changeTypes', 'user', 'results'));
+    }
+
+    public function updateForm($id = null)
+    {
+        $results = Turnover::find($id);
+        if (!$results) {
+            return redirect()->route('admin.data');
+        }
+        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
+        $user = User::where('id', $results->user_id)->select('id', 'name')->first();
+//        dd($results);
+        return view('admin.pages.data.edit', compact('changeTypes', 'user', 'results'));
+    }
+
+
+    // 保存用户数据
+    public function saveToUser($data)
+    {
+        $action = ChangeAction::find($data['type_id']);
+        $user = User::find($data['user_id']);
+
+        // 更改总额
+        $user->balance = ChangeType::turnover($user->balance, $data['data'], $action->type->action);
+        if ($action->type->action == ChangeType::INCOME) {
+            $user->total = ChangeType::income($user->total, $data['data']);
+        }
+        $user->save();
+
+        $data['history'] = $user->balance;
+
+        return $data;
+    }
+
+    // 还原用户数据
+    public function recoveryUser($id)
+    {
+        $d = Turnover::find($id);
+        $action = ChangeAction::where('id', $d->type_id)->first();
+        $user = User::find($d->user_id);
+
+        $user->balance = ChangeType::turnover($user->balance, $d->data, ChangeType::reverse($action->type->action));
+
+        if ($action->type->action == ChangeType::INCOME) {
+            $user->total = ChangeType::expenditure($user->total, $d->data);
+            Turnover::where([['id', '>', $id], ['user_id', $d->user_id]])->decrement('history', $d->data);
+        } else {
+            Turnover::where([['id', '>', $id], ['user_id', $d->user_id]])->increment('history', $d->data);
+        }
+        $user->save();
     }
 
     public function create(Request $request)
@@ -42,29 +92,55 @@ class DataController extends Controller
             'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
             'data' => 'required|numeric|min:0.01',
+            'description' => 'nullable'
         ]);
 
-        $data = $request->only("user_id", "type_id", "data");
-        $action = ChangeAction::find($data['type_id']);
-        $user = User::find($data['user_id']);
 
-        $user->turnover($data['data'], $action->type->action)->save();
+        $data = $request->input();
 
-        $data['history'] = $user->balance;
-
-        if (!in_array('description', array_keys($data))) $data['description'] = ' ';
+        $data = $this->saveToUser($data);
 
         $turnover = new Turnover($data);
         $turnover->save();
 
         return redirect()->route('admin.data');
+    }
 
+
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|numeric',
+            'user_id' => 'required|numeric',
+            'type_id' => 'required|numeric',
+            'data' => 'required|numeric|min:0.01',
+            'description' => 'nullable'
+        ]);
+
+        $data = $request->input();
+        $this->recoveryUser($data['id']);
+        $turnover = Turnover::find($data['id']);
+
+        unset($data['id']);
+        $data = $this->saveToUser($data);
+        $turnover->update($data);
+
+        return redirect()->route('admin.data');
     }
 
     public function deleteId(Request $request)
     {
-        Turnover::where('id', $request->input('id'))->delete();
+        $this->validate($request, [
+            'id' => 'required|numeric',
+        ]);
+        $id = $request->input('id');
+
+        $this->recoveryUser($id);
+        // 删除
+        Turnover::where('id', $request->input('id', $id))->delete();
         return redirect()->route('admin.data');
     }
+
+
 
 }

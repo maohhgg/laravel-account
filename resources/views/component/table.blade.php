@@ -110,6 +110,9 @@
                 </div>
                 <div class="modal-body">
                     <h6>确认删除 <span class="text-c-red" id="deleteModalBody"></span> 吗?</h6>
+                    @if(isset($confrimMessage))
+                        <span class="text-c-red">{{ $confrimMessage }}</span>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-info" data-dismiss="modal">取消</button>

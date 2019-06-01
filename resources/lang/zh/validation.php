@@ -141,6 +141,8 @@ return [
         'name'                  => '名称',
         'username'              => '用户名',
         'email'                 => '邮箱',
+        'user_id'               => '用户',
+        'data'                  => '数值',
         'first_name'            => '名',
         'last_name'             => '姓',
         'password'              => '密码',

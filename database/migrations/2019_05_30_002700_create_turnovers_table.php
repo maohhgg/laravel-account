@@ -17,7 +17,7 @@ class CreateTurnoversTable extends Migration
             $table->bigIncrements('id');
             $table->decimal('data',10,2);
             $table->decimal('history',10,2);
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();
             $table->timestamp('created_at');

@@ -9,29 +9,23 @@
                     <span class="d-block m-t-5">编辑 <code>数据</code> 信息</span>
                 </div>
                 <div class="card-block">
-                    <form action="{{ route('admin.data.create') }}" method="post">
+                    <form action="@if($results) {{ route('admin.data.save') }} @else {{ route('admin.data.create') }} @endif"
+                          method="post">
                         @csrf
-                        @error('user_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        @error('type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        @error('data')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
 
                         <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                            @if($results)
+                                <input type="hidden" value="{{ $results->id }}" name="id">
+                            @endif
 
-                            <div class="form-group">
+                            <div class="form-group " @error('user_id') data-toggle="tooltip" data-placement="top"
+                                 title="{{ $message }}" @enderror>
                                 <label class="form-label">用户</label>
                                 @if($user)
-                                    <input type="hidden"  value="{{ $user->id }}" name="user_id">
+                                    <input type="hidden" value="{{ $user->id }}" name="user_id">
                                     <input type="text" class="form-control" value="{{ $user->name }}" disabled>
                                 @else
-                                    <select name="user_id" class="js-data-ajax col-sm-12"
-                                            @error('user_id') data-toggle="tooltip" data-placement="top"
-                                            title="{{ $message }}" @enderror>
+                                    <select name="user_id" class="js-data-ajax col-sm-12">
                                         <option value="" selected="selected">请选择用户</option>
                                     </select>
                                 @endif
@@ -57,23 +51,25 @@
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="form-label">描述
-                                    <small>(<span class="text-c-red">可以为空</span>)</small>
+                                <label class="form-label">
+                                    详细 <small>为类型的补充，和类型一起显示(<span class="text-c-red">* 可以为空</span>)</small>
                                 </label>
-                                <input name="description" type="text" class="form-control" value="{{ old('detail') }}"
+                                <input name="description" type="text" class="form-control"
+                                       value="@if(!$results){{ old('description') }}@else{{$results->description }}@endif"
                                        placeholder="添加描述"/>
                             </div>
 
                             <div class="form-group mb-4">
                                 <label class="form-label">数值</label>
-                                <input name="data" type="number" class="form-control" min="0.01"
+                                <input name="data" type="number"
+                                       class="form-control  @error('data') border-danger @enderror" min="0.01"
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
-                                       value="{{ old('data') }}"
+                                       value="@if(!$results){{ old('data') }}@else{{ floatval($results->data) }}@endif"
                                        step="0.01"/>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">创建</button>
+                            <button type="submit" class="btn btn-primary">@if($results) 更新 @else 创建 @endif</button>
                         </div>
 
                     </form>
