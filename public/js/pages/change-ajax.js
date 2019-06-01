@@ -1,21 +1,27 @@
 $(document).ready(function () {
 
     $('.updateChangeType').click(function () {
-        let actionID = this.getAttribute('data-action');
-        let typeID = this.getAttribute('data-type');
-        let input = '#changeAction' + actionID;
+        let actionId = this.getAttribute('data-action');
+        let typeId = this.getAttribute('data-type');
+        let input = '#changeAction' + actionId;
         $.post(
             UPDATEURL,
-            {'_token':CSRFTOKEN, 'id': actionID, 'change_type_id': typeID, 'name': $(input).val()}
+            {'_token':CSRFTOKEN, 'id': actionId, 'change_type_id': typeId, 'name': $(input).val()}
         );
     });
 
     $('.deleteChangeType').click(function () {
-        let actionID = this.getAttribute('data-action');
+        let actionId = this.getAttribute('data-action');
         $.post(
             DELETEURL,
-            {'_token':CSRFTOKEN, 'id': actionID}
+            {'_token':CSRFTOKEN, 'id': actionId}
         );
+    });
+
+    $('button.addChangeType').click(function () {
+        $('#change-type-id').val(this.getAttribute('data-type'));
+        $('#actionModalLabel').html(this.getAttribute('data-type-name'));
+        $('#createActionModal').modal('show');
     });
 
 });

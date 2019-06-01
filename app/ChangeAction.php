@@ -18,4 +18,9 @@ class ChangeAction extends model
     {
         return $this->belongsTo('App\ChangeType', 'change_type_id');
     }
+
+    public function turnover()
+    {
+        return $this->hasMany('App\Turnover', 'type_id');
+    }
 }

@@ -36,8 +36,8 @@
                                             <label for="checkbox-fill-a1" class="cr">记住我</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary shadow-2 mb-4">Login</button>
-                                    <p class="mb-2 text-muted">忘记密码了？ <a href="{{ route('admin.password.request') }}">重置</a></p>
+                                    <button type="submit" class="btn btn-primary shadow-2 mb-4">登录</button>
+{{--                                    <p class="mb-2 text-muted">忘记密码了？ <a href="{{ route('admin.password.request') }}">重置</a></p>--}}
                                 </div>
 
                             </div>

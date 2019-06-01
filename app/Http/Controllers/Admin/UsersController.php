@@ -100,7 +100,7 @@ class UsersController extends Controller
             'password' => 'required|string|min:8',
         ]);
         $data = $request->input();
-
+        $data['password'] = Hash::make($data['password']);
         $user = new User($data);
         $user->save();
         return redirect()->route('admin.users');

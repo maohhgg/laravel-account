@@ -17,13 +17,15 @@
                         <i class="feather icon-unlock auth-icon"></i>
                     </div>
                     <h3 class="mb-4">登录</h3>
-
+{{--                    @error('email') {{ $message }} @enderror--}}
+{{--                    @error('phone') {{ $message }} @enderror--}}
+                    @error('name') {{ $message }} @enderror
                     <div class="form-group mb-3">
-                        <input name="email" type="email"
-                               class="form-control @error('email') border-danger @enderror" placeholder="邮箱"
-                               @error('email') data-toggle="tooltip" data-placement="top" title="{{ $message }}"
+                        <input name="login" type="text"
+                               class="form-control @error('email') border-danger @enderror" placeholder="用户名/电话/邮箱"
+                               @error('phone') data-toggle="tooltip" data-placement="top" title="{{ $message }}"
                                @enderror
-                               value="{{ old('email') }}" required>
+                               value="{{ old('login') }}" required>
                     </div>
                     <div class="form-group mb-4">
                         <input name="password" type="password" class="form-control" placeholder="密码" required>
@@ -37,7 +39,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary shadow-2 mb-4">登录</button>
-                    <p class="mb-2 text-muted">忘记密码了？<a href="{{ route('password.request') }}">重置</a></p>
+                    {{--                    <p class="mb-2 text-muted">忘记密码了？<a href="{{ route('password.request') }}">重置</a></p>--}}
                     <p class="mb-0 text-muted">还没有账户? <a href="{{ route('register') }}">注册</a></p>
                 </div>
             </form>

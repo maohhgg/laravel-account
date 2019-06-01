@@ -19,6 +19,19 @@ class ChangeController extends Controller
         return view('admin.pages.change.index', compact('changeTypes'));
     }
 
+    public function create(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|unique:users,name',
+            'change_type_id' => 'required|exists:change_types,id',
+        ]);
+        $data = $request->input();
+
+        $user = new ChangeAction($data);
+        $user->save();
+        return redirect()->route('admin.change');
+    }
+
     public function updateData(Request $request)
     {
         $this->validate($request, [

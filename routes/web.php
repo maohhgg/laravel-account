@@ -48,6 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
     Route::prefix('change')->group(function ($router) {
         $router->get('/', 'ChangeController@index')->name('admin.change');
         $router->post('save', 'ChangeController@updateData')->name('admin.change.save');
+        $router->post('create', 'ChangeController@create')->name('admin.change.create');
         $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
     });
 

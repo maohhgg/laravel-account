@@ -17,6 +17,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+
     <!-- Styles -->
     @yield('styles')
     <link href="{{ asset('css/style.css')  }}" rel="stylesheet">

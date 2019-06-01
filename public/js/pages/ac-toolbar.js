@@ -18,7 +18,6 @@ $(window).on('load', function() {
                 window.location.href = this.getAttribute('data-data-url');
                 break;
             case 'delete':
-                console.log(this.getAttribute('data-name'));
                 $('#deleteModalBody').html(this.getAttribute('data-name'));
                 $('#deleteModalId').val(this.getAttribute('data-content'));
                 $('#deleteModal').modal('show');

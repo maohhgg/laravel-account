@@ -10,6 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Styles -->
     <link href="{{ asset('plugins/animation/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css')  }}" rel="stylesheet">
@@ -19,13 +20,7 @@
 <body>
 
 <div class="auth-wrapper">
-
-
-                @yield('content')
-            </div>
-        </div>
-    </div>
-
+    @yield('content')
 </div>
 
 

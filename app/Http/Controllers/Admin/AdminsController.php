@@ -112,6 +112,7 @@ class AdminsController extends Controller
         ]);
 
         $data = $request->input();
+        $data['password'] = Hash::make($data['password']);
         $admin = new Admin($data);
         $admin->save();
         return redirect()->route('admin.admins');
