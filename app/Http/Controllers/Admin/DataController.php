@@ -41,7 +41,7 @@ class DataController extends Controller
         $this->validate($request, [
             'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
-            'data' => 'required|numeric',
+            'data' => 'required|numeric|min:0.01',
         ]);
 
         $data = $request->only("user_id", "type_id", "data");

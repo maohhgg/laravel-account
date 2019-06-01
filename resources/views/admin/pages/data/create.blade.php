@@ -26,11 +26,12 @@
                             <div class="form-group">
                                 <label class="form-label">用户</label>
                                 @if($user)
-                                    <select name="user_id" class="col-sm-12 form-control">
-                                        <option value="{{ $user->id }}" selected="selected"> {{ $user->name }}</option>
-                                    </select>
+                                    <input type="hidden"  value="{{ $user->id }}" name="user_id">
+                                    <input type="text" class="form-control" value="{{ $user->name }}" disabled>
                                 @else
-                                    <select name="user_id" class="js-data-ajax col-sm-12">
+                                    <select name="user_id" class="js-data-ajax col-sm-12"
+                                            @error('user_id') data-toggle="tooltip" data-placement="top"
+                                            title="{{ $message }}" @enderror>
                                         <option value="" selected="selected">请选择用户</option>
                                     </select>
                                 @endif
@@ -38,7 +39,9 @@
 
                             <div class="form-group">
                                 <label class="form-label">类型</label>
-                                <select name="type_id" class="js-basic-single form-control">
+                                <select name="type_id" class="js-basic-single form-control"
+                                        @error('type_id') data-toggle="tooltip" data-placement="top"
+                                        title="{{ $message }}" @enderror>
                                     @if($changeTypes)
                                         @foreach($changeTypes as $type)
                                             <optgroup label="{{ $type->name }}">
@@ -57,13 +60,15 @@
                                 <label class="form-label">描述
                                     <small>(<span class="text-c-red">可以为空</span>)</small>
                                 </label>
-                                <input name="detail" type="text" class="form-control" value="{{ old('detail') }}"
+                                <input name="description" type="text" class="form-control" value="{{ old('detail') }}"
                                        placeholder="添加描述"/>
                             </div>
 
                             <div class="form-group mb-4">
                                 <label class="form-label">数值</label>
                                 <input name="data" type="number" class="form-control" min="0.01"
+                                       @error('data') data-toggle="tooltip" data-placement="top"
+                                       title="{{ $message }}" @enderror
                                        value="{{ old('data') }}"
                                        step="0.01"/>
                             </div>

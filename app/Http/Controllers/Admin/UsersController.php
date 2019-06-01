@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\ChangeType;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -63,7 +64,8 @@ class UsersController extends Controller
             'action' => '操作'];
 
         $results = User::Paginate(10);
-        return view('admin.pages.users.index', compact('items', 'results'));
+        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
+        return view('admin.pages.users.index', compact('items', 'results', 'changeTypes'));
     }
 
     public function showCreateForm()

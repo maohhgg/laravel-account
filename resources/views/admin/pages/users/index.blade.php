@@ -7,6 +7,67 @@
                 用户数据
             @endslot
 
+            @slot('otherModal')
+                <div class="modal fade" id="createTurnoverModal" tabindex="-1" role="dialog"
+                     aria-labelledby="createTurnoverModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加新数据</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">用户</label>
+                                    <input type="hidden" id="turnover-user-id">
+                                    <input type="text" id="turnover-user" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">类型</label>
+                                    <select name="type_id" id="turnover-type-id" class="js-basic-single form-control">
+                                        @if($changeTypes)
+                                            @foreach($changeTypes as $type)
+                                                <optgroup label="{{ $type->name }}">
+                                                    @if(!$type->actions->isEmpty())
+                                                        @foreach($type->actions as $action )
+                                                            <option value="{{ $action->id }}">{{ $action->name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </optgroup>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">描述
+                                        <small>(<span class="text-c-red">可以为空</span>)</small>
+                                    </label>
+                                    <input name="detail" type="text" id="turnover-detail" class="form-control"
+                                           value="{{ old('detail') }}"
+                                           placeholder="添加描述"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">数值</label>
+                                    <input name="data" type="number" id="turnover-data" class="form-control" min="0.01"
+                                           value="{{ old('data') }}"
+                                           step="0.01"/>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-info" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" id="createTurnoverButton">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endslot
+
             @foreach($results as $v)
                 <tr>
                     @foreach($items as $key =>  $item)
@@ -19,8 +80,9 @@
                         @elseif($key == 'action')
                             <td>
                                 <a class="text-white label bg-c-blue f-16 toolbar"
-                                   data-url = "{{ route('admin.users.update', [$v->id]) }}"
-                                   data-data-url = "{{ route('admin.data.create', [$v->id]) }}"
+                                   data-user-id=" {{ $v->id }}"
+                                   data-url="{{ route('admin.users.update', [$v->id]) }}"
+                                   data-data-url="{{ route('admin.data.create', [$v->id]) }}"
                                    data-content="{{ $v->id }}" data-name="{{ $v->name }}">
                                     <i class="icon feather icon-settings"></i>
                                 </a>
@@ -56,4 +118,28 @@
 @section('script')
     <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
+    <script>
+        const CSRFTOKEN = '{{ csrf_token() }}';
+        const ADDURL = '{{ route('admin.data.create') }}';
+        $(document).ready(function () {
+            $('#createTurnoverButton').click(function () {
+                let data = {
+                    '_token': CSRFTOKEN,
+                    'user_id': $('#turnover-user-id').val(),
+                    'type_id': $('#turnover-type-id').find(":selected").val(),
+                    'data': $('#turnover-data').val()
+                }
+                let desc = $('#turnover-detail').val();
+                if (desc) {
+                    data.description = desc;
+                }
+                $.post(
+                    ADDURL,
+                    data
+                ).done(function () {
+                    window.location.reload();
+                });
+            })
+        })
+    </script>
 @endsection

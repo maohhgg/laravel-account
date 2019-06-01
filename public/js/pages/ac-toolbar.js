@@ -15,7 +15,9 @@ $(window).on('load', function() {
                 break;
 
             case 'push':
-                window.location.href = this.getAttribute('data-data-url');
+                $('#turnover-user-id').val(this.getAttribute('data-user-id'));
+                $('#turnover-user').val(this.getAttribute('data-name'));
+                $('#createTurnoverModal').modal('show');
                 break;
             case 'delete':
                 $('#deleteModalBody').html(this.getAttribute('data-name'));

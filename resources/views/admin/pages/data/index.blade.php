@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <!-- [ Main Content ] start -->
-    @if(!$results->isEmpty())
+    @if($results)
         @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
             @slot('title')
                 数据

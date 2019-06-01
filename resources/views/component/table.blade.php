@@ -129,3 +129,7 @@
         </div>
     </div>
 @endif
+
+@if(isset($otherModal))
+    {{ $otherModal }}
+@endif
