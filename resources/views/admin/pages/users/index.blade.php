@@ -133,13 +133,13 @@
                 if (desc) {
                     data.description = desc;
                 }
-                console.log(data);
-                // $.post(
-                //     ADDURL,
-                //     data
-                // ).done(function () {
-                //     window.location.reload();
-                // });
+
+                $.post(
+                    ADDURL,
+                    data
+                ).done(function () {
+                    window.location.reload();
+                });
             })
         })
     </script>
