@@ -1997,7 +1997,7 @@ p.text-muted {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 37px;
+  width: 40px;
   height: 70px;
   position: absolute;
   right: 0;
@@ -2034,7 +2034,7 @@ p.text-muted {
 }
 .mobile-menu span:before {
   top: -5px;
-  width: 40%;
+  width: 50%;
 }
 .mobile-menu.on span {
   background-color: transparent;
@@ -2927,9 +2927,9 @@ p.text-muted {
     padding-right: 20px;
   }
   .pcoded-header .navbar-nav.mr-auto li {
-    display: none;
+    display: block;
   }
-  .pcoded-header .navbar-nav.mr-auto li.nav-item:not(.dropdown) {
+  .pcoded-header .navbar-nav.mr-auto li.nav-item {
     display: block;
     padding-right: 0;
   }

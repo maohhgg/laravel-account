@@ -20,6 +20,7 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Styles -->
     @yield('styles')
+    @yield('component-styles')
     <link href="{{ asset('plugins/animation/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css')  }}" rel="stylesheet">
 </head>
@@ -59,6 +60,7 @@
 
 
 @yield('script')
+@yield('component-script')
 </body>
 
 </html>

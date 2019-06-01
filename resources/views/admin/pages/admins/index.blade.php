@@ -18,7 +18,7 @@
                         @elseif($key == 'action')
                             <td>
                                 <a class="text-white label bg-c-blue f-16 toolbar"
-                                   data-url = "{{ route('admin.admins.update', [$v->id]) }}"
+                                   data-url="{{ route('admin.admins.update', [$v->id]) }}"
                                    data-content="{{ $v->id }}" data-name="{{ $v->name }}">
                                     <i class="icon feather icon-settings"></i>
                                 </a>

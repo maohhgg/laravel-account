@@ -30,7 +30,7 @@
     </div>
     <div class="card-block pb-0">
         <div class="table-responsive">
-            <table class="table text-center">
+            <table class="table text-center" id="fixed-columns-left-table">
                 <thead>
                 <tr>
                     @foreach($items as $item)
@@ -136,3 +136,23 @@
 @if(isset($otherModal))
     {{ $otherModal }}
 @endif
+
+{{--@section('component-styles')--}}
+{{--    <link href="{{ asset('plugins/data-tables/css/datatables.min.css') }}" rel="stylesheet">--}}
+{{--@endsection--}}
+{{--@section('component-script')--}}
+{{--    <script src="{{ asset('plugins/data-tables/js/datatables.min.js') }}"></script>--}}
+{{--    <script>--}}
+{{--        $(document).ready(function () {--}}
+{{--            $('#fixed-columns-left-table').DataTable({--}}
+{{--                scrollX: true,--}}
+{{--                scrollCollapse: true,--}}
+{{--                paging: false,--}}
+{{--                fixedColumns: {--}}
+{{--                    leftColumns: 0,--}}
+{{--                    rightColumns: 1--}}
+{{--                }--}}
+{{--            });--}}
+{{--        });--}}
+{{--    </script>--}}
+{{--@endsection--}}
