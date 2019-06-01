@@ -34,7 +34,7 @@
 <!-- [ Pre-loader ] End -->
 
 <!-- [ navigation menu ] start -->
-@component('admin.component.navigation')
+@component('component.navigation')
 @endcomponent
 <!-- [ navigation menu ] end -->
 
@@ -45,7 +45,7 @@
 <!-- [ Header ] end -->
 
 <!-- [ Content ] start -->
-@component('admin.component.breadcrumb')
+@component('component.breadcrumb')
     @yield('content')
 @endcomponent
 <!-- [ Content ] end -->
@@ -54,6 +54,7 @@
 <script src="{{ asset('js/vendor-all.min.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/pcoded.min.js') }}"></script>
+
 
 
 @yield('script')

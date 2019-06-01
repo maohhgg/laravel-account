@@ -1,6 +1,6 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light">
     <div class="m-header">
-        <a class="mobile-menu" id="mobile-collapse1"href="{{ route('admin') }}"><span></span></a>
+        <a class="mobile-menu" id="mobile-collapse1"href="#"><span></span></a>
         <a href="{{ route('admin') }}" class="b-brand">
             <div class="b-bg">
                 <i class="feather icon-trending-up"></i>
@@ -37,34 +37,34 @@
             <li></li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li>
-                <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right notification">
-                        <div class="noti-head">
-                            <h6 class="d-inline-block m-b-0">消息中心</h6>
-                            <div class="float-right">
-                                <a href="#" class="m-r-10">全部已读</a>
-                                <a href="#">清除</a>
-                            </div>
-                        </div>
-                        <ul class="noti-body">
-                            <li class="notification">
-                                <div class="media">
-                                    <img class="img-radius" src="{{ asset('images/user/avatar-1.jpg')}}" alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <p><strong>John Doe</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                                        <p>新的注册会员</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="noti-footer">
-                            <a href="#">查看全部</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
+{{--            <li>--}}
+{{--                <div class="dropdown">--}}
+{{--                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>--}}
+{{--                    <div class="dropdown-menu dropdown-menu-right notification">--}}
+{{--                        <div class="noti-head">--}}
+{{--                            <h6 class="d-inline-block m-b-0">消息中心</h6>--}}
+{{--                            <div class="float-right">--}}
+{{--                                <a href="#" class="m-r-10">全部已读</a>--}}
+{{--                                <a href="#">清除</a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <ul class="noti-body">--}}
+{{--                            <li class="notification">--}}
+{{--                                <div class="media">--}}
+{{--                                    <img class="img-radius" src="{{ asset('images/user/avatar-1.jpg')}}" alt="Generic placeholder image">--}}
+{{--                                    <div class="media-body">--}}
+{{--                                        <p><strong>John Doe</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>--}}
+{{--                                        <p>新的注册会员</p>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                        <div class="noti-footer">--}}
+{{--                            <a href="#">查看全部</a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </li>--}}
             <li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -72,11 +72,11 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
-                            <img src="{{ asset('images/user/avatar-1.jpg')}}" class="img-radius" alt="User-Profile-Image">
-                            <span>John Doe</span>
+{{--                            <img src="{{ asset('images/user/'.Auth::user()->icon)}}" class="img-radius" alt="User-Profile-Image">--}}
+                            <span>{{ Auth::user()->name }}</span>
                         </div>
                         <ul class="pro-body">
-                            <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>
+{{--                            <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
                             <li><a href="{{ route('admin.logout') }}"
                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                                    class="dropdown-item">

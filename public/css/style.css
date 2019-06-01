@@ -70,7 +70,9 @@ body {
 *:focus {
   outline: none;
 }
-
+a{
+  cursor: pointer;
+}
 a:hover {
   outline: none;
   text-decoration: none;

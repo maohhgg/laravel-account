@@ -1,4 +1,4 @@
 @extends('layouts.admin')
 @section('content')
-    {{ print_r($breadcrumbs) }}
+{{--    {{ var_dump(Auth::user()) }}--}}
 @endsection

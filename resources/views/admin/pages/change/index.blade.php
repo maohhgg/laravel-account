@@ -1,39 +1,82 @@
 @extends('layouts.admin')
 @section('content')
+
     <div class="row">
         @if($changeTypes)
             @foreach($changeTypes as $type)
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-block">
+                        <div class="card-header">
                             <h5 class="m-b-30">{{ $type->name }}</h5>
+                        </div>
+                        <div class="card-block task-setting">
+
                             @if(!$type->actions->isEmpty())
                                 @foreach($type->actions as $action )
-                                    <div class="media summary-box mb-4">
-                                        <div class="photo-table">
-                                            <h4 class="m-0 f-w-300">
-                                                <span>{{ $action->name }}</span>
-                                            </h4>
-                                        </div>
-                                        <div class="media-body">
-                                            <i class="card-icon float-right f-20 feather icon-{{ $type->icon }}"></i>
+                                    <div class="row">
+                                        <div class="col-sm-12 mb-3">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       id="changeAction{{ $action->id }}"
+                                                       value="{{ $action->name }}">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary updateChangeType" type="button"
+                                                            data-action="{{ $action->id }}" data-type="{{ $type->id }}">
+                                                        更新
+                                                    </button>
+                                                    <button class="btn btn-danger deleteChangeType" type="button"
+                                                            data-action="{{ $action->id }}" data-type="{{ $type->id }}">
+                                                        删除
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <span> 请添加新的{{ $type->name }} </span>
+                                <span> 还没有{{ $type->name }}, 请添加新的{{ $type->name }} </span>
                             @endif
+{{--                            <div id="newChangeTypeBody{{ $type->id }}"></div>--}}
+{{--                            <div style="display: none" id="defaultChangeTypeBody{{ $type->id }}">--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-sm-12 mb-3">--}}
+{{--                                        <div class="input-group">--}}
+{{--                                            <input type="text" class="form-control" id="addAction{{ $type->id }}" placeholder="名称">--}}
+{{--                                            <div class="input-group-append">--}}
+{{--                                                <button class="btn btn-primary addChangeType" data-type="{{ $type->id }}" type="button">添加--}}
+{{--                                                </button>--}}
+{{--                                                <button class="btn btn-info cancelChangeType" data-type="{{ $type->id }}" type="button">取消--}}
+{{--                                                </button>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
 
-                            <div class="form-group">
-                                <a href="#!" class="btn btn-primary shadow-2 text-uppercase btn-block"
-                                   style="max-width:150px;margin:0 auto;">添加{{ $type->name }}</a>
+                            <div class="row text-center mt-2">
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-primary  addChangeType"
+                                            data-type="{{$type->id}}">
+                                        添加新的{{ $type->name }}
+                                    </button>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
     </div>
+
+@endsection
+
+@section('script')
+
+    <script src="{{ asset('js/pages/change-ajax.js') }}"></script>
+    <script>
+        const CSRFTOKEN = '{{ csrf_token() }}';
+        const UPDATEURL = '{{ route('admin.change.save') }}';
+        const DELETEURL = '{{ route('admin.change.delete') }}';
+    </script>
 @endsection

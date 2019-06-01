@@ -10,6 +10,10 @@ class ChangeAction extends model
 {
     public $timestamps = false;
 
+    protected $fillable = [
+        'name', 'change_type_id',
+    ];
+
     public function type()
     {
         return $this->belongsTo('App\ChangeType', 'change_type_id');

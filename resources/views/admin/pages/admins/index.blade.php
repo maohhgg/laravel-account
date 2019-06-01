@@ -1,96 +1,57 @@
 @extends('layouts.admin')
 @section('content')
-
     <!-- [ Main Content ] start -->
-    <div class="card User-Activity">
-        <div class="card-header">
-            <h5>数据列表</h5>
-            <div class="card-header-right">
-                <div class="btn-group card-option">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="feather icon-more-horizontal"></i>
-                    </button>
-                    <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
-                        <li class="dropdown-item full-card">
-                            <a href="#">
-                                <span><i class="feather icon-maximize"></i> 全屏</span>
-                                <span style="display:none"><i class="feather icon-minimize"></i> 还原</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-item minimize-card">
-                            <a href="#">
-                                <span><i class="feather icon-minus"></i> 折叠</span>
-                                <span style="display:none"><i class="feather icon-plus"></i> 展开</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-item reload-card">
-                            <a href="#"><i class="feather icon-refresh-cw"></i> 刷新</a>
-                        </li>
-                    </ul>
+    @if($results)
+        @component('component.table',['items' => $items, 'results' => $results,'target' => 'admins'])
+            @slot('title')
+                管理员数据
+            @endslot
 
-                </div>
-            </div>
-        </div>
-        <div class="card-block pb-0">
-            <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
-                    <tr>
-                        <th>#ID</th>
-                        <th>名称</th>
-                        <th>邮箱</th>
-                        <th>创建时间</th>
-                        <th>上次登录时间</th>
-                        <th>状态</th>
-                    </tr></thead>
-                    <tbody>
-                    <tr>
-
-                    @foreach($admins as $admin)
-                        <tr>
-                            <td><h6 class="m-0">{{ $admin->id }}</h6></td>
-                            <td><h6 class="m-0">{{ $admin->name }}</h6></td>
-                            <td><h6 class="m-0">{{ $admin->email }}</h6></td>
-                            <td><h6 class="m-0">{{ $admin->created_at->format('Y-m-d') }}</h6></td>
-                            <td><h6 class="m-0">{{ $admin->updated_at->format('Y-m-d') }}</h6></td>
+            @foreach($results as $v)
+                <tr>
+                    @foreach($items as $key =>  $item)
+                        @if($key == 'avatar')
                             <td>
-                                <div class="form-group">
-                                    <div class="switch d-inline m-r-10">
-                                        <input type="checkbox" id="switch-s-{{ $admin->id }}" @if($admin->id == 1) disabled  @endif checked>
-                                        <label for="switch-s-{{ $admin->id }}" class="cr"></label>
-                                    </div>
-                                </div>
+                                <img class="rounded-circle" style="width:40px;"
+                                     src="{{ asset('images/user/'.$v->icon) }}" alt="activity-user">
                             </td>
-                        </tr>
+                        @elseif($key == 'action')
+                            <td>
+                                <a class="text-white label bg-c-blue f-16 toolbar"
+                                   data-url = "{{ route('admin.admins.update', [$v->id]) }}"
+                                   data-content="{{ $v->id }}" data-name="{{ $v->name }}">
+                                    <i class="icon feather icon-settings"></i>
+                                </a>
+                            </td>
+                        @elseif(strpos($key, 'created_at') !== false)
+                            <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
+                        @elseif(strpos($key, 'updated_at') !== false)
+                            <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
+                        @else
+                            <td><h6 class="m-0">{{ $v->{$key} }}</h6></td>
+                        @endif
                     @endforeach
-                    </tbody>
-                </table>
+                </tr>
+            @endforeach
+        @endcomponent
 
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-5">
-                    <div class="dataTables_info" id="zero-configuration_info" role="status" aria-live="polite">Showing 1 to 10 of 17 entries</div>
-                </div>
-                <div class="col-sm-12 col-md-7">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-
+        <div id="toolbar-options" class="hidden">
+            <a data-content="edit"><i class="feather icon-edit-2"></i></a>
+            <a data-content="delete"><i class="feather icon-trash-2"></i></a>
         </div>
-    </div>
-    <!-- [ Main Content ] end -->
+
+    @else
+        还没有数据
+    @endif
+    <!-- [ Main Content ] start -->
+@endsection
 
 
+@section('styles')
+    <link href="{{ asset('plugins/toolbar/css/jquery.toolbar.css') }}" rel="stylesheet">
+@endsection
+
+@section('script')
+    <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
+    <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
 @endsection

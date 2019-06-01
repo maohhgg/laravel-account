@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Page;
 use Illuminate\Support\Facades\Route;
 
-class HomeController extends AdminController
+class HomeController extends Controller
 {
     public $module = 'home';
 

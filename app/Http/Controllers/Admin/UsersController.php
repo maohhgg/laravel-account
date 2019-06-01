@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 
-class UsersController extends AdminController
+class UsersController extends Controller
 {
 
     public $module = 'users';
@@ -19,14 +19,14 @@ class UsersController extends AdminController
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -35,7 +35,7 @@ class UsersController extends AdminController
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \App\User
      */
     protected function create(array $data)
@@ -50,13 +50,32 @@ class UsersController extends AdminController
 
     public function index()
     {
-        $users = User::paginate(10);
-        return view('admin.pages.users.index', compact('users'));
+        $items = [
+            'id' => '#ID',
+            'name' => '名称',
+//            'avatar' => '头像',
+            'phone' => '电话号码',
+            'balance' => '余额',
+            'total' => '消费总计',
+            'email' => '邮箱',
+            'created_at' => '创建时间',
+            'updated_at' => '上次登录时间',
+            'action' => '操作'];
+
+        $results = User::Paginate(10);
+        return view('admin.pages.users.index', compact('items', 'results'));
     }
 
     public function showCreateForm()
     {
         return view('admin.pages.users.create');
+    }
+
+    public function updateForm($id = null)
+    {
+        if (!$id || !is_numeric($id)) return redirect()->route('admin');
+        $user = User::find($id);
+        return view('admin.pages.users.update', compact('user'));
     }
 
 
@@ -67,10 +86,48 @@ class UsersController extends AdminController
      */
     public function autocomplete(Request $request)
     {
-        $data = User::select('id','name')
-            ->where("name","LIKE","%{$request->input('query')}%")
+        $data = User::select('id', 'name as text')
+            ->where("name", "LIKE", "%{$request->input('query')}%")
             ->limit(5)
             ->get();
         return response()->json($data);
+    }
+
+    public function save(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|unique:users,name',
+            'password' => 'required|string|min:8',
+        ]);
+        $data = $request->input();
+
+        $user = new User($data);
+        $user->save();
+        return redirect()->route('admin.users');
+    }
+
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'string',
+            'email' => 'string|email|max:255',
+            'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/']
+        ]);
+
+        $data = $request->input();
+
+        unset($data['id']);
+        $user = User::find($request->input('id'));
+        $user->update($data);
+        return redirect()->route('admin.users');
+    }
+
+    public function deleteId(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|numeric',
+        ]);
+        User::where('id', $request->input('id'))->delete();
+        return redirect()->route('admin.users');
     }
 }

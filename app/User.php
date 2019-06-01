@@ -35,4 +35,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function turnover($data, $action)
+    {
+        if ($action == ChangeType::EXPENDITURE)
+            $this->balance -= $data;
+        else {
+            $this->total += $data;
+            $this->balance += $data;
+        }
+
+        return $this;
+    }
 }

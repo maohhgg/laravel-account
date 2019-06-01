@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\ChangeAction;
 use App\ChangeType;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
-class ChangeController extends AdminController
+class ChangeController extends Controller
 {
-    const INCOME = 'income';
-    const EXPENDITURE = 'expenditure';
     public $module = 'change';
 
     public function index()
@@ -19,5 +19,29 @@ class ChangeController extends AdminController
         return view('admin.pages.change.index', compact('changeTypes'));
     }
 
+    public function updateData(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|numeric',
+            'change_type_id' => 'required|numeric'
+        ]);
+
+        $data = $request->input();
+        if (in_array('id', array_keys($data))) {
+            $c = ChangeAction::find($data['id']);
+            unset($data['id']);
+            unset($data['_token']);
+            response()->json($c->update($data));
+        }
+
+    }
+
+    public function deleteId(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|numeric',
+        ]);
+        response()->json( ChangeAction::where('id',$request->input('id'))->delete());
+    }
 
 }

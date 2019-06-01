@@ -17,10 +17,10 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('phone',16)->unique();
-            $table->decimal('balance',10,2);
-            $table->decimal('total',10,2);
+            $table->decimal('balance',10,2)->nullable()->default(0);
+            $table->decimal('total',10,2)->nullable()->default(0);
             $table->string('email')->unique();
-            $table->string('icon',64);
+            $table->string('icon',64)->nullable()->default('');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

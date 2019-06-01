@@ -18,13 +18,25 @@
 
 <body>
 
-    @yield('content')
+<div class="auth-wrapper">
 
 
-    <!-- Required Js -->
-    <script src="{{ asset('js/vendor-all.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/pcoded.min.js') }}"></script>
+                @yield('content')
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Required Js -->
+<script src="{{ asset('js/vendor-all.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/pcoded.min.js') }}"></script>
+
+<!-- Tooltip Js -->
+<script src="{{ asset('js/tooltip.js') }}"></script>
+@yield('script')
 
 </body>
 
