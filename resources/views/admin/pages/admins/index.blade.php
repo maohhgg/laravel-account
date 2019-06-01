@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <!-- [ Main Content ] start -->
-    @if($results)
+    @if(!$results->isEmpty())
         @component('component.table',['items' => $items, 'results' => $results,'target' => 'admins'])
             @slot('title')
                 管理员数据
