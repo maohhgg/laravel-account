@@ -22,7 +22,7 @@
                                                 <div class="input-group-append">
                                                     <button class="btn btn-primary updateChangeType" type="button"
                                                             data-action="{{ $action->id }}" data-type="{{ $type->id }}">
-                                                        更新
+                                                        重命名
                                                     </button>
                                                     @if($action->turnover->isEmpty())
                                                         <button class="btn btn-danger deleteChangeType" type="button"
