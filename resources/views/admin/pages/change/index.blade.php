@@ -73,7 +73,7 @@
                             <label for="recipient-name" class="col-form-label">名称</label>
                             <input name="name" type="text"
                                    class="form-control tooltip-test @error('name') border-danger @enderror"
-                                   placeholder="充值"
+                                   placeholder="名称"
                                    @error('name') data-toggle="tooltip" data-placement="top" data-container="#createActionModal"
                                    title="{{ $message }}" @enderror
                                    value="{{ old('name') }}" required>
