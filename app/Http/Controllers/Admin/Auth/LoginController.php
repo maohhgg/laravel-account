@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -14,7 +15,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/index';
+    protected $redirectTo = '/admin/';
+    protected $username;
 
     /**
      * Create a new controller instance.
@@ -24,14 +26,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest:admin')->except('logout');
-    }
-
-    /**
-     * 重写登录视图页面
-     */
-    public function showLogin()
-    {
-        return view('admin.auth.login');
+        $this->username = $this->findUsername();
     }
 
     /**
@@ -39,9 +34,41 @@ class LoginController extends Controller
      *
      * @return string
      */
+    public function findUsername()
+    {
+        $login = request()->input('login');
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            $fieldType = 'email';
+        }  else {
+            $fieldType = 'name';
+        }
+        request()->merge([$fieldType => $login]);
+
+        return $fieldType;
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+
     public function username()
     {
-        return 'email';
+        return $this->username;
+    }
+
+    /**
+     * 重写登录视图页面
+     */
+    public function showLogin()
+    {
+        return view('admin.pages.auth.login');
+    }
+
+    protected function authenticated(Request $request)
+    {
+        return redirect($this->redirectTo); //put your redirect url here
     }
 
     /**

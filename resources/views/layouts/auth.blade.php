@@ -10,16 +10,28 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Styles -->
-    <link href="{{ asset('css/app.css')  }}" rel="stylesheet">
-    <link href="{{ asset('css/icofont/css/icofont.css')  }}" rel="stylesheet">
+    <link href="{{ asset('plugins/animation/css/animate.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css')  }}" rel="stylesheet">
+
 </head>
 
-<body themebg-pattern="theme1">
+<body>
 
+<div class="auth-wrapper">
     @yield('content')
+</div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+
+<!-- Required Js -->
+<script src="{{ asset('js/vendor-all.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/pcoded.min.js') }}"></script>
+
+<!-- Tooltip Js -->
+@yield('script')
+
 </body>
 
 </html>

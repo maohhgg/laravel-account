@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
 {
@@ -26,16 +27,9 @@ class ResetPasswordController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:admin');
+        $this->middleware('guest:admin')->except('logout');
     }
 
-    /**
-     * 重写忘记密码视图页面
-     */
-    public function showForgot()
-    {
-        return view('admin.auth.forgot');
-    }
 
     /**
      * 自定义认证驱动
@@ -44,5 +38,12 @@ class ResetPasswordController extends Controller
     protected function guard()
     {
         return auth()->guard('admin');
+    }
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('admin.pages.auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
     }
 }

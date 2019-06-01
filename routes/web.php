@@ -11,20 +11,68 @@
 |
 */
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($router) {
-    // 管理员登录注销
-    $router->get('login', 'Auth\LoginController@showLogin')->name('admin.login');
-    $router->post('login', 'Auth\LoginController@login');
-    $router->post('logout', 'Auth\LoginController@logout');
 
-    // 管理员账户更改密码
-    $router->get('forgot', 'Auth\ResetPasswordController@showForgot')->name('admin.forgot');
-    $router->post('forgot', 'Auth\ResetPasswordController@forgot');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 'Admin'], function ($router) {
 
-    $router->get('/', 'AdminController@index')->name('admin.index');
-    $router->get('/index', 'AdminController@index');
+    // 后台单页面
+    $router->get('/dash', 'HomeController@index');
+    $router->get('/', 'HomeController@index')->name('admin');
+
+    Route::prefix('users')->group(function ($router) {
+        $router->get('/', 'UsersController@index')->name('admin.users');
+        $router->get('create', 'UsersController@showCreateForm')->name('admin.users.create');
+        $router->post('create', 'UsersController@save');
+        $router->get('update/{id}', 'UsersController@updateForm')->name('admin.users.update');
+        $router->post('save', 'UsersController@update')->name('admin.users.save');
+        $router->post('delete', 'UsersController@deleteId')->name('admin.users.delete');;
+    });
+
+    Route::prefix('admins')->group(function ($router) {
+        $router->get('/', 'AdminsController@index')->name('admin.admins');
+        $router->get('create', 'AdminsController@showCreateForm')->name('admin.admins.create');
+        $router->post('create', 'AdminsController@save');
+        $router->get('update/{id}', 'AdminsController@updateForm')->name('admin.admins.update');
+        $router->post('save', 'AdminsController@updateData')->name('admin.admins.save');
+        $router->post('delete', 'AdminsController@deleteId')->name('admin.admins.delete');;
+    });
+
+    Route::prefix('data')->group(function ($router) {
+        $router->get('/', 'DataController@index')->name('admin.data');
+        $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
+        $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
+        $router->post('create', 'DataController@create');
+        $router->post('save', 'DataController@update')->name('admin.data.save');
+        $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
+    });
+
+    Route::prefix('change')->group(function ($router) {
+        $router->get('/', 'ChangeController@index')->name('admin.change');
+        $router->post('save', 'ChangeController@updateData')->name('admin.change.save');
+        $router->post('create', 'ChangeController@create')->name('admin.change.create');
+        $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
+    });
+
+    Route::prefix('autocomplete')->group(function ($router) {
+        $router->get('name', 'UsersController@autocomplete')->name('users.autocomplete');
+    });
+
 });
 
+
+// 后台登录
+Route::prefix('admin')->namespace('Admin\Auth')->group(function ($router) {
+    // 管理员登录注销
+    $router->get('login', 'LoginController@showLogin')->name('admin.login');
+    $router->post('login', 'LoginController@login');
+    $router->get('logout', 'LoginController@logout')->name('admin.logout');
+    $router->post('logout', 'LoginController@logout');
+
+});
+
+// 前台登录
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('auth')->group(function ($router) {
+    $router->get('/','HomeController@index')->name('home');
+    $router->get('data/history','DataController@history')->name('data.history');
+});

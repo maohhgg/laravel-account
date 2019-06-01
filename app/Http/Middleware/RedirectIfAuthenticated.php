@@ -18,10 +18,10 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-
-            $url = $guard ? 'admin/dash':'/home';
+            $url = $guard ? 'admin':'/';
             return redirect($url);
         }
+
 
         return $next($request);
     }

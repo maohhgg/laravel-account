@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
 class LoginController extends Controller
 {
     /*
@@ -25,7 +26,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
+    protected $username;
 
     /**
      * Create a new controller instance.
@@ -35,5 +37,37 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->username = $this->findUsername();
+    }
+
+    public function showLoginForm()
+    {
+        return view('home.auth.login');
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function findUsername()
+    {
+        $login = request()->input('login');
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            $fieldType = 'email';
+        } else if (preg_match('/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/', $login)) {
+            $fieldType = 'phone';
+        } else {
+            $fieldType = 'name';
+        }
+
+        request()->merge([$fieldType => $login]);
+
+        return $fieldType;
+    }
+
+    public function username()
+    {
+        return $this->username;
     }
 }
