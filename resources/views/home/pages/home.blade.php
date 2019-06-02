@@ -29,6 +29,12 @@
         </div>
         @endif
 
+        <div class="col-md-12">
+            <div class="card bg-dark">
+                <img class="card-img" src="{{ asset('images/resource/add-bar.png') }}" alt="Card image">
+            </div>
+        </div>
+
 
     </div>
 @endsection

@@ -3,7 +3,7 @@
         <div class="navbar-brand header-logo">
             <a href="#" class="b-brand">
                 <div class="b-bg">
-                    <i class="feather icon-trending-up"></i>
+                    <img src="{{ asset('images/resource/logo-new.png') }}" alt="">
                 </div>
                 <span class="b-title"></span>
             </a>
