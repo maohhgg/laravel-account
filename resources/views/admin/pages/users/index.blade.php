@@ -22,40 +22,27 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">用户</label>
-                                    <input type="hidden" id="turnover-user-id">
-                                    <input type="text" id="turnover-user" class="form-control" disabled>
+
+                                    {{ Form::hidden('',null,['id'=>'turnover-user-id']) }}
+                                    {{ Form::text('',null,['id'=>'turnover-user','class'=>'form-control','disabled']) }}
+
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">类型</label>
-                                    <select name="type_id" id="turnover-type-id" class="js-basic-single form-control">
-                                        @if($changeTypes)
-                                            @foreach($changeTypes as $type)
-                                                <optgroup label="{{ $type->name }}">
-                                                    @if(!$type->actions->isEmpty())
-                                                        @foreach($type->actions as $action )
-                                                            <option value="{{ $action->id }}">{{ $action->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </optgroup>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    {{ Form::select('user_id', $types, null, ['id'=>'turnover-type-id','class'=>'js-data-ajax form-control']) }}
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">
-                                        详细 <small>为类型的补充，和类型一起显示(<span class="text-c-red">* 可以为空</span>)</small>
+                                        详细
+                                        <small>为类型的补充，和类型一起显示(<span class="text-c-red">* 可以为空</span>)</small>
                                     </label>
-                                    <input name="description" type="text" id="turnover-detail" class="form-control"
-                                           value="{{ old('description') }}"
-                                           placeholder="添加描述"/>
+                                    {{ Form::text('description',null,['id'=>'turnover-description','class'=>'form-control','placeholder'=>'添加描述']) }}
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">数值</label>
-                                    <input name="data" type="number" id="turnover-data" class="form-control" min="0.01"
-                                           value="{{ old('data') }}"
-                                           step="0.01"/>
+                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
                                 </div>
 
                             </div>
@@ -72,7 +59,6 @@
                 <tr>
                     @foreach($items as $key =>  $item)
                         @if($key == 'avatar')
-                            <td>
                             <td>
                                 <img class="rounded-circle" style="width:40px;"
                                      src="{{ asset('images/user/'.$v->icon) }}" alt="activity-user">
@@ -91,12 +77,21 @@
                             <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
                         @elseif(strpos($key, 'updated_at') !== false)
                             <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
+                        @elseif(strpos($key, 'name') !== false)
+                            <td>
+                                <h6 class="m-0">
+                                    <a href="{{ route('admin.data',[$v->id]) }}">{{ $v->name }}</a>
+                                </h6>
+                            </td>
                         @else
                             <td><h6 class="m-0">{{ $v->{$key} }}</h6></td>
                         @endif
                     @endforeach
                 </tr>
             @endforeach
+
+
+
         @endcomponent
 
         <div id="toolbar-options" class="hidden">
@@ -115,7 +110,6 @@
     <link href="{{ asset('plugins/toolbar/css/jquery.toolbar.css') }}" rel="stylesheet">
 @endsection
 
-
 @section('script')
     <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
@@ -128,9 +122,10 @@
                     '_token': CSRFTOKEN,
                     'user_id': $('#turnover-user-id').val(),
                     'type_id': $('#turnover-type-id').find(":selected").val(),
-                    'data': $('#turnover-data').val()
-                }
-                let desc = $('#turnover-detail').val();
+                    'data': $('#turnover-data').val(),
+                    'method': 'ajax'
+                };
+                let desc = $('#turnover-description').val();
                 if (desc) {
                     data.description = desc;
                 }

@@ -2,8 +2,8 @@
 @section('content')
 
     <div class="row">
-        @if($changeTypes)
-            @foreach($changeTypes as $type)
+        @if($types)
+            @foreach($types as $type)
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">

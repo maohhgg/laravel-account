@@ -12,42 +12,24 @@
                     <form action="@if($results) {{ route('admin.data.save') }} @else {{ route('admin.data.create') }} @endif"
                           method="post">
                         @csrf
+                        {{  Form::hidden('url',URL::previous())  }}
 
                         <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                            @if($results)
-                                <input type="hidden" value="{{ $results->id }}" name="id">
-                            @endif
+                            @if($results) {{  Form::hidden('id', $results->id)  }} @endif
 
-                            <div class="form-group " @error('user_id') data-toggle="tooltip" data-placement="top"
-                                 title="{{ $message }}" @enderror>
+                            <div class="form-group " @error('user_id') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror>
                                 <label class="form-label">用户</label>
                                 @if($user)
-                                    <input type="hidden" value="{{ $user->id }}" name="user_id">
-                                    <input type="text" class="form-control" value="{{ $user->name }}" disabled>
+                                    {{  Form::hidden('user_id',$user->id )  }}
+                                    {{  Form::text(null, $user->name, array('class'=>'form-control','disabled')) }}
                                 @else
-                                    <select name="user_id" class="js-data-ajax col-sm-12">
-                                        <option value="" selected="selected">请选择用户</option>
-                                    </select>
+                                    {{ Form::select('user_id', [], null, ['placeholder' => '用户','class'=>'js-data-ajax col-sm-12']) }}
                                 @endif
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">类型</label>
-                                <select name="type_id" class="js-basic-single form-control"
-                                        @error('type_id') data-toggle="tooltip" data-placement="top"
-                                        title="{{ $message }}" @enderror>
-                                    @if($changeTypes)
-                                        @foreach($changeTypes as $type)
-                                            <optgroup label="{{ $type->name }}">
-                                                @if(!$type->actions->isEmpty())
-                                                    @foreach($type->actions as $action )
-                                                        <option value="{{ $action->id }}">{{ $action->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </optgroup>
-                                        @endforeach
-                                    @endif
-                                </select>
+                                {{ Form::select('type_id', $types, null, ['class'=>'js-data-single  form-control']) }}
                             </div>
 
                             <div class="form-group mb-4">

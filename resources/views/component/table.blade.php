@@ -136,23 +136,3 @@
 @if(isset($otherModal))
     {{ $otherModal }}
 @endif
-
-{{--@section('component-styles')--}}
-{{--    <link href="{{ asset('plugins/data-tables/css/datatables.min.css') }}" rel="stylesheet">--}}
-{{--@endsection--}}
-{{--@section('component-script')--}}
-{{--    <script src="{{ asset('plugins/data-tables/js/datatables.min.js') }}"></script>--}}
-{{--    <script>--}}
-{{--        $(document).ready(function () {--}}
-{{--            $('#fixed-columns-left-table').DataTable({--}}
-{{--                scrollX: true,--}}
-{{--                scrollCollapse: true,--}}
-{{--                paging: false,--}}
-{{--                fixedColumns: {--}}
-{{--                    leftColumns: 0,--}}
-{{--                    rightColumns: 1--}}
-{{--                }--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
-{{--@endsection--}}

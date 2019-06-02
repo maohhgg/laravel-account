@@ -4,18 +4,28 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\ChangeAction;
-use App\ChangeType;
+use App\Action;
+use App\Type;
 use App\Turnover;
 use App\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 
 class DataController extends Controller
 {
     public $module = 'data';
 
-    public function index()
+    /**
+     * display all turnover data
+     *
+     * @param null|number $id user_id
+     * @return Factory|View
+     */
+    public function display($id = null)
     {
         $items = [
             'id' => '#ID',
@@ -24,68 +34,50 @@ class DataController extends Controller
             'data' => '金额',
             'created_at' => '时间',
             'action' => '操作'];
-
-        $results = Turnover::orderBy('id', 'desc')->Paginate(10);
+        $t = $id == null ? new Turnover(): Turnover::where('user_id', $id);
+        $results = $t->orderBy('id', 'desc')->Paginate(10);
         return view('admin.pages.data.index', compact('items', 'results'));
     }
 
+    /**
+     * create view
+     *
+     * @param null $id user_id
+     * @return Factory|View
+     */
     public function createForm($id = null)
     {
-        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
-        $user = !empty($id) ? User::where('id', $id)->select('id', 'name')->first() : null;
         $results = [];
-        return view('admin.pages.data.edit', compact('changeTypes', 'user', 'results'));
+        $types = Type::getTypeArray();
+        $user = !empty($id) ? User::select('id', 'name')->find($id) : null;
+
+        return view('admin.pages.data.edit', compact('types', 'user', 'results'));
     }
 
+    /**
+     * update turnover view
+     *
+     * @param null $id turnover_id
+     * @return Factory|RedirectResponse|View
+     */
     public function updateForm($id = null)
     {
         $results = Turnover::find($id);
-        if (!$results) {
-            return redirect()->route('admin.data');
-        }
-        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
-        $user = User::where('id', $results->user_id)->select('id', 'name')->first();
-//        dd($results);
-        return view('admin.pages.data.edit', compact('changeTypes', 'user', 'results'));
+        if (!$results) return redirect()->route('admin.data');
+
+        $types = Type::getTypeArray();
+        $user = User::select('id', 'name')->find($results->user_id);
+        return view('admin.pages.data.edit', compact('types', 'user', 'results'));
     }
 
 
-    // 保存用户数据
-    public function saveToUser($data)
-    {
-        $action = ChangeAction::find($data['type_id']);
-        $user = User::find($data['user_id']);
-
-        // 更改总额
-        $user->balance = ChangeType::turnover($user->balance, $data['data'], $action->type->action);
-        if ($action->type->action == ChangeType::INCOME) {
-            $user->total = ChangeType::income($user->total, $data['data']);
-        }
-        $user->save();
-
-        $data['history'] = $user->balance;
-
-        return $data;
-    }
-
-    // 还原用户数据
-    public function recoveryUser($id)
-    {
-        $d = Turnover::find($id);
-        $action = ChangeAction::where('id', $d->type_id)->first();
-        $user = User::find($d->user_id);
-
-        $user->balance = ChangeType::turnover($user->balance, $d->data, ChangeType::reverse($action->type->action));
-
-        if ($action->type->action == ChangeType::INCOME) {
-            $user->total = ChangeType::expenditure($user->total, $d->data);
-            Turnover::where([['id', '>', $id], ['user_id', $d->user_id]])->decrement('history', $d->data);
-        } else {
-            Turnover::where([['id', '>', $id], ['user_id', $d->user_id]])->increment('history', $d->data);
-        }
-        $user->save();
-    }
-
+    /**
+     * create a turnover
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
     public function create(Request $request)
     {
         $this->validate($request, [
@@ -95,18 +87,22 @@ class DataController extends Controller
             'description' => 'nullable'
         ]);
 
+        Turnover::create($this->saveToUser($request->only('user_id', 'type_id', 'data', 'description')));
 
-        $data = $request->input();
-
-        $data = $this->saveToUser($data);
-
-        $turnover = new Turnover($data);
-        $turnover->save();
-
-        return redirect()->route('admin.data');
+        if(!$request->input('method')){
+            return redirect()->back()->with('toast','创建完成');
+        }
+        return redirect($request->input('url'))->with('toast','创建完成');
     }
 
 
+    /**
+     * turnover update
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
     public function update(Request $request)
     {
         $this->validate($request, [
@@ -117,30 +113,72 @@ class DataController extends Controller
             'description' => 'nullable'
         ]);
 
-        $data = $request->input();
-        $this->recoveryUser($data['id']);
-        $turnover = Turnover::find($data['id']);
+        $this->recoveryUser($request->input('id'));
+        Turnover::find($request->input('id'))
+            ->update($this->saveToUser($request->only('user_id', 'type_id', 'data', 'description')));
 
-        unset($data['id']);
-        $data = $this->saveToUser($data);
-        $turnover->update($data);
-
-        return redirect()->route('admin.data');
+        return redirect($request->input('url'))->with('toast', '记录更新完成');
     }
 
+    /**
+     * delete a turnover
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
     public function deleteId(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        $id = $request->input('id');
 
-        $this->recoveryUser($id);
-        // 删除
-        Turnover::where('id', $request->input('id', $id))->delete();
-        return redirect()->route('admin.data');
+        $this->recoveryUser($request->input('id'));
+        Turnover::find($request->input('id'))->delete();
+        return redirect()->back()->with('toast', '记录已经删除');
     }
 
 
+    /**
+     * according to turnover data change user balance and total
+     *
+     * @param array $data
+     * @return array mixed
+     */
+    protected function saveToUser($data)
+    {
+        $action = Action::find($data['type_id']);
+        $user = User::find($data['user_id']);
+
+        $user->balance = Type::turnover($user->balance, $data['data'], $action->type->action);
+        $user->total = $action->type->action == Type::INCOME ? Type::income($user->total, $data['data']) : $user->total;
+        $user->save();
+
+        $data['history'] = $user->balance;
+
+        return $data;
+    }
+
+
+    /**
+     * recovery user balance and total
+     *
+     * @param number $turnoverId
+     */
+    protected function recoveryUser($turnoverId)
+    {
+        $t = Turnover::find($turnoverId);
+        $a = Action::where('id', $t->type_id)->first();
+        $user = User::find($t->user_id);
+
+        $user->balance = Type::turnover($user->balance, $t->data, Type::reverse($a->type->action));
+
+        if ($a->type->action == Type::INCOME) {
+            $user->total = Type::expenditure($user->total, $t->data);
+            Turnover::where([['id', '>', $turnoverId], ['user_id', $t->user_id]])->decrement('history', $t->data);
+        } else {
+            Turnover::where([['id', '>', $turnoverId], ['user_id', $t->user_id]])->increment('history', $t->data);
+        }
+        $user->save();
+    }
 
 }

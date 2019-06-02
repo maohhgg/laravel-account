@@ -4,57 +4,74 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\ChangeAction;
-use App\ChangeType;
+use App\Action;
+use App\Type;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class ChangeController extends Controller
 {
     public $module = 'change';
 
+
+    /**
+     * view for display all change_actions
+     *
+     * @return Factory|View
+     */
     public function index()
     {
-        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
-        return view('admin.pages.change.index', compact('changeTypes'));
+        $types = Type::where('id', '>', '0')->with('actions')->get();
+        return view('admin.pages.change.index', compact('types'));
     }
 
+    /**
+     * create a change_action
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
     public function create(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|string|unique:change_actions,name',
             'change_type_id' => 'required|exists:change_types,id',
         ]);
-        $data = $request->input();
-
-        $user = new ChangeAction($data);
-        $user->save();
-        return redirect()->route('admin.change');
+        Action::create($request->only('name', 'change_type_id'));
+        return redirect()->back()->with('toast','新的方式已经保存!');
     }
 
-    public function updateData(Request $request)
+    /**
+     * update change_action name
+     *
+     * @param Request $request
+     * @throws ValidationException
+     */
+    public function updateAction(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|numeric',
-            'change_type_id' => 'required|numeric'
+            'name' => 'required|string|max:64|max:1'
         ]);
-
-        $data = $request->input();
-        if (in_array('id', array_keys($data))) {
-            $c = ChangeAction::find($data['id']);
-            unset($data['id']);
-            unset($data['_token']);
-            response()->json($c->update($data));
-        }
-
+        Action::find($request->input('id'))->update($request->only('name'));
     }
 
+    /**
+     *  delete a change_action
+     *
+     * @param Request $request
+     * @throws ValidationException
+     */
     public function deleteId(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        response()->json( ChangeAction::where('id',$request->input('id'))->delete());
+        Action::find($request->input('id'))->delete();
     }
 
 }
