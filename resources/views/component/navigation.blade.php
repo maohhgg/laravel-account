@@ -3,7 +3,7 @@
         <div class="navbar-brand header-logo">
             <a href="#" class="b-brand">
                 <div class="b-bg">
-                    <img src="{{ asset('images/resource/logo-new.png') }}" alt="">
+                    <img src="{{ asset('images/resource/logo.png') }}" alt="">
                 </div>
                 <span class="b-title"></span>
             </a>

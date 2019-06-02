@@ -14,12 +14,20 @@
     <!-- Styles -->
     <link href="{{ asset('plugins/animation/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css')  }}" rel="stylesheet">
-
+    <style>
+        .union-login-bg {
+            background-image: url("{{ asset('images/resource/user-login-bg.jpg') }}") ;
+            -webkit-background-size:cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="auth-wrapper">
+<div class="auth-wrapper union-login-bg">
     @yield('content')
 </div>
 

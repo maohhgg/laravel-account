@@ -2,12 +2,6 @@
 
 @section('content')
     <div class="auth-content">
-        <div class="auth-bg">
-            <span class="r"></span>
-            <span class="r s"></span>
-            <span class="r s"></span>
-            <span class="r"></span>
-        </div>
         <div class="card">
             <!-- Authentication card start -->
             <form class="md-float-material form-material" action="{{ route('login') }}" method="post">
@@ -37,7 +31,7 @@
 
                     <button type="submit" class="btn btn-primary shadow-2 mb-4">登录</button>
                     {{--                    <p class="mb-2 text-muted">忘记密码了？<a href="{{ route('password.request') }}">重置</a></p>--}}
-                    <p class="mb-0 text-muted">还没有账户? <a href="{{ route('register') }}">注册</a></p>
+{{--                    <p class="mb-0 text-muted">还没有账户? <a href="{{ route('register') }}">注册</a></p>--}}
                 </div>
             </form>
         </div>

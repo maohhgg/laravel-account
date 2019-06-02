@@ -3,7 +3,7 @@
         <a class="mobile-menu" id="mobile-collapse1"href="#"><span></span></a>
         <a href="{{ route('admin') }}" class="b-brand">
             <div class="b-bg">
-                <i class="feather icon-trending-up"></i>
+                <img src="{{ asset('images/resource/logo.png') }}" alt="">
             </div>
             <span class="b-title">后台管理</span>
         </a>
