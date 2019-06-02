@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
 
-        $router->post('create', 'DataController@create');
+        $router->post('add', 'DataController@create');
         $router->post('save', 'DataController@update')->name('admin.data.save');
         $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
     });

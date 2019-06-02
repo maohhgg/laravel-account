@@ -115,7 +115,7 @@
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
     <script>
         const CSRFTOKEN = '{{ csrf_token() }}';
-        const ADDURL = '{{ route('admin.data.create') }}';
+        const ADDURL = '{{ route('admin.data.add') }}';
         $(document).ready(function () {
             $('#createTurnoverButton').click(function () {
                 let data = {

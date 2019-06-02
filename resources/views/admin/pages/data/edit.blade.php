@@ -9,7 +9,7 @@
                     <span class="d-block m-t-5">编辑 <code>数据</code> 信息</span>
                 </div>
                 <div class="card-block">
-                    <form action="@if($results) {{ route('admin.data.save') }} @else {{ route('admin.data.create') }} @endif"
+                    <form action="@if($results) {{ route('admin.data.save') }} @else {{ route('admin.data.add') }} @endif"
                           method="post">
                         @csrf
                         {{  Form::hidden('url',URL::previous())  }}
