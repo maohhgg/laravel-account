@@ -70,6 +70,10 @@ class AdminsController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
+        $id = $request->input('id');
+        if(auth()->user()->id == $id){
+            return redirect()->back()->with('toast', '不能删除自己!');
+        }
         Admin::find($request->input('id'))->delete();
         return redirect()->back()->with('toast', '管理员已经创建!');
     }
