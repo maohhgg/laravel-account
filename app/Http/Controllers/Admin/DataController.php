@@ -50,7 +50,6 @@ class DataController extends Controller
         $results = [];
         $types = Type::getTypeArray();
         $user = !empty($id) ? User::select('id', 'name')->find($id) : null;
-
         return view('admin.pages.data.edit', compact('types', 'user', 'results'));
     }
 

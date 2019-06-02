@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
 
     Route::prefix('data')->group(function ($router) {
 
-        $router->get('/{id?}', 'DataController@display')->name('admin.data');
+        $router->get('/', 'DataController@display')->name('admin.data');
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
 
