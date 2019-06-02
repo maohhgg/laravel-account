@@ -89,7 +89,7 @@ class DataController extends Controller
 
         Turnover::create($this->saveToUser($request->only('user_id', 'type_id', 'data', 'description')));
 
-        if(!$request->input('method')){
+        if($request->input('method')){
             return redirect()->back()->with('toast','创建完成');
         }
         return redirect($request->input('url'))->with('toast','创建完成');
