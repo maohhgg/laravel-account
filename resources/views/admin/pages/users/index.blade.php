@@ -80,7 +80,7 @@
                         @elseif(strpos($key, 'name') !== false)
                             <td>
                                 <h6 class="m-0">
-                                    <a href="{{ route('admin.data',[$v->id]) }}">{{ $v->name }}</a>
+                                    <a href="{{ route('admin.data.user',[$v->id]) }}">{{ $v->name }}</a>
                                 </h6>
                             </td>
                         @else
