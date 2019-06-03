@@ -45,6 +45,8 @@ class Controller extends BaseController
         View::share('breadcrumbs', $this->breadcrumbs);
         if($page){
             View::share('title', $page->name.' ---- UnionPay international');
+        } else {
+            View::share('title', ' UnionPay international');
         }
     }
 
