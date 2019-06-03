@@ -29,23 +29,25 @@
 
 
 <!-- [ notification ] start -->
-@if (session('toast'))
-    <div style="position:absolute;top:50px;right: 40px;width: 350px;z-index: 100000">
-        <div class="toast hide toast-right" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
-            <div class="toast-header">
-                <img src="{{ asset('favicon.ico') }}" alt="" class="img-fluid mr-2">
-                <strong class="mr-auto">通知</strong>
-                <small class="text-muted"></small>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
+
+<div style="position:absolute;top:50px;right: 40px;width: 350px;z-index: 100000">
+    <div class="toast hide toast-right" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
+        <div class="toast-header">
+            <img src="{{ asset('favicon.ico') }}" alt="" class="img-fluid mr-2">
+            <strong class="mr-auto">通知</strong>
+            <small class="text-muted"></small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="toast-message">
+            @if (session('toast'))
                 {{ session('toast') }}
-            </div>
+            @endif
         </div>
     </div>
-@endif
+</div>
+
 <!-- [ notification ] end -->
 
 <!-- [ Pre-loader ] start -->
@@ -78,13 +80,13 @@
 <script src="{{ asset('js/vendor-all.min.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/pcoded.min.js') }}"></script>
-<script>
-    @if (session('toast'))
-    $(document).ready(function () {
-        $('.toast').toast('show');
-    });
-    @endif
-</script>
+@if (session('toast'))
+    <script>
+        $(document).ready(function () {
+            $('.toast').toast('show');
+        });
+    </script>
+@endif
 
 @yield('script')
 @yield('component-script')

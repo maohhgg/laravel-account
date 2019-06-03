@@ -44,6 +44,14 @@
                                        value="{{ old('email') ?? $user->email }}" required>
                             </div>
 
+                            <div class="form-group mb-3">
+                                <label class="form-label">密码</label>
+                                <input name="password" type="password"
+                                       class="form-control @error('password') border-danger @enderror"
+                                       @error('password') data-toggle="tooltip" data-placement="top"
+                                       title="{{ $message }}" @enderror
+                                       value="{{ old('password') ?? $user->password }}" required>
+                            </div>
 
                             <button type="submit" class="btn btn-primary">更新</button>
                         </form>

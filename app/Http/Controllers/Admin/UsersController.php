@@ -96,6 +96,11 @@ class UsersController extends Controller
         return view('admin.pages.users.update', compact('user'));
     }
 
+    public function passwordForm()
+    {
+        return view('home.pages.password');
+    }
+
 
     /**
      * response username json resource for creating a new turnover.
@@ -144,13 +149,39 @@ class UsersController extends Controller
     public function updateUser(Request $request)
     {
         $this->validate($request, [
+            'id' => 'required',
             'name' => 'string',
             'email' => 'string|email|max:255',
-            'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/']
+            'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/'],
+            'password' => 'string:min:8'
         ]);
+        $data = $request->only('name', 'email', 'phone', 'password');
+        $u = User::find($request->input('id'));
+        if ($data['password']!=$u->password){
+            $data['password'] = Hash::make($data['password']);
+        }
 
-        User::find($request->input('id'))->update($request->only('name', 'email', 'phone'));
+        $u->update($data);
         return redirect($request->input('url'))->with('toast','用户数据完成更新');
+    }
+
+    /**
+     * change Admin password
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
+    public function updatePassword(Request $request)
+    {
+        $this->validate($request, [
+            'current_password' => ['required', 'string', 'min:8', function ($attribute, $value, $fail) {
+                return Hash::check($value, auth()->user()->password) ? true : $fail('当前密码 不匹配');
+            }],
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+        User::where('id', auth()->user()->id)->update(['password' => Hash::make($request->input('password'))]);
+        return redirect($request->input('url'))->with('toast', '密码已经更新!');
     }
 
     /**

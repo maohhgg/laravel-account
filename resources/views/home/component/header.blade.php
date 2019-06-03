@@ -25,7 +25,8 @@
                         </div>
                         <ul class="pro-body">
 {{--                            <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
-                            <li><a href="{{ route('admin.logout') }}"
+                            <li><a href="{{ route('password') }}" class="dropdown-item"><i class="feather icon-lock"></i> 修改密码</a></li>
+                            <li><a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                                    class="dropdown-item">
                                     <i class="feather icon-log-out"></i>  退出</a>

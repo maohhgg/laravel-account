@@ -14,6 +14,9 @@ $(window).on('load', function() {
                 window.location.href = this.getAttribute('data-url');
                 break;
             case 'collect':
+                $('#collect-user-id').val(this.getAttribute('data-user-id'));
+                $('#collect-user').val(this.getAttribute('data-name'));
+                $('#createCollectModal').modal('show');
                 break;
 
             case 'push':

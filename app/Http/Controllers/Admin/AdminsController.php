@@ -116,7 +116,7 @@ class AdminsController extends Controller
         return view('admin.pages.admins.update', compact('admin'));
     }
 
-    public function passwordForm($id = null)
+    public function passwordForm()
     {
         return view('admin.pages.admins.password');
     }

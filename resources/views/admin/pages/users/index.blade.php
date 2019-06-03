@@ -42,13 +42,56 @@
 
                                 <div class="form-group">
                                     <label class="form-label">数值</label>
-                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
+                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.01','step'=>'1']) }}
                                 </div>
 
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-info" data-dismiss="modal">取消</button>
                                 <button type="button" class="btn btn-primary" id="createTurnoverButton">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="createCollectModal" tabindex="-1" role="dialog"
+                     aria-labelledby="createCollectModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加新汇总数据</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">用户</label>
+
+                                    {{ Form::hidden('',null,['id'=>'collect-user-id']) }}
+                                    {{ Form::text('',null,['id'=>'collect-user','class'=>'form-control','disabled']) }}
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">类型</label>
+                                    {{ Form::select('is_online', ['0' => '线下交易汇总', '1' => '在线交易汇总'], null, ['id'=>'collect-type-id','class'=>'js-data-ajax form-control']) }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">数值</label>
+                                    {{ Form::number('data',null,['id'=>'collect-data','class'=>'form-control','min'=>'0.01','step'=>'1']) }}
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label class="form-label">日期</label>
+                                    {{ Form::date('created_at', date('Y-m-d'),['class'=>'form-control','id' => 'collect-date']) }}
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-info" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" id="createCollectButton">添加</button>
                             </div>
                         </div>
                     </div>
@@ -79,9 +122,7 @@
                             <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
                         @elseif(strpos($key, 'name') !== false)
                             <td>
-                                <h6 class="m-0">
-                                    <a href="{{ route('admin.data.user',[$v->id]) }}">{{ $v->name }}</a>
-                                </h6>
+                                <h6 class="m-0">{{ $v->name }}</h6>
                             </td>
                         @else
                             <td><h6 class="m-0">{{ $v->{$key} }}</h6></td>
@@ -89,7 +130,6 @@
                     @endforeach
                 </tr>
             @endforeach
-
 
 
         @endcomponent
@@ -109,15 +149,50 @@
 
 @section('styles')
     <link href="{{ asset('plugins/toolbar/css/jquery.toolbar.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
 @endsection
 
+
 @section('script')
+
+    <script src="{{ asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js') }}"></script>
     <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
     <script>
         const CSRFTOKEN = '{{ csrf_token() }}';
-        const ADDURL = '{{ route('admin.data.add') }}';
+        const DATAADDURL = '{{ route('admin.data.add') }}';
+        const COLLECTADDURL = '{{ route('admin.collect.add') }}';
+
+        function toastMessage(string) {
+            $('#toast-message').html(string);
+            $('.toast').toast('show');
+        }
+
         $(document).ready(function () {
+            $('#collect-date').datepicker({
+                language: 'zh-CN',
+                autoclose: true
+            });
+
+            $('#createCollectButton').click(function () {
+                let data = {
+                    '_token': CSRFTOKEN,
+                    'user_id': $('#collect-user-id').val(),
+                    'is_online': $('#collect-type-id').find(":selected").val(),
+                    'data': $('#collect-data').val(),
+                    'created_at': $('#collect-date').val(),
+                    'method': 'ajax'
+                };
+
+                $.post(COLLECTADDURL, data).done(function (result) {
+                    window.location.reload();
+                }).fail(function (result) {
+                    toastMessage('请填写必须项');
+                });
+
+            });
+
             $('#createTurnoverButton').click(function () {
                 let data = {
                     '_token': CSRFTOKEN,
@@ -128,14 +203,13 @@
                 };
                 let desc = $('#turnover-description').val();
                 if (desc) {
-                    data.description = desc;
+                    data.description = desc
                 }
 
-                $.post(
-                    ADDURL,
-                    data
-                ).done(function () {
+                $.post(DATAADDURL, data).done(function (result) {
                     window.location.reload();
+                }).fail(function (result) {
+                    toastMessage('请填写必须项');
                 });
             })
         })
