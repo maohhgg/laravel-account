@@ -17,7 +17,7 @@
                                 <ul class="breadcrumb">
                                     @if ($breadcrumbs)
                                         <li class="breadcrumb-item">
-                                            <a href="{{ route('admin') }}"><i class="feather icon-home"></i></a>
+                                            <a href="{{ route('admin.home') }}"><i class="feather icon-home"></i></a>
                                         </li>
                                         @foreach($breadcrumbs as $breadcrumb)
                                             @if ($loop->last)

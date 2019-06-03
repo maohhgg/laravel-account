@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
             AdminsTableSeeder::class,
             ChangeTypesTableSeeder::class,
             NavigationsTableSeeder::class,
-            PagesTableSeeder::class,
+            ChangeActionsTableSeeder::class,
         ]);
     }
 }

@@ -1,10 +1,12 @@
-<li data-username="{{ $item->action }}"
-    class="nav-item pcoded-hasmenu @if($item->children->reduce(function($c,$i){return $c == $i->action ? true : $c;},$active) === true) active pcoded-trigger @endif">
+<li data-username="{{ $item->action.$active }}"
+    class="nav-item pcoded-hasmenu @if(strpos($active, $item->action) === 0 ) active pcoded-trigger @endif">
 
 
     <a href="#" class="nav-link">
         <span class="pcoded-micon"><i class="feather icon-{{ $item->icon }}"></i></span>
-        <span class="pcoded-mtext">{{ $item->name }}</span>
+        <span class="pcoded-mtext">
+            {{ $item->name }}
+        </span>
     </a>
 
     <ul class="pcoded-submenu">

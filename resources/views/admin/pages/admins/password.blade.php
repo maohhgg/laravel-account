@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-block">
                     <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                        <form action="{{ route('admin.password.update') }}" method="post">
+                        <form action="{{ route('admin.password.save') }}" method="post">
                             @csrf
                             {{  Form::hidden('url',URL::previous())  }}
                             <div class="form-group mb-3">

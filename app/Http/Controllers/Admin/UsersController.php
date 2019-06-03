@@ -54,15 +54,13 @@ class UsersController extends Controller
         ]);
     }
 
-    public function index()
+    public function display()
     {
         $items = [
             'id' => '#ID',
             'name' => '名称',
-//            'avatar' => '头像',
             'phone' => '电话号码',
             'balance' => '余额',
-            'total' => '消费总计',
             'email' => '邮箱',
             'created_at' => '创建时间',
             'updated_at' => '上次登录时间',
@@ -70,6 +68,7 @@ class UsersController extends Controller
 
         $results = User::Paginate(10);
         $types = Type::getTypeArray();
+
         return view('admin.pages.users.index', compact('items', 'results', 'types'));
     }
 

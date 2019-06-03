@@ -50,47 +50,7 @@
             </div>
             <div class="col-sm-12 col-md-7">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end" role="navigation">
-                        @if ($results->hasPages())
-                            {{-- Previous Page Link --}}
-                            @if ($results->onFirstPage())
-                                <li class="page-item disabled" aria-disabled="true"
-                                    aria-label="@lang('pagination.previous')">
-                                    <a class="page-link" aria-hidden="true">&lsaquo;</a>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $results->previousPageUrl() }}" rel="prev"
-                                       aria-label="@lang('pagination.previous')">&lsaquo;</a>
-                                </li>
-                            @endif
-
-                            @for ($i = 1; $i <= $results->lastPage(); $i++)
-                                @if ($i == $results->currentPage())
-                                    <li class="page-item active" aria-current="page">
-                                        <a class="page-link" href="{{'?page='.$i}}">{{$i}}</a>
-                                    </li>
-                                @else
-                                    <li class="page-item"><a class="page-link" href="{{'?page='.$i}}">{{$i}}</a></li>
-                                @endif
-
-                            @endfor
-
-
-                            {{-- Next Page Link --}}
-                            @if ($results->hasMorePages())
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $results->nextPageUrl() }}" rel="next"
-                                       aria-label="@lang('pagination.next')">&rsaquo;</a>
-                                </li>
-                            @else
-                                <li class="page-item disabled" aria-disabled="true"
-                                    aria-label="@lang('pagination.next')">
-                                    <a class="page-link" aria-hidden="true">&rsaquo;</a>
-                                </li>
-                            @endif
-                        @endif
-                    </ul>
+                    {{ $results->links() }}
                 </nav>
             </div>
         </div>

@@ -22,7 +22,7 @@ class ChangeController extends Controller
      *
      * @return Factory|View
      */
-    public function index()
+    public function display()
     {
         $types = Type::where('id', '>', '0')->with('actions')->get();
         return view('admin.pages.change.index', compact('types'));
@@ -38,7 +38,7 @@ class ChangeController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|string|unique:change_actions,name',
+            'name' => 'required|string|unique:change_actions,name|max:255|min:1',
             'change_type_id' => 'required|exists:change_types,id',
         ]);
         Action::create($request->only('name', 'change_type_id'));
@@ -55,7 +55,7 @@ class ChangeController extends Controller
     {
         $this->validate($request, [
             'id' => 'required|numeric',
-            'name' => 'required|string|max:64|max:1'
+            'name' => 'required|string|unique:change_actions,name|max:255|min:1'
         ]);
         Action::find($request->input('id'))->update($request->only('name'));
     }

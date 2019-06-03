@@ -29,6 +29,11 @@ class Type extends model
         return $action == self::INCOME ? self::income($balance, $data) : self::expenditure($balance, $data);
     }
 
+    public static function is_push($action)
+    {
+        return $action === self::INCOME;
+    }
+
     public static function income($balance, $data){
         return $balance = $balance + $data;
     }

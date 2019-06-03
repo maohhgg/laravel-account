@@ -1,7 +1,7 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light">
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse1"href="#"><span></span></a>
-        <a href="{{ route('admin') }}" class="b-brand">
+        <a href="{{ route('admin.home') }}" class="b-brand">
             <div class="b-bg">
                 <img src="{{ asset('images/resource/logo.png') }}" alt="">
             </div>
@@ -20,6 +20,11 @@
                     <li><a class="dropdown-item" href="{{ route('admin.data.create') }}">
                             <span class="pcoded-micon"><i class="feather icon-file-plus"></i></span>
                             <span class="pcoded-mtext">数据</span>
+                        </a>
+                    </li>
+                    <li><a class="dropdown-item" href="{{ route('admin.collect.create') }}">
+                            <span class="pcoded-micon"><i class="feather icon-file-plus"></i></span>
+                            <span class="pcoded-mtext">汇总数据</span>
                         </a>
                     </li>
                     <li><a class="dropdown-item" href="{{ route('admin.users.create') }}">

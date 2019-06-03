@@ -4,12 +4,11 @@
 namespace App\Http\Controllers;
 
 
+use App\Collect;
 use App\Turnover;
-use Illuminate\Support\Facades\Route;
 
 class DataController extends Controller
 {
-    public $module = 'history';
 
     public function history()
     {
@@ -21,6 +20,17 @@ class DataController extends Controller
 
         $results = Turnover::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->Paginate(15);
         return view('home.pages.data.turnover', compact('items', 'results'));
+    }
+
+    public function collect()
+    {
+        $items = [
+            'data' => '金额(元)',
+            'created_at' => '日期'];
+        $id = auth()->user()->id;
+        $online_results = Collect::where([['user_id', $id], ['is_online', 1]])->orderBy('id', 'desc')->Paginate(15, ['*'], 'oPage');
+        $results = Collect::where([['user_id', $id], ['is_online', 0]])->orderBy('id', 'desc')->Paginate(15, ['*'], 'lPage');
+        return view('home.pages.data.collect', compact('items', 'results', 'online_results'));
     }
 
 }

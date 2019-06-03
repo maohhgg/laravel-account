@@ -17,8 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('phone',16)->default('default');
-            $table->decimal('balance',10,2)->default(0);
-            $table->decimal('total',10,2)->default(0);
+            $table->decimal('balance',14,2)->default(0);
             $table->string('email')->default('default');
             $table->string('icon',64)->default('avatar-1.jpg');
             $table->timestamp('email_verified_at')->nullable();

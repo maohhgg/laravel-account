@@ -84,7 +84,7 @@ class AdminsController extends Controller
      *
      * @return Factory|View
      */
-    public function index()
+    public function display()
     {
         $items = [
             'id' => '#ID',
@@ -119,12 +119,6 @@ class AdminsController extends Controller
     public function passwordForm($id = null)
     {
         return view('admin.pages.admins.password');
-    }
-
-    public function settingForm()
-    {
-        $admin = Admin::find(auth()->user()->id);
-        return view('admin.pages.admins.setting', compact('admin'));
     }
 
     /**

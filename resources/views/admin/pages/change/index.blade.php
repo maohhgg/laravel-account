@@ -66,7 +66,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="create-change-form" action="{{ route('admin.change.create') }}">
+                    <form method="post" id="create-change-form" action="{{ route('admin.change.add') }}">
                         @csrf
                         <div class="form-group">
                             <input type="hidden" name="change_type_id" id="change-type-id">

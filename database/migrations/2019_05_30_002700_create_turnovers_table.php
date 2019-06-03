@@ -15,11 +15,12 @@ class CreateTurnoversTable extends Migration
     {
         Schema::create('turnovers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('data',10,2);
-            $table->decimal('history',10,2);
+            $table->decimal('data',14,2);
+            $table->decimal('history',14,2);
             $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();
+            $table->integer('pre_id');
             $table->timestamp('created_at');
         });
     }

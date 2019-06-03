@@ -16,7 +16,6 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public $breadcrumbs;
-    public $module;
 
     /**
      * iZgeidm3894rguZ
@@ -26,9 +25,14 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware('auth.admin:admin');
-        View::share('active', $this->module);
-        View::share('menus', Navigation::where([['parent_id', '0'], ['is_admin', '1']])->with('children')->get());
-        $page = Page::where('url', Route::currentRouteName())->with('parent')->first();
+        View::share('active', str_replace('admin.','', Route::currentRouteName()));
+        $nav = Navigation::where(['parent_nav' => 0,'is_admin' => 1])
+            ->orderBy('sequence')
+            ->with('children')
+            ->select('id','action','icon','name','url')
+            ->get();
+        View::share('menus', $nav);
+        $page = Navigation::where('url', Route::currentRouteName())->with('parent')->first();
         if ($page) {
             $this->breadcrumbs = [];
             while ($page->parent) {
@@ -37,9 +41,11 @@ class Controller extends BaseController
                 array_unshift($this->breadcrumbs, $b);
                 $page = $page->parent;
             }
-            unset($page);
         }
         View::share('breadcrumbs', $this->breadcrumbs);
+        if($page){
+            View::share('title', $page->name);
+        }
     }
 
 }

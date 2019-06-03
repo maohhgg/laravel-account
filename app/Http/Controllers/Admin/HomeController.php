@@ -4,8 +4,9 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Config;
 use App\Page;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Arr;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,16 @@ class HomeController extends Controller
 
     public function index()
     {
-        $breadcrumbs = Page::where('url',Route::currentRouteName())->get()->toArray();
-        return view('admin.pages.home',compact('breadcrumbs'));
+        return view('admin.pages.home');
+    }
+
+    public function settingForm()
+    {
+        $settings = ['server_name', 'QRCode'];
+        $results = [];
+        foreach ($settings as $item){
+            $results[$item] = Config::get($item);
+        }
+        return view('admin.pages.setting',compact('results'));
     }
 }

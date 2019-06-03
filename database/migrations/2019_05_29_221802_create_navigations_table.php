@@ -19,8 +19,10 @@ class CreateNavigationsTable extends Migration
             $table->string('icon',64);
             $table->string('name',64);
             $table->string('url',64);
-            $table->integer('parent_id');
+            $table->integer('sequence');
+            $table->integer('parent_nav');
             $table->boolean('is_admin');
+            $table->boolean('is_nav');
         });
     }
 

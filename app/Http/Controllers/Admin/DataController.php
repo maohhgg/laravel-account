@@ -34,7 +34,14 @@ class DataController extends Controller
             'data' => '金额',
             'created_at' => '时间',
             'action' => '操作'];
-        $t = $id == null ? new Turnover(): Turnover::where('user_id', $id);
+        // 判断用户是否存在
+        if ($id) {
+            if (is_null(User::where('id', $id)->first())) return redirect()->route('admin');
+            $t = Turnover::where('user_id', $id);
+        } else {
+            $t = new Turnover();
+        }
+
         $results = $t->orderBy('id', 'desc')->Paginate(10);
         return view('admin.pages.data.index', compact('items', 'results'));
     }
@@ -82,16 +89,29 @@ class DataController extends Controller
         $this->validate($request, [
             'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
-            'data' => 'required|numeric|min:0.01',
-            'description' => 'nullable'
+            'data' => 'required|numeric|min:0.01|max:99999999999',
+            'description' => 'nullable',
         ]);
 
-        Turnover::create($this->saveToUser($request->only('user_id', 'type_id', 'data', 'description')));
+        $data = $request->only('user_id', 'type_id', 'data', 'description');
+        $action = Action::find($data['type_id'])->type->action;
 
-        if($request->input('method')){
-            return redirect()->back()->with('toast','创建完成');
+        $this->saveToUser($data['user_id'], $data['data'], $action);
+        $pre = Turnover::where('user_id', $data['user_id'])->orderBy('id', 'desc')->first();
+
+        if (is_null($pre)) {
+            $data['pre_id'] = 0;
+            $data['history'] = $data['data'];
+        } else {
+            $data['pre_id'] = $pre->id;
+            $data['history'] = Type::turnover($pre->history, $data['data'], $action);
         }
-        return redirect($request->input('url'))->with('toast','创建完成');
+
+        Turnover::create($data);
+
+        return $request->input('method') ?
+            redirect()->back()->with('toast', '创建完成') :
+            redirect()->route('admin.data')->with('toast', '创建完成');
     }
 
 
@@ -106,15 +126,32 @@ class DataController extends Controller
     {
         $this->validate($request, [
             'id' => 'required|numeric',
-            'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
-            'data' => 'required|numeric|min:0.01',
-            'description' => 'nullable'
+            'data' => 'required|numeric|min:0.01|max:99999999999',
+            'description' => 'nullable',
+            'created_at' => 'date'
         ]);
+        $data = $request->only('type_id', 'data', 'description', 'created_at');
 
-        $this->recoveryUser($request->input('id'));
-        Turnover::find($request->input('id'))
-            ->update($this->saveToUser($request->only('user_id', 'type_id', 'data', 'description')));
+        $t = Turnover::find($request->input('id'));
+
+        $old = Action::find($t->type_id)->type->action;
+        $new = Action::find($request->input('type_id'))->type->action;
+
+        $this->recoveryUser($t, $old);
+        $this->saveToUser($t->user_id, $data['data'], $new);
+
+
+
+        $count = 0 - ($old === $new ? $t->data - $data['data'] : $t->data + $data['data']);
+        if (Type::is_push($old)) {
+            $t->history += $count;
+            Turnover::where([['user_id', $t->user_id],['id','>', $t->id]])->increment('history',$count);
+        } else {
+            $t->history -= $count;
+            Turnover::where([['user_id', $t->user_id],['id','>', $t->id]])->decrement('history',$count);
+        }
+        $t->update($data);
 
         return redirect($request->input('url'))->with('toast', '记录更新完成');
     }
@@ -131,8 +168,10 @@ class DataController extends Controller
             'id' => 'required|numeric',
         ]);
 
-        $this->recoveryUser($request->input('id'));
-        Turnover::find($request->input('id'))->delete();
+        $t = Turnover::find($request->input('id'));
+        $this->recoveryUser($t, Action::find($t->type_id));
+
+        $t->delete();
         return redirect()->back()->with('toast', '记录已经删除');
     }
 
@@ -140,43 +179,28 @@ class DataController extends Controller
     /**
      * according to turnover data change user balance and total
      *
+     * @param int $userId
      * @param array $data
-     * @return array mixed
+     * @param string $action
      */
-    protected function saveToUser($data)
+    protected function saveToUser(int $userId, $data, string $action)
     {
-        $action = Action::find($data['type_id']);
-        $user = User::find($data['user_id']);
-
-        $user->balance = Type::turnover($user->balance, $data['data'], $action->type->action);
-        $user->total = $action->type->action == Type::INCOME ? Type::income($user->total, $data['data']) : $user->total;
+        $user = User::find($userId);
+        $user->balance = Type::turnover($user->balance, $data, $action);
         $user->save();
-
-        $data['history'] = $user->balance;
-
-        return $data;
     }
 
 
     /**
      * recovery user balance and total
      *
-     * @param number $turnoverId
+     * @param Turnover $turnover
+     * @param string $action
      */
-    protected function recoveryUser($turnoverId)
+    protected function recoveryUser(Turnover $turnover, string $action)
     {
-        $t = Turnover::find($turnoverId);
-        $a = Action::where('id', $t->type_id)->first();
-        $user = User::find($t->user_id);
-
-        $user->balance = Type::turnover($user->balance, $t->data, Type::reverse($a->type->action));
-
-        if ($a->type->action == Type::INCOME) {
-            $user->total = Type::expenditure($user->total, $t->data);
-            Turnover::where([['id', '>', $turnoverId], ['user_id', $t->user_id]])->decrement('history', $t->data);
-        } else {
-            Turnover::where([['id', '>', $turnoverId], ['user_id', $t->user_id]])->increment('history', $t->data);
-        }
+        $user = User::find($turnover->user_id);
+        $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));
         $user->save();
     }
 
