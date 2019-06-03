@@ -40,6 +40,8 @@ class Controller extends BaseController
 
         }
         View::share('breadcrumbs', $this->breadcrumbs);
-        View::share('title', $page->name);
+        if($page){
+            View::share('title', $page->name.' ---- UnionPay international');
+        }
     }
 }
