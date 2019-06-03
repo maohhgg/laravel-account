@@ -97,6 +97,7 @@
         <div id="toolbar-options" class="hidden">
             <a data-content="edit"><i class="feather icon-edit-2"></i></a>
             <a data-content="push"><i class="feather icon-plus-circle"></i></a>
+            <a data-content="collect"><i class="feather icon-file-plus"></i></a>
             <a data-content="delete"><i class="feather icon-trash-2"></i></a>
         </div>
     @else

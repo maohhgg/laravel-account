@@ -78,7 +78,7 @@ class CollectController extends Controller
             'user_id' => 'required|numeric',
             'is_online' => 'required|numeric',
             'data' => 'required|numeric|min:0.01|max:99999999999',
-            'created_at' => 'date'
+            'created_at' => 'required|date'
         ]);
 
         Collect::create($request->only('user_id', 'is_online', 'data', 'created_at'));

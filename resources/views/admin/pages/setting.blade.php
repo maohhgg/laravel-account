@@ -24,16 +24,12 @@
                                        value="{{ old('servername') ?? $results['server_name'] }}" required>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="form-label">充值二维码</label>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <form action="{{ route('admin.upload') }}" class="dropzone dz-clickable">
-                                    <div class="dz-default dz-message"><span>拖动文件上传</span></div></form>
-                                </div>
-
+                            <div class="form-group mb-3">
+                                <form action="{{ route('admin.upload') }}" class="dropzone dz-clickable dz-started">
+                                    <div class="fallback">
+                                        <input name="file" type="file" multiple />
+                                    </div>
+                                </form>
                             </div>
 
                             <button type="submit" class="btn btn-primary">更新</button>
@@ -45,4 +41,10 @@
     </div>
     <!-- [ Main Content ] end -->
 
+@endsection
+@section('styles')
+<link href="{{ asset('plugins/fileupload/css/fileupload.css') }}">
+@endsection
+@section('script')
+    <script src="{{ asset('plugins/fileupload/js/dropzone-amd-module.min.js') }}"></script>
 @endsection

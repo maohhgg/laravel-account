@@ -13,6 +13,8 @@ $(window).on('load', function() {
             case 'edit':
                 window.location.href = this.getAttribute('data-url');
                 break;
+            case 'collect':
+                break;
 
             case 'push':
                 $('#turnover-user-id').val(this.getAttribute('data-user-id'));
