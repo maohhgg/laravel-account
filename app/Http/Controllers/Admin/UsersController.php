@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Collect;
 use App\Type;
 use App\Turnover;
 use App\User;
@@ -166,6 +167,7 @@ class UsersController extends Controller
         ]);
         $id = $request->input('id');
         Turnover::where('user_id', $id)->delete();
+        Collect::where('user_id', $id)->delete();
         User::find($id)->delete();
         return redirect()->back()->with('toast','用户已删除');
     }
