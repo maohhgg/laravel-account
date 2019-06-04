@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        @if(!$results->isEmpty())
+        @if($results)
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -43,7 +43,7 @@
 
     <script src=" {{ asset('plugins/chart-chartjs/js/Chart.min.js') }}"></script>
     <script>
-        let results = {!! json_encode($results->toArray()) !!} ;
+        let results = {!! json_encode($results) !!};
         let bar = document.getElementById("chart-area-1").getContext('2d');
         let theme = bar.createLinearGradient(0, 0, 500, 0);
         theme.addColorStop(0, 'rgba(29, 233, 182, 0.6)');
@@ -90,6 +90,10 @@
                     callbacks: {
                         title: function (tooltipItems, data) {
                             return '';
+                        },
+                        label: function (tooltipItem, data) {
+                            var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            return value + '元';
                         }
                     }
                 }

@@ -15,15 +15,9 @@ class DataController extends Controller
         $items = [
             'data' => '金额(元)',
             'type' => '消息',
-            'history' => '变更后余额(元)',
             'created_at' => '日期'];
 
-        $results = Turnover::where('user_id', auth()->user()->id)->orderBy('created_at');
-        $temp = 0;
-        foreach ($results as $result){
-            $temp += $result->data;
-            $result->history = $temp;
-        }
+        $results = Turnover::where('user_id', auth()->user()->id)->orderBy('created_at')->Paginate(30);
         return view('home.pages.data.turnover', compact('items', 'results'));
     }
 
