@@ -35,15 +35,17 @@ class DataController extends Controller
             'created_at' => '时间',
             'action' => '操作'];
         // 判断用户是否存在
+        $user = null;
         if ($id) {
-            if (is_null(User::where('id', $id)->first())) return redirect()->route('admin');
+            $user = User::where('id', $id)->first();
+            if (is_null($user)) return redirect()->route('admin');
             $t = Turnover::where('user_id', $id);
         } else {
             $t = new Turnover();
         }
 
         $results = $t->orderBy('id', 'desc')->Paginate(15);
-        return view('admin.pages.data.index', compact('items', 'results'));
+        return view('admin.pages.data.index', compact('items', 'results', 'user'));
     }
 
     /**

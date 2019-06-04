@@ -29,15 +29,17 @@ class CollectController extends Controller
             'created_at' => '日期',
             'action' => '操作'];
         // 判断用户是否存在
+        $user = null;
         if ($id) {
-            if (is_null(User::where('id', $id)->first())) return redirect()->route('admin');
+            $user = User::where('id', $id)->first();
+            if (is_null($user)) return redirect()->route('admin');
             $c = Collect::where('user_id', $id);
         } else {
             $c = new Collect();
         }
         $results = $c->orderBy('id', 'desc')->Paginate(15);
         $types = $this->types;
-        return view('admin.pages.collect.index', compact('items', 'results', 'types'));
+        return view('admin.pages.collect.index', compact('items', 'results', 'types', 'user'));
     }
 
     /**

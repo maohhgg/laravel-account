@@ -4,7 +4,7 @@
     @if(!$results->isEmpty())
         @component('component.table',['items' => $items,'results' => $results,'target' => 'collect'])
             @slot('title')
-                数据
+                @if(!is_null($user)) {{ $user->name }} 的@endif汇总数据
             @endslot
 
             @foreach($results as $v)

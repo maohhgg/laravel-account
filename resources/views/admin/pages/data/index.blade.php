@@ -4,7 +4,7 @@
     @if(!$results->isEmpty())
         @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
             @slot('title')
-                数据
+                @if(!is_null($user)) {{ $user->name }} 的@endif数据
             @endslot
             @slot('confrimMessage')
                 删除记录将会还原数据
