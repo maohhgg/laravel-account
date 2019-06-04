@@ -161,7 +161,12 @@ class CollectController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        Collect::find($request->input('id'))->delete();
+        $c = Collect::find($request->input('id'));
+        $t = Turnover::find($c->turn_id);
+        User::recoveryUser($t, Action::find($t->type_id));
+        $t->delete();
+        $c->delete();
+
         return redirect()->back()->with('toast', '汇总数据已删除');
     }
 }

@@ -18,7 +18,12 @@ class DataController extends Controller
             'history' => '变更后余额(元)',
             'created_at' => '日期'];
 
-        $results = Turnover::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->Paginate(15);
+        $results = Turnover::where('user_id', auth()->user()->id)->orderBy('created_at');
+        $temp = 0;
+        foreach ($results as $result){
+            $temp += $result->data;
+            $result->history = $temp;
+        }
         return view('home.pages.data.turnover', compact('items', 'results'));
     }
 

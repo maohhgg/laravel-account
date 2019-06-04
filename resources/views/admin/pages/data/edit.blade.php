@@ -54,11 +54,10 @@
                             <div class="form-group mb-4">
                                 <label class="form-label">数值</label>
                                 <input name="data" type="number"
-                                       class="form-control  @error('data') border-danger @enderror" min="0.01"
+                                       class="form-control  @error('data') border-danger @enderror"
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
-                                       value="@if(!$results){{ old('data') }}@else{{ floatval($results->data) }}@endif"
-                                       step="0.01"/>
+                                       value="@if(!$results){{ old('data') }}@else{{ floatval($results->data) }}@endif"/>
                             </div>
 
                             @if($results)
