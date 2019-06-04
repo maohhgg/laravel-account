@@ -27,6 +27,8 @@
                             <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
                         @elseif(strpos($key, 'updated_at') !== false)
                             <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
+                        @elseif(strpos($key, 'id') !== false)
+                            <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
                         @else
                             <td><h6 class="m-0">{{ $v->{$key} }}</h6></td>
                         @endif

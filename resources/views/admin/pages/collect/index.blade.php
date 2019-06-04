@@ -9,7 +9,7 @@
 
             @foreach($results as $v)
                 <tr>
-                    <td><h6 class="m-0">{{ $v->id }}</h6></td>
+                    <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
                     <td>
                         <h6 class="m-0">
                             <a href="{{ route('admin.collect.user',[$v->user->id]) }}">{{ $v->user->name }}</a>

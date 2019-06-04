@@ -67,7 +67,7 @@ class UsersController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = User::Paginate(10);
+        $results = User::Paginate(15);
         $types = Type::getTypeArray();
 
         return view('admin.pages.users.index', compact('items', 'results', 'types'));

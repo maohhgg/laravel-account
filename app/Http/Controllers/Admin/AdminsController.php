@@ -95,7 +95,7 @@ class AdminsController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = Admin::paginate(10);
+        $results = Admin::paginate(15);
         return view('admin.pages.admins.index', compact('items', 'results'));
     }
 

@@ -35,7 +35,7 @@ class CollectController extends Controller
         } else {
             $c = new Collect();
         }
-        $results = $c->orderBy('id', 'desc')->Paginate(10);
+        $results = $c->orderBy('id', 'desc')->Paginate(15);
         $types = $this->types;
         return view('admin.pages.collect.index', compact('items', 'results', 'types'));
     }

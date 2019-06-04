@@ -42,7 +42,7 @@ class DataController extends Controller
             $t = new Turnover();
         }
 
-        $results = $t->orderBy('id', 'desc')->Paginate(10);
+        $results = $t->orderBy('id', 'desc')->Paginate(15);
         return view('admin.pages.data.index', compact('items', 'results'));
     }
 
