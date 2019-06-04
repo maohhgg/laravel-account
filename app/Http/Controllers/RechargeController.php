@@ -32,9 +32,9 @@ class RechargeController extends Controller
             'pay_number' => 'required|numeric|min:0.01|max:9999999999'
         ]);
         $data = [
-            'goods' => Order::goodsId(),
+            'goods' => Order::goods(),
             'goods_inf' => Action::find(3)->name,
-            'order' => Order::orderId(),
+            'order' => Order::order(),
             'user_id' => $request->input('id'),
             'pay_number' => $request->input('pay_number'),
             'is_cancel' => 0

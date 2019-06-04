@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Action;
 use App\Collect;
+use App\Library\Order;
 use App\Turnover;
 use App\User;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ class CollectController extends Controller
     {
         $items = [
             'id' => '#ID',
+            'order' => '单号',
             'name' => '用户',
             'is_online' => '类型',
             'data' => '总额',
@@ -103,6 +105,7 @@ class CollectController extends Controller
 
 
         $data['turn_id'] = Turnover::create($d)->id;
+        $data['order'] = Order::collect();
         Collect::create($data);
 
         return $request->input('method') ?

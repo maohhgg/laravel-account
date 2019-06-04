@@ -16,10 +16,11 @@ class CreateTurnoversTable extends Migration
         Schema::create('turnovers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->decimal('data',14,2);
-            $table->string('order')->nullable();
+            $table->string('order');
             $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();
+            $table->string('is_recharge');
             $table->timestamp('created_at');
         });
     }

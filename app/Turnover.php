@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Turnover extends Model
 {
-    protected $fillable = ['user_id', 'type_id', 'data', 'description', 'created_at', 'order'];
+    protected $fillable = ['user_id', 'type_id', 'data', 'description', 'created_at', 'order', 'is_recharge'];
 
     public $timestamps = false;
 
@@ -35,7 +35,7 @@ class Turnover extends Model
 
     public function next()
     {
-        return $this->belongsTo(self::class, 'id','pre_id');
+        return $this->belongsTo(self::class, 'id', 'pre_id');
     }
 
 }

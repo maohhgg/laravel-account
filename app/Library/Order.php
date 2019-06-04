@@ -6,12 +6,17 @@ namespace App\Library;
 
 class Order
 {
-    public static function goodsId()
+    public static function goods()
     {
         return 'GNO' . self::generate();
     }
 
-    public static function orderId()
+    public static function collect()
+    {
+        return 'CNO' . self::generate();
+    }
+
+    public static function order()
     {
         return 'ONO' . self::generate();
     }

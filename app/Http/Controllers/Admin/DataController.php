@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Action;
+use App\Library\Order;
 use App\Type;
 use App\Turnover;
 use App\User;
@@ -29,8 +30,10 @@ class DataController extends Controller
     {
         $items = [
             'id' => '#ID',
+            'order' => '单号',
             'avatar' => '用户',
             'type' => '行为',
+            'collect' => '所属',
             'data' => '金额',
             'created_at' => '时间',
             'action' => '操作'];
@@ -99,7 +102,8 @@ class DataController extends Controller
         $action = Action::find($data['type_id'])->type->action;
 
         User::saveToUser($data['user_id'], $data['data'], $action);
-
+        $data['order'] = Order::order();
+        $data['is_recharge'] = 0;
         Turnover::create($data);
 
         return $request->input('method') ?

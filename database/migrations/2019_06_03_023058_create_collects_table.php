@@ -16,6 +16,7 @@ class CreateCollectsTable extends Migration
         Schema::create('collects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->decimal('data',14,2);
+            $table->string('order');
             $table->boolean('is_online');
             $table->integer('user_id');
             $table->integer('turn_id')->default(0);

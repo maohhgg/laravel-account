@@ -13,9 +13,10 @@
             @foreach($results as $v)
                 <tr>
                     <td><h6 class="m-0">{{ $loop->remaining+1 }}</h6></td>
+
+                    <td><h6 class="m-0">{{ $v->order }}</h6></td>
+
                     <td>
-                        {{--                        <img class="rounded-circle" style="width:40px;"--}}
-                        {{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
                         <h6 class="m-0">
                             <a href="{{ route('admin.data.user',[$v->user->id]) }}">{{ $v->user->name }}</a>
                         </h6>
@@ -24,6 +25,17 @@
                     <td>
                         <h6 class="m-0 @if($v->type->type->action == 'income') text-c-green  @else text-c-red @endif">{{ $v->type->name.$v->description}}</h6>
                     </td>
+
+                    <td>
+                        <h6 class="m-0">
+                            @if(!$v->collect->isEmpty())
+                                汇总数据：<a href="#">{{ $v->collect->order}}</a>
+                            @elseif(!$v->order->isEmpty())
+                                充值订单：<a href="#">{{ $v->order->order}}</a>
+                            @endif
+                        </h6>
+                    </td>
+
                     <td>
                         <h6 class="m-0">
                             <i class="feather @if($v->type->type->action == 'income') icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
