@@ -20,7 +20,7 @@ class CreateTurnoversTable extends Migration
             $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();
-            $table->string('is_recharge');
+            $table->string('is_recharge')->default(0);
             $table->timestamp('created_at');
         });
     }

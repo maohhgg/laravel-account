@@ -16,6 +16,7 @@ class CreatRechargeOrdersTable extends Migration
         Schema::create('recharge_orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
+            $table->integer('turn_id')->nullable();
             $table->string('order');
             $table->string('goods');
             $table->string('goods_inf');

@@ -28,10 +28,12 @@
 
                     <td>
                         <h6 class="m-0">
-                            @if(!$v->collect->isEmpty())
+                            @if(!is_null($v->collect))
                                 汇总数据：<a href="#">{{ $v->collect->order}}</a>
-                            @elseif(!$v->order->isEmpty())
-                                充值订单：<a href="#">{{ $v->order->order}}</a>
+                            @elseif(!is_null($v->hasOrder))
+                                充值订单：<a href="#">{{ $v->hasOrder->order}}</a>
+                            @else
+                                空
                             @endif
                         </h6>
                     </td>

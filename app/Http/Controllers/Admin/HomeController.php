@@ -50,6 +50,9 @@ class HomeController extends Controller
             $data[$item] = $request->input($item);
         }
 
+        foreach ($data as $key => $item) {
+            Config::set($key, $item);
+        }
         return redirect()->back()->with('toast', '服务器配置已经更新');
     }
 }

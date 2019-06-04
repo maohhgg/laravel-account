@@ -10,7 +10,7 @@
             @foreach($results as $v)
                 <tr>
                     <td><h6 class="m-0">{{ $loop->remaining+1 }}</h6></td>
-                    td><h6 class="m-0">{{ $v->order }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->order }}</h6></td>
                     <td>
                         <h6 class="m-0">
                             <a href="{{ route('admin.collect.user',[$v->user->id]) }}">{{ $v->user->name }}</a>

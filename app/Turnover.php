@@ -28,14 +28,13 @@ class Turnover extends Model
         return $this->belongsTo('App\Action', 'type_id');
     }
 
-    public function pre()
+    public function hasOrder()
     {
-        return $this->belongsTo(self::class, 'pre_id');
+        return $this->hasOne('App\RechargeOrder', 'turn_id', 'id');
     }
 
-    public function next()
+    public function collect()
     {
-        return $this->belongsTo(self::class, 'id', 'pre_id');
+        return $this->hasOne('App\Collect', 'turn_id', 'id');
     }
-
 }

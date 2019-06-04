@@ -103,9 +103,10 @@ class CollectController extends Controller
 
         User::saveToUser($data['user_id'], $d['data'], $action->type->action);
 
-
+        $d['order'] = Order::order();
         $data['turn_id'] = Turnover::create($d)->id;
         $data['order'] = Order::collect();
+//        dd($data);
         Collect::create($data);
 
         return $request->input('method') ?

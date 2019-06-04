@@ -16,6 +16,13 @@ use Illuminate\Http\Request;
 
 class RechargeController extends Controller
 {
+    const SUCCESS = 0;
+    const CANCEL = 1;
+    const NORESULTS = 2;
+    const UNKOWN = 3;
+    const PROCESS = 4;
+
+
     public $statusCode = [
         '0000' => '交易成功',
         '2000' => '交易处理中',
@@ -37,7 +44,7 @@ class RechargeController extends Controller
             'order' => Order::order(),
             'user_id' => $request->input('id'),
             'pay_number' => $request->input('pay_number'),
-            'is_cancel' => 0
+            'is_cancel' => self::PROCESS
         ];
         $re = Recharge::bind([
             'order' => $data['order'],
@@ -52,10 +59,10 @@ class RechargeController extends Controller
         $url = Recharge::orderSubmitUri;
 
         $r = RechargeOrder::create($data);
-        dd($params);
+//        dd($params);
 //        if(is_null($r))return redirect()->back();
 
-//        return view('home.pages.recharge.confirm', compact('params','url'));
+        return view('home.pages.recharge.confirm', compact('params','url'));
     }
 
     public function success(Request $request, $token = null)
@@ -72,10 +79,11 @@ class RechargeController extends Controller
         }
 
         if ($data['trxstatus'] == "0000") {
-            $this->saveStatus($r, $data['trxamt']);
+            $turn_id = $this->saveStatus($r, $data['trxamt']);
 
             $r->update([
-                'is_cancel' => 2,
+                'is_cancel' => self::SUCCESS,
+                'turn_id' => $turn_id,
                 'pay_number' => $data['trxamt'],
             ]);
 
@@ -104,7 +112,7 @@ class RechargeController extends Controller
     {
         $action = Action::find(3)->type->action;
         User::saveToUser($rechargeOrder->user_id, $rechargeOrder->pay_number, $action);
-        Turnover::create([
+        $t = Turnover::create([
             'data' => $data,
             'user_id' => $rechargeOrder->user_id,
             'type_id' => 3,
@@ -112,6 +120,7 @@ class RechargeController extends Controller
             'description' => ' --- 用户自己操作',
             'created_at' => $rechargeOrder->created_at,
         ]);
+        return $t ? $t->id : null;
     }
 
     public function results(Request $request)
@@ -123,20 +132,20 @@ class RechargeController extends Controller
         if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {
             return redirect('/');
         }
-        $r = RechargeOrder::where('order', $data['cusorderid'])->first();
+        $r = RechargeOrder::where(['order', $data['cusorderid'],['is_cancel' ]])->first();
+
         if ($data['trxstatus'] == "0000") {
-
-            $this->saveStatus($r, $data['trxamt']);
-
+            $turn_id = $this->saveStatus($r, $data['trxamt']);
             $r->update([
-                'is_cancel' => 2,
+                'is_cancel' => self::SUCCESS,
+                'turn_id' => $turn_id,
                 'pay_number' => $data['trxamt'],
             ]);
         } else {
             if (in_array($data['trxstatus'], array_keys($this->statusCode))) {
-                $r->update(['is_cancel' => 3]);
+                $r->update(['is_cancel' => self::NORESULTS]);
             } else {
-                $r->update(['is_cancel' => 4]);
+                $r->update(['is_cancel' => self::UNKOWN]);
             }
         }
     }
