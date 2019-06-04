@@ -35,4 +35,32 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * according to turnover data change user balance and total
+     *
+     * @param int $userId
+     * @param array $data
+     * @param string $action
+     */
+    public static function saveToUser(int $userId, $data, string $action)
+    {
+        $user = self::find($userId);
+        $user->balance = Type::turnover($user->balance, $data, $action);
+        $user->save();
+    }
+
+
+    /**
+     * recovery user balance and total
+     *
+     * @param Turnover $turnover
+     * @param string $action
+     */
+    public static  function recoveryUser(Turnover $turnover, string $action)
+    {
+        $user = self::find($turnover->user_id);
+        $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));
+        $user->save();
+    }
 }

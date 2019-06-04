@@ -24,7 +24,7 @@
                                                             data-action="{{ $action->id }}" data-type="{{ $type->id }}">
                                                         重命名
                                                     </button>
-                                                    @if($action->turnover->isEmpty())
+                                                    @if($action->turnover->isEmpty() && $action->can_delete == 1)
                                                         <button class="btn btn-danger deleteChangeType" type="button"
                                                                 data-action="{{ $action->id }}"
                                                                 data-type="{{ $type->id }}">

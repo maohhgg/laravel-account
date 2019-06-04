@@ -41,7 +41,9 @@ class ChangeController extends Controller
             'name' => 'required|string|unique:change_actions,name|max:255|min:1',
             'change_type_id' => 'required|exists:change_types,id',
         ]);
-        Action::create($request->only('name', 'change_type_id'));
+        $data = $request->only('name', 'change_type_id');
+        $data['can_delete'] = 1;
+        Action::create($data);
         return redirect()->back()->with('toast','新的方式已经保存!');
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Collect extends Model
 {
     protected $fillable = [
-        'data', 'is_online', 'user_id', 'created_at'
+        'data', 'is_online', 'user_id', 'created_at','turn_id'
     ];
 
     public $timestamps = false;

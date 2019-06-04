@@ -16,7 +16,7 @@
                         </h6>
                     </td>
 
-                    <td><h6 class="m-0">@if($v->is_online)在线支付交易@else线下支付交易@endif</h6></td>
+                    <td><h6 class="m-0">@if($v->is_online) {{ $types[1] }} @else {{ $types[0] }} @endif</h6></td>
 
                     <td><h6 class="m-0 text-c-blue">{{ $v->data }}</h6></td>
 

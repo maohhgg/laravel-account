@@ -12,7 +12,7 @@ class Action extends model
     public $table = 'change_actions';
 
     protected $fillable = [
-        'name', 'change_type_id',
+        'name', 'change_type_id', 'can_delete'
     ];
 
     public function type()

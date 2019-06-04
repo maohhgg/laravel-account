@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">类型</label>
-                                    {{ Form::select('is_online', ['0' => '线下交易汇总', '1' => '在线交易汇总'], null, ['id'=>'collect-type-id','class'=>'js-data-ajax form-control']) }}
+                                    {{ Form::select('is_online', ['0' => '线下交易汇总', '1' => '二维码交易汇总'], null, ['id'=>'collect-type-id','class'=>'js-data-ajax form-control']) }}
                                 </div>
 
                                 <div class="form-group">
@@ -85,7 +85,7 @@
 
                                 <div class="form-group mb-4">
                                     <label class="form-label">日期</label>
-                                    {{ Form::date('created_at', date('Y-m-d'),['class'=>'form-control','id' => 'collect-date']) }}
+                                    {{ Form::date('created_at', date('Y-m-d',strtotime('-1 day')),['class'=>'form-control','id' => 'collect-date']) }}
                                 </div>
 
                             </div>

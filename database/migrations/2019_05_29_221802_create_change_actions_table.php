@@ -17,6 +17,7 @@ class CreateChangeActionsTable extends Migration
             $table->integerIncrements('id');
             $table->string('name');
             $table->integer('change_type_id');
+            $table->boolean('can_delete');
         });
     }
 

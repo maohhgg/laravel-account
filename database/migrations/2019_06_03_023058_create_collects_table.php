@@ -18,6 +18,7 @@ class CreateCollectsTable extends Migration
             $table->decimal('data',14,2);
             $table->boolean('is_online');
             $table->integer('user_id');
+            $table->integer('turn_id')->default(0);
             $table->timestamp('created_at');
         });
     }

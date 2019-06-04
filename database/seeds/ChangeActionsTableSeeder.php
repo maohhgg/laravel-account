@@ -12,8 +12,8 @@ class ChangeActionsTableSeeder extends Seeder
     public function run()
     {
         DB::table('change_actions')->insert([
-            ['name' => '充值', 'change_type_id' => 1],
-            ['name' => '购买', 'change_type_id' => 2],
+            ['name' => '线下交易汇总', 'change_type_id' => 2, 'can_delete' => 0],
+            ['name' => '二维码交易汇总', 'change_type_id' => 2, 'can_delete' => 0],
         ]);
     }
 }

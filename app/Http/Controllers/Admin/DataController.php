@@ -96,16 +96,7 @@ class DataController extends Controller
         $data = $request->only('user_id', 'type_id', 'data', 'description');
         $action = Action::find($data['type_id'])->type->action;
 
-        $this->saveToUser($data['user_id'], $data['data'], $action);
-        $pre = Turnover::where('user_id', $data['user_id'])->orderBy('id', 'desc')->first();
-
-        if (is_null($pre)) {
-            $data['pre_id'] = 0;
-            $data['history'] = $data['data'];
-        } else {
-            $data['pre_id'] = $pre->id;
-            $data['history'] = Type::turnover($pre->history, $data['data'], $action);
-        }
+        User::saveToUser($data['user_id'], $data['data'], $action);
 
         Turnover::create($data);
 
@@ -138,19 +129,9 @@ class DataController extends Controller
         $old = Action::find($t->type_id)->type->action;
         $new = Action::find($request->input('type_id'))->type->action;
 
-        $this->recoveryUser($t, $old);
-        $this->saveToUser($t->user_id, $data['data'], $new);
+        User::recoveryUser($t, $old);
+        User::saveToUser($t->user_id, $data['data'], $new);
 
-
-
-        $count = 0 - ($old === $new ? $t->data - $data['data'] : $t->data + $data['data']);
-        if (Type::is_push($old)) {
-            $t->history += $count;
-            Turnover::where([['user_id', $t->user_id],['id','>', $t->id]])->increment('history',$count);
-        } else {
-            $t->history -= $count;
-            Turnover::where([['user_id', $t->user_id],['id','>', $t->id]])->decrement('history',$count);
-        }
         $t->update($data);
 
         return redirect($request->input('url'))->with('toast', '记录更新完成');
@@ -169,39 +150,12 @@ class DataController extends Controller
         ]);
 
         $t = Turnover::find($request->input('id'));
-        $this->recoveryUser($t, Action::find($t->type_id));
+        User::recoveryUser($t, Action::find($t->type_id));
 
         $t->delete();
         return redirect()->back()->with('toast', '记录已经删除');
     }
 
 
-    /**
-     * according to turnover data change user balance and total
-     *
-     * @param int $userId
-     * @param array $data
-     * @param string $action
-     */
-    protected function saveToUser(int $userId, $data, string $action)
-    {
-        $user = User::find($userId);
-        $user->balance = Type::turnover($user->balance, $data, $action);
-        $user->save();
-    }
-
-
-    /**
-     * recovery user balance and total
-     *
-     * @param Turnover $turnover
-     * @param string $action
-     */
-    protected function recoveryUser(Turnover $turnover, string $action)
-    {
-        $user = User::find($turnover->user_id);
-        $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));
-        $user->save();
-    }
 
 }
