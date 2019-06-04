@@ -11,9 +11,9 @@ use App\User;
 class Recharge
 {
 
-    const orderSubmitUri = '//vsp.allinpay.com/apiweb/gateway/pay';
-    const orderQueryUri = '//test.allinpaygd.com/apiweb/gateway/query';
-    const orderRefund = '//test.allinpaygd.com/apiweb/gateway/refund';
+    const orderSubmitUri = 'https://vsp.allinpay.com/apiweb/gateway/pay';
+    const orderQueryUri = 'https://vsp.allinpaygd.com/apiweb/gateway/query';
+    const orderRefund = 'https://vsptest.allinpaygd.com/apiweb/gateway/refund';
 
     const SUCCESS = 0;
     const CANCEL = 1;
