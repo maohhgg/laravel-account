@@ -12,7 +12,7 @@
 
             @foreach($results as $v)
                 <tr>
-                    <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
+                    <td><h6 class="m-0">{{ $loop->remaining+1 }}</h6></td>
                     <td>
                         {{--                        <img class="rounded-circle" style="width:40px;"--}}
                         {{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
