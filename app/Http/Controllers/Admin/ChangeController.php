@@ -44,7 +44,7 @@ class ChangeController extends Controller
         $data = $request->only('name', 'change_type_id');
         $data['can_delete'] = 1;
         Action::create($data);
-        return redirect()->back()->with('toast','新的方式已经保存!');
+        return redirect()->back()->with('toast', '新的方式已经保存!');
     }
 
     /**
@@ -73,7 +73,7 @@ class ChangeController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        Action::find($request->input('id'))->delete();
+        Action::where([['id', $request->input('id')], ['can_delete', 1]])->delete();
     }
 
 }

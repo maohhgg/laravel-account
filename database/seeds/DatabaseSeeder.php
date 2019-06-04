@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminsTableSeeder::class,
+            AdminConfigsTableSeeder::class,
             ChangeTypesTableSeeder::class,
             NavigationsTableSeeder::class,
             ChangeActionsTableSeeder::class,

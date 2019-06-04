@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Config;
 use App\Page;
 use App\Navigation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -24,6 +25,7 @@ class Controller extends BaseController
      */
     public function __construct()
     {
+        $server = Config::get('SERVERNAME');
         $this->middleware('auth.admin:admin');
         View::share('active', str_replace('admin.','', Route::currentRouteName()));
         $nav = Navigation::where(['parent_nav' => 0,'is_admin' => 1])
@@ -43,10 +45,10 @@ class Controller extends BaseController
             }
         }
         View::share('breadcrumbs', $this->breadcrumbs);
-        if($page){
-            View::share('title', $page->name.' ---- UnionPay international');
+        if ($page) {
+            View::share('title', $page->name . ' - ' . $server);
         } else {
-            View::share('title', ' UnionPay international');
+            View::share('title', $server);
         }
     }
 

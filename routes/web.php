@@ -17,14 +17,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
     // 后台单页面
     $router->get('/dash', 'HomeController@index');
     $router->get('/', 'HomeController@index')->name('admin.home');
+
     $router->get('settings', 'HomeController@settingForm')->name('admin.settings');
-    $router->get('upload', 'FileController@settingForm')->name('admin.upload');
+    $router->post('config/save', 'HomeController@configSave')->name('admin.config.save');
+
 
     // 管理员修改自己帐号
     $router->get('password', 'AdminsController@passwordForm')->name('admin.password');
     $router->post('password/update', 'AdminsController@updatePassword')->name('admin.password.save');
 
 
+    // 用户管理
     Route::prefix('users')->group(function ($router) {
         // 展示页面
         $router->get('/', 'UsersController@display')->name('admin.users');
@@ -37,6 +40,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->post('delete', 'UsersController@deleteId')->name('admin.users.delete');
     });
 
+    // 管理员管理
     Route::prefix('admins')->group(function ($router) {
         // 展示页面
         $router->get('/', 'AdminsController@display')->name('admin.admins');
@@ -49,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->post('delete', 'AdminsController@deleteId')->name('admin.admins.delete');
     });
 
+    // 流水数据管理
     Route::prefix('data')->group(function ($router) {
 
         $router->get('/', 'DataController@display')->name('admin.data');
@@ -61,6 +66,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
     });
 
+    // 流水类型管理
     Route::prefix('change')->group(function ($router) {
         // 展示页面
         $router->get('/', 'ChangeController@display')->name('admin.change');
@@ -71,6 +77,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
     });
 
+    // 每日汇总数据管理
     Route::prefix('collect')->group(function ($router) {
         // 展示页面
         $router->get('/', 'CollectController@display')->name('admin.collect');
@@ -84,6 +91,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->post('delete', 'CollectController@deleteId')->name('admin.collect.delete');;
     });
 
+    // 根据名称补全用户
     Route::prefix('autocomplete')->group(function ($router) {
         $router->get('name', 'UsersController@autocomplete')->name('users.autocomplete');
     });
@@ -105,15 +113,25 @@ Route::prefix('admin')->namespace('Admin\Auth')->group(function ($router) {
 // 前台登录
 Auth::routes();
 
+
 Route::middleware('auth')->group(function ($router) {
 
+    // 前台单页面
     $router->get('/','HomeController@index')->name('home');
     $router->get('data/history','DataController@history')->name('history');
     $router->get('data/collect','DataController@collect')->name('collect');
     $router->get('recharge','HomeController@recharge')->name('recharge');
+
+    $router->post('recharge/submit','RechargeController@submit')->name('recharge.submit');
+    // 充值成功回调地址
+    $router->post('recharge/result/{token}','RechargeController@success')->name('recharge.success');
 
     // 用户修改自己帐号
     $router->get('settings', 'Admin\UsersController@settingForm')->name('settings');
     $router->get('password', 'Admin\UsersController@passwordForm')->name('password');
     $router->post('password/update', 'Admin\UsersController@updatePassword')->name('password.save');
 });
+
+
+// 充值异步处理页面
+Route::get('/recharge/results','RechargeController@success')->name('recharge.results');

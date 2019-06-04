@@ -88,7 +88,6 @@
         </div>
     </div>
 </div>
-.pcoded-inner-content .auth-wrapper
 <!-- [ Content ] end -->
 
 <!-- Required Js -->

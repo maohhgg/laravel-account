@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Turnover extends Model
 {
-    protected $fillable = ['user_id', 'type_id', 'data', 'description', 'created_at'];
+    protected $fillable = ['user_id', 'type_id', 'data', 'description', 'created_at', 'order'];
 
     public $timestamps = false;
 

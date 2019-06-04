@@ -29,6 +29,6 @@ class HomeController extends Controller
     public function recharge()
     {
         $results = Config::get('recharge');
-        return view('home.pages.recharge', compact('results'));
+        return view('home.pages.recharge.recharge', compact('results'));
     }
 }

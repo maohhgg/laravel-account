@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Config;
 use App\Navigation;
 use App\Page;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -24,6 +25,7 @@ class Controller extends BaseController
      */
     public function __construct()
     {
+        $server = Config::get('SERVERNAME');
         $this->middleware('auth');
         View::share('active', Route::currentRouteName());
         View::share('menus', Navigation::where([['parent_nav', 0], ['is_admin', 0], ['is_nav', 1]])->with('children')->orderBy('sequence')->get());
@@ -41,9 +43,9 @@ class Controller extends BaseController
         }
         View::share('breadcrumbs', $this->breadcrumbs);
         if ($page) {
-            View::share('title', $page->name . ' ---- UnionPay international');
+            View::share('title', $page->name . ' - ' . $server);
         } else {
-            View::share('title', ' UnionPay international');
+            View::share('title', $server);
         }
 
     }

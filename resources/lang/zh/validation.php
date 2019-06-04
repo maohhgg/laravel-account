@@ -146,6 +146,7 @@ return [
         'data'                  => '数值',
         'first_name'            => '名',
         'last_name'             => '姓',
+        'pay_number'            => '充值金额',
         'current_password'      => '当前密码',
         'password'              => '密码',
         'password_confirmation' => '确认密码',
