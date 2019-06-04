@@ -3,12 +3,33 @@
 
 namespace App\Library;
 
+use App\Action;
+use App\RechargeOrder;
+use App\Turnover;
+use App\User;
+
 class Recharge
 {
 
-    const orderSubmitUri = '//test.allinpaygd.com/apiweb/gateway/pay';
+    const orderSubmitUri = '//vsp.allinpay.com/apiweb/gateway/pay';
     const orderQueryUri = '//test.allinpaygd.com/apiweb/gateway/query';
     const orderRefund = '//test.allinpaygd.com/apiweb/gateway/refund';
+
+    const SUCCESS = 0;
+    const CANCEL = 1;
+    const NORESULTS = 2;
+    const UNKOWN = 3;
+    const PROCESS = 4;
+
+    const Code = [
+        '0000' => '交易成功',
+        '2000' => '交易处理中',
+        '2008' => '交易处理中',
+        '3044' => '交易超时',
+        '3008' => '余额不足',
+        '3999' => '交易失败'
+    ];
+
 
     public $cusid;
     public $appid;
@@ -71,4 +92,18 @@ class Recharge
         return RechargeUtil::SignArray($this->toArray(), $AppKey);//签名
     }
 
+    public static function saveStatus(RechargeOrder $rechargeOrder, $data)
+    {
+        $action = Action::find(3)->type->action;
+        User::saveToUser($rechargeOrder->user_id, $rechargeOrder->pay_number, $action);
+        $t = Turnover::create([
+            'data' => $data,
+            'user_id' => $rechargeOrder->user_id,
+            'type_id' => 3,
+            'order' => $rechargeOrder->turn_order,
+            'description' => '|用户自己充值',
+            'created_at' => $rechargeOrder->created_at,
+        ]);
+        return $t ? $t->id : null;
+    }
 }

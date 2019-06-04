@@ -18,6 +18,7 @@ class CreatRechargeOrdersTable extends Migration
             $table->integer('user_id');
             $table->integer('turn_id')->nullable();
             $table->string('order');
+            $table->string('turn_order');
             $table->string('goods');
             $table->string('goods_inf');
             $table->decimal('pay_number',14,2);

@@ -134,4 +134,4 @@ Route::middleware('auth')->group(function ($router) {
 
 
 // 充值异步处理页面
-Route::get('/recharge/results','RechargeController@success')->name('recharge.results');
+Route::post('/recharge/results','NobodyController@success')->name('recharge.results');

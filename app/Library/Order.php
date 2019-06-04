@@ -16,6 +16,11 @@ class Order
         return 'CNO' . self::generate();
     }
 
+    public static function recharge()
+    {
+        return 'RNO' . self::generate();
+    }
+
     public static function order()
     {
         return 'ONO' . self::generate();
