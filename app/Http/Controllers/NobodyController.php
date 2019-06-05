@@ -29,7 +29,6 @@ class NobodyController extends BaseController
                 $r->update([
                     'is_cancel' => Recharge::SUCCESS,
                     'turn_id' => $turn_id,
-                    'pay_number' => $data['trxamt'],
                 ]);
             }
         } else {

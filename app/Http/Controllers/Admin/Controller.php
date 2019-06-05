@@ -16,6 +16,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public $breadcrumbs;
+    public $paginate;
 
     /**
      * iZgeidm3894rguZ
@@ -24,17 +25,21 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $server = Config::get('SERVERNAME');
         $this->middleware('auth.admin:admin');
-        View::share('active', str_replace('admin.','', Route::currentRouteName()));
-        $nav = Navigation::where(['parent_nav' => 0,'is_admin' => 1])
+
+        $serverName = Config::get('SERVERNAME');
+        $this->paginate = Config::get('PAGINATE');
+
+        $nav = Navigation::where(['parent_nav' => false,'is_admin' => true])
             ->orderBy('sequence')
             ->with('children')
             ->select('id','action','icon','name','url')
             ->get();
-        View::share('menus', $nav);
         $page = Navigation::where('url', Route::currentRouteName())->with('parent')->first();
+
+
         if ($page) {
+            $title = $page->name . ' 后台管理 - ' . $serverName;
             $this->breadcrumbs = [];
             while ($page->parent) {
                 $b = $page;
@@ -42,13 +47,14 @@ class Controller extends BaseController
                 array_unshift($this->breadcrumbs, $b);
                 $page = $page->parent;
             }
-        }
-        View::share('breadcrumbs', $this->breadcrumbs);
-        if ($page) {
-            View::share('title', $page->name . ' 后台管理 - ' . $server);
         } else {
-            View::share('title',  ' 后台管理 - ' . $server);
+            $title = ' 后台管理 - ' . $serverName;
         }
+
+        View::share('menus', $nav);
+        View::share('breadcrumbs', $this->breadcrumbs);
+        View::share('active', str_replace('admin.','', Route::currentRouteName()));
+        View::share('title',  $title);
     }
 
 }

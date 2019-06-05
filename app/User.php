@@ -40,13 +40,13 @@ class User extends Authenticatable
      * according to turnover data change user balance and total
      *
      * @param int $userId
-     * @param array $data
+     * @param float $amount
      * @param string $action
      */
-    public static function saveToUser(int $userId, $data, string $action)
+    public static function saveToUser(int $userId, float $amount, string $action)
     {
         $user = self::find($userId);
-        $user->balance = Type::turnover($user->balance, $data, $action);
+        $user->balance = Type::turnover($user->balance, $amount, $action);
         $user->save();
     }
 

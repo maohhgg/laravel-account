@@ -62,12 +62,23 @@ class Recharge
         $this->randomstr = $orderId;
     }
 
+    /**
+     * set user show return url
+     * @param string $url
+     * @return $this
+     */
     public function setReturl($url)
     {
         $this->returl = $url;
         return $this;
     }
 
+
+    /**
+     * set server asynchronous url
+     * @param string $url
+     * @return $this
+     */
     public function setNotifyurl($url)
     {
         $this->notifyurl = $url;
@@ -87,17 +98,32 @@ class Recharge
     }
 
 
+    /**
+     * @param string $AppKey
+     * @return string
+     */
     public function sign($AppKey)
     {
         return RechargeUtil::SignArray($this->toArray(), $AppKey);//签名
     }
 
-    public static function saveStatus(RechargeOrder $rechargeOrder, $data)
+    /**
+     * @param RechargeOrder $rechargeOrder
+     * @param int $data
+     * @return int | null
+     */
+    public static function saveStatus(RechargeOrder $rechargeOrder, int $data)
     {
+        $amount = ($data / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
         $action = Action::find(3)->type->action;
-        User::saveToUser($rechargeOrder->user_id, $rechargeOrder->pay_number, $action);
+
+        if ($rechargeOrder->pay_number != $amount){
+            $rechargeOrder->update(['pay_number' => $amount]);
+        }
+
+        User::saveToUser($rechargeOrder->user_id, $amount, $action);
         $t = Turnover::create([
-            'data' => ($data / 100), // 单位是分 需要 /100
+            'data' => $amount,
             'user_id' => $rechargeOrder->user_id,
             'type_id' => 3,
             'order' => $rechargeOrder->turn_order,
