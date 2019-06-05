@@ -14,7 +14,7 @@ class AdminConfigsTableSeeder extends Seeder
             ['key' => 'APPKEY', 'value' => 'a0ea3fa20dbd7bb4d5abf1d59d63bae8'],
             ['key' => 'CHARSET', 'value' => 'UTF-8'],
             ['key' => 'SERVERNAME', 'value' => 'UnionPay international'],
-            ['key' => 'RECHARGE', 'value' => 1],
+            ['key' => 'RECHARGE', 'value' => 0],
         ]);
     }
 }
