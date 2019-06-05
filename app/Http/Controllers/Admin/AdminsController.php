@@ -87,9 +87,8 @@ class AdminsController extends Controller
     public function display()
     {
         $items = [
-            'id' => '#ID',
+            'id' => 'UID',
             'name' => '名称',
-//            'avatar' => '头像',
             'email' => '邮箱',
             'created_at' => '创建时间',
             'updated_at' => '上次登录时间',

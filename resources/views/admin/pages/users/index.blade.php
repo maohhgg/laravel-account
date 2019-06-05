@@ -100,36 +100,24 @@
 
             @foreach($results as $v)
                 <tr>
-                    @foreach($items as $key =>  $item)
-                        @if($key == 'avatar')
-                            <td>
-                                <img class="rounded-circle" style="width:40px;"
-                                     src="{{ asset('images/user/'.$v->icon) }}" alt="activity-user">
-                            </td>
-                        @elseif($key == 'action')
-                            <td>
-                                <a class="text-white label bg-c-blue f-16 toolbar"
-                                   data-user-id=" {{ $v->id }}"
-                                   data-url="{{ route('admin.users.update', [$v->id]) }}"
-                                   data-data-url="{{ route('admin.data.create', [$v->id]) }}"
-                                   data-content="{{ $v->id }}" data-name="{{ $v->name }}">
-                                    <i class="icon feather icon-settings"></i>
-                                </a>
-                            </td>
-                        @elseif(strpos($key, 'created_at') !== false)
-                            <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
-                        @elseif(strpos($key, 'updated_at') !== false)
-                            <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
-                        @elseif(strpos($key, 'id') !== false)
-                            <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
-                        @elseif(strpos($key, 'name') !== false)
-                            <td>
-                                <h6 class="m-0">{{ $v->name }}</h6>
-                            </td>
-                        @else
-                            <td><h6 class="m-0">{{ $v->{$key} }}</h6></td>
-                        @endif
-                    @endforeach
+                    <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->id }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->name }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->phone }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->balance }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->email }}</h6></td>
+
+                    <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>
+                    <td>
+                        <a class="text-white label bg-c-blue f-16 toolbar"
+                           data-user-id=" {{ $v->id }}"
+                           data-url="{{ route('admin.users.update', [$v->id]) }}"
+                           data-data-url="{{ route('admin.data.create', [$v->id]) }}"
+                           data-content="{{ $v->id }}" data-name="{{ $v->name }}">
+                            <i class="icon feather icon-settings"></i>
+                        </a>
+                    </td>
                 </tr>
             @endforeach
 

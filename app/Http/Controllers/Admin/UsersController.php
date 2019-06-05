@@ -58,7 +58,8 @@ class UsersController extends Controller
     public function display()
     {
         $items = [
-            'id' => '#ID',
+            'looper' => '#ID',
+            'id' => 'UID',
             'name' => '名称',
             'phone' => '电话号码',
             'balance' => '余额',
