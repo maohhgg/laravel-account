@@ -32,7 +32,7 @@ class RechargeOrder extends Model
                     $this->update(['is_cancel' => Recharge::CANCEL]);
                     $result = '已取消';
                 } else {
-                    $result = '已取消';
+                    $result = '等待支付';
                 }
                 break;
             case Recharge::CANCEL:

@@ -134,6 +134,7 @@ Route::middleware('auth')->group(function ($router) {
     $router->get('data/history','DataController@history')->name('history');
     $router->get('data/collect','DataController@collect')->name('collect');
     $router->get('recharge','HomeController@recharge')->name('recharge');
+    $router->get('recharge/history','HomeController@display')->name('rechargeOrder');
 
     $router->post('recharge/submit','RechargeController@submit')->name('recharge.submit');
     // 充值成功回调地址

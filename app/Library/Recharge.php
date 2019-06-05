@@ -101,7 +101,7 @@ class Recharge
             'user_id' => $rechargeOrder->user_id,
             'type_id' => 3,
             'order' => $rechargeOrder->turn_order,
-            'description' => '|用户自己充值',
+            'description' => '',
             'created_at' => $rechargeOrder->created_at,
         ]);
         return $t ? $t->id : null;

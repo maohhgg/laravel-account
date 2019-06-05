@@ -24,6 +24,7 @@ class NavigationsTableSeeder extends Seeder
             array('history', 'pie-chart', '历史记录', 'history', 2, 0, 0, 1),
             array('collect', 'sidebar', '每日交易汇总', 'collect', 3, 0, 0, 1),
             array('recharge', 'credit-card', '在线充值', 'recharge', 4, 0, 0, 1),
+            array('rechargeOrder', 'shopping-cart', '充值订单记录', 'rechargeOrder', 5, 0, 0, 1),
 
 
             array('data', 'clipboard', '全部数据', 'admin.data', 0, 2, 1, 1),

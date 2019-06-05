@@ -10,8 +10,6 @@ use App\Library\Order;
 use App\Library\Recharge;
 use App\Library\RechargeUtil;
 use App\RechargeOrder;
-use App\Turnover;
-use App\User;
 use Illuminate\Http\Request;
 
 class RechargeController extends Controller
@@ -28,7 +26,7 @@ class RechargeController extends Controller
             'order' => Order::recharge(),
             'turn_order' =>  Order::order(),
             'user_id' => $request->input('id'),
-            'pay_number' => $request->input('pay_number'),
+            'pay_number' => $request->input('pay_number') * 100,
             'is_cancel' => Recharge::PROCESS
         ];
         $re = Recharge::bind([
@@ -53,9 +51,6 @@ class RechargeController extends Controller
         if (!$token) return redirect('/');
         $r = RechargeOrder::where('order', base64_decode($token))->first();
         $data = $request->input();
-        $fp = fopen('success.txt', 'w');
-        fwrite($fp, json_encode($data));
-        fclose($fp);
 
         if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {
             return redirect('/');

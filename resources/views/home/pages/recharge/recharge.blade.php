@@ -37,13 +37,17 @@
                     <div class="form-group mb-4">
                         <label class="form-label">应付金额</label>
                         {{  Form::hidden('pay_number', null, ['id'=>'recharge-data'])  }}
-                        <h2 class="f-w-300 text-c-red" id="recharge-show-data">0</h2>
+                        {{  Form::hidden('pay_number_precess', null, ['id'=>'recharge-data-precess'])  }}
+                        <h2 class="f-w-300 text-c-red" id="recharge-show-data">0.00 <span
+                                    class=" m-r-3 f-14 text-muted">元</span></h2>
                     </div>
 
-                    <button type="submit" class="btn btn-primary shadow-2 text-uppercase btn-block @error('pay_number') border-danger @enderror "
+                    <button type="submit"
+                            class="btn btn-primary shadow-2 text-uppercase btn-block @error('pay_number') border-danger @enderror "
                             style="max-width:150px;margin:0 auto;"
                             @error('pay_number') data-toggle="tooltip" data-placement="top"
-                            title="{{ $message }}" @enderror>充值</button>
+                            title="{{ $message }}" @enderror>充值
+                    </button>
                 </form>
             </div>
         </div>
@@ -52,11 +56,22 @@
 
 @section('script')
     <script>
-        function updateNumber(num){
-            let muted = '<span class=" m-r-3 f-14 text-muted">元</span>';
+
+        function hasDot(num) {
+            if (!isNaN(num)) {
+                if (num < Number(0.01)) num = Number(0.01);
+                else num = Number(num).toFixed(2);
+                return num;
+            }
+        }
+
+        function updateNumber(num) {
+            num = hasDot(num);
+            let muted = ' <span class=" m-r-3 f-14 text-muted">元</span>';
             $('#recharge-data').val(num);
             $('#recharge-show-data').html(num + muted);
         }
+
         $('document').ready(function () {
             $('#recharge-data-select .recharge-btn').click(function () {
                 $('#recharge-data-select .recharge-btn').removeClass('btn-primary');

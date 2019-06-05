@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Action;
+use App\RechargeOrder;
 use App\Turnover;
 use App\Config;
 use App\Type;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -30,5 +32,22 @@ class HomeController extends Controller
     {
         $results = Config::get('recharge');
         return view('home.pages.recharge.recharge', compact('results'));
+    }
+
+    public function display()
+    {
+        $items = [
+            'order' => '订单号',
+            'data' => '金额',
+            'is_cancel' => '状态',
+            'created_at' => '创建日期'];
+
+        $user = User::find(auth()->user()->id);
+        if (is_null($user)) return redirect()->back();
+
+        $r = RechargeOrder::where('user_id', $user->id);
+        $results = $r->orderBy('id', 'desc')->Paginate(15);
+
+        return view('home.pages.recharge.display', compact('results', 'items'));
     }
 }

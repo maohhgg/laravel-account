@@ -8,7 +8,7 @@
                 </div>
                 <div class="card-block">
                     <div class="mb-5">
-                        <h2 class="mb-4 text-center f-w-500 text-c-red">{{ $params['trxamt'] }}<span
+                        <h2 class="mb-4 text-center f-w-500 text-c-red">{{ ($params['trxamt']/100) }}<span
                                     class=" m-r-3 f-14 text-muted">元</span></h2>
                         <h5 class="text-muted">
                             <span class="f-14 mr-1">充值给：</span>
