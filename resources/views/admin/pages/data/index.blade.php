@@ -5,10 +5,8 @@
         @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
             @slot('title')
                 @if(!is_null($user))
-                    用户 <span class="text-c-blue">{{ $user->name }}</span> 的
-                @elseif(!is_null($order))
-                    单号为 <span class="text-c-blue">{{ $order }}</span> 的
-                @endif数据
+                    用户 <span class="text-c-blue">{{ $user->name }}</span> 的@elseif(!is_null($order))
+                    单号为 <span class="text-c-blue">{{ $order }}</span> 的@endif数据
             @endslot
             @slot('confrimMessage')
                 删除记录将会还原数据
