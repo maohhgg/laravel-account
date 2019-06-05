@@ -37,6 +37,7 @@ class HomeController extends Controller
 
     public function display()
     {
+        if (Config::get('RECHARGE') == 0) return redirect('/');
         $items = [
             'order' => '订单号',
             'data' => '金额',
