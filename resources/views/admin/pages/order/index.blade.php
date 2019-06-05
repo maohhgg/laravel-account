@@ -29,7 +29,7 @@
                     </td>
                     <td><h6 class="m-0 text-c-blue">{{ $v->pay_number }}</h6></td>
 
-                    <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->created_at }}</h6></td>
                     <td>
                         @if($v->is_cancel == 0)
                             <h6 class="m-0 text-c-green">{{ $v->status }}</h6>
