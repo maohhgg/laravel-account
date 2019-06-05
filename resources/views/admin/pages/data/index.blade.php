@@ -4,7 +4,11 @@
     @if(!$results->isEmpty())
         @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
             @slot('title')
-                @if(!is_null($user)) {{ $user->name }} 的@endif数据
+                @if(!is_null($user))
+                    用户 <span class="text-c-blue">{{ $user->name }}</span> 的
+                @elseif(!is_null($order))
+                    单号为 <span class="text-c-blue">{{ $order }}</span> 的
+                @endif数据
             @endslot
             @slot('confrimMessage')
                 删除记录将会还原数据
@@ -29,9 +33,9 @@
                     <td>
                         <h6 class="m-0">
                             @if(!is_null($v->collect))
-                                汇总数据：<a href="#">{{ $v->collect->order}}</a>
+                                汇总数据：<a href="{{ route('admin.collect.order',[$v->collect->order]) }}">{{ $v->collect->order }}</a>
                             @elseif(!is_null($v->hasOrder))
-                                充值订单：<a href="#">{{ $v->hasOrder->order}}</a>
+                                充值订单：<a href="{{ route('admin.order.order',[$v->hasOrder->order]) }}">{{ $v->hasOrder->order }}</a>
                             @else
                                 空
                             @endif
@@ -59,6 +63,8 @@
             <a data-content="edit"><i class="feather icon-edit-2"></i></a>
             <a data-content="delete"><i class="feather icon-trash-2"></i></a>
         </div>
+    @elseif(!is_null($order))
+        <h2>不存在单号为<span class="text-c-red">{{ $order }}</span>的数据</h2>
     @else
         还没有数据
     @endif

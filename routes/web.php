@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
 
         $router->get('/', 'DataController@display')->name('admin.data');
         $router->get('/user/{id?}', 'DataController@display')->name('admin.data.user');
+        $router->get('/order/{order}', 'DataController@order')->name('admin.data.order');
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
 
@@ -83,12 +84,24 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->get('/', 'CollectController@display')->name('admin.collect');
         $router->get('create/{id?}', 'CollectController@createFrom')->name('admin.collect.create');
         $router->get('/user/{id?}', 'CollectController@display')->name('admin.collect.user');
+        $router->get('/order/{order}', 'CollectController@order')->name('admin.collect.order');
         $router->get('update/{id}', 'CollectController@updateForm')->name('admin.collect.update');
 
         // post 处理页面
         $router->post('add', 'CollectController@create')->name('admin.collect.add');
         $router->post('save', 'CollectController@updateCollect')->name('admin.collect.save');
         $router->post('delete', 'CollectController@deleteId')->name('admin.collect.delete');;
+    });
+
+    // 订单数据管理
+    Route::prefix('order')->group(function ($router) {
+        // 展示页面
+        $router->get('/', 'OrderController@display')->name('admin.order');
+        $router->get('/user/{id?}', 'OrderController@display')->name('admin.order.user');
+        $router->get('/order/{order}', 'OrderController@order')->name('admin.order.order');
+
+        // post 处理页面
+        $router->post('delete', 'OrderController@deleteId')->name('admin.order.delete');;
     });
 
     // 根据名称补全用户

@@ -2,7 +2,7 @@
 @section('content')
     <!-- [ Main Content ] start -->
     @if(!$results->isEmpty())
-        @component('component.table',['items' => $items,'results' => $results,'target' => 'collect'])
+        @component('component.table',['items' => $items,'results' => $results,'target' => 'order'])
             @slot('title')
                 @if(!is_null($user))
                     用户 <span class="text-c-blue">{{ $user->name }}</span> 的
@@ -16,20 +16,34 @@
                     <td><h6 class="m-0">{{ $loop->remaining+1 }}</h6></td>
                     <td><h6 class="m-0">{{ $v->order }}</h6></td>
                     <td>
+                        @if($v->is_cancel == 0)
+                            <h6 class="m-0">
+                                <a href="{{ route('admin.data.order',[$v->turnover->order]) }}">{{ $v->turnover->order }}</a>
+                            </h6>
+                        @else
+                            <h6 class="m-0">空</h6>
+                        @endif
+                    </td>
+                    <td>
                         <h6 class="m-0">
-                            <a href="{{ route('admin.collect.user',[$v->user->id]) }}">{{ $v->user->name }}</a>
+                            <a href="{{ route('admin.order.user',[$v->user->id]) }}">{{ $v->user->name }}</a>
                         </h6>
                     </td>
-
-                    <td><h6 class="m-0">@if($v->is_online) {{ $types[1] }} @else {{ $types[0] }} @endif</h6></td>
-
-                    <td><h6 class="m-0 text-c-blue">{{ $v->data }}</h6></td>
+                    <td><h6 class="m-0 text-c-blue">{{ $v->pay_number }}</h6></td>
 
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
+                    <td>
+                        @if($v->is_cancel == 0)
+                            <h6 class="m-0 text-c-green">{{ $v->status }}</h6>
+                        @elseif($v->is_cancel > 1)
+                            <h6 class="m-0 text-c-purple">{{ $v->status }}</h6>
+                        @else
+                            <h6 class="m-0 text-c-red">{{ $v->status }}</h6>
+                        @endif
+                    </td>
 
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"
-                           data-url="{{ route('admin.collect.update', [$v->id]) }}"
                            data-content="{{ $v->id }}">
                             <i class="icon feather icon-settings"></i>
                         </a>
@@ -38,7 +52,6 @@
             @endforeach
         @endcomponent
         <div id="toolbar-options" class="hidden">
-            <a data-content="edit"><i class="feather icon-edit-2"></i></a>
             <a data-content="delete"><i class="feather icon-trash-2"></i></a>
         </div>
     @elseif(!is_null($order))

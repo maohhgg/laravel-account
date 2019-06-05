@@ -9,7 +9,6 @@
 
             @foreach($results as $v)
                 <tr>
-
                     <td><h6 class="m-0">{{ $v->id }}</h6></td>
                     <td><h6 class="m-0">{{ $v->name }}</h6></td>
                     <td><h6 class="m-0">{{ $v->email }}</h6></td>

@@ -19,29 +19,43 @@ class CollectController extends Controller
 {
     public $types = ['0' => '线下交易汇总', '1' => '二维码交易汇总'];
     public $interest = ['0' => 0.0047, '1' => 0.0042];
+    public $items = [
+        'id' => '#ID',
+        'order' => '单号',
+        'name' => '用户',
+        'is_online' => '类型',
+        'data' => '总额',
+        'created_at' => '日期',
+        'action' => '操作'];
 
     public function display($id = null)
     {
-        $items = [
-            'id' => '#ID',
-            'order' => '单号',
-            'name' => '用户',
-            'is_online' => '类型',
-            'data' => '总额',
-            'created_at' => '日期',
-            'action' => '操作'];
-        // 判断用户是否存在
         $user = null;
         if ($id) {
             $user = User::where('id', $id)->first();
-            if (is_null($user)) return redirect()->route('admin');
+            if (is_null($user)) return redirect()->route('admin.home');
             $c = Collect::where('user_id', $id);
         } else {
             $c = new Collect();
         }
         $results = $c->orderBy('id', 'desc')->Paginate(15);
+        return $this->render($results, $user);
+    }
+
+    public function order($order = null)
+    {
+        if ($order) {
+            $results = Collect::where('order', $order)->Paginate(2);
+            return $this->render($results, null, $order);
+        }
+        return redirect()->route('admin.home');
+    }
+
+    protected function render($results, $user = null, $order = null)
+    {
+        $items = $this->items;
         $types = $this->types;
-        return view('admin.pages.collect.index', compact('items', 'results', 'types', 'user'));
+        return view('admin.pages.collect.index', compact('items', 'results', 'types', 'user', 'order'));
     }
 
     /**
@@ -169,8 +183,11 @@ class CollectController extends Controller
         ]);
         $c = Collect::find($request->input('id'));
         $t = Turnover::find($c->turn_id);
-        User::recoveryUser($t, Action::find($t->type_id));
-        $t->delete();
+        if (!is_null($t)) {
+            User::recoveryUser($t, Action::find($t->type_id));
+            $t->delete();
+        }
+
         $c->delete();
 
         return redirect()->back()->with('toast', '汇总数据已删除');

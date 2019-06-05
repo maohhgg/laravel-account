@@ -19,6 +19,15 @@ use Illuminate\View\View;
 class DataController extends Controller
 {
     public $module = 'data';
+    public $items = [
+        'id' => '#ID',
+        'order' => '单号',
+        'avatar' => '用户',
+        'type' => '行为',
+        'collect' => '所属',
+        'data' => '金额',
+        'created_at' => '时间',
+        'action' => '操作'];
 
     /**
      * display all turnover data
@@ -26,30 +35,34 @@ class DataController extends Controller
      * @param null|number $id user_id
      * @return Factory|View
      */
-    public function display($id = null)
+    public function display($id = null, $order = null)
     {
-        $items = [
-            'id' => '#ID',
-            'order' => '单号',
-            'avatar' => '用户',
-            'type' => '行为',
-            'collect' => '所属',
-            'data' => '金额',
-            'created_at' => '时间',
-            'action' => '操作'];
         // 判断用户是否存在
         $user = null;
         if ($id) {
             $user = User::where('id', $id)->first();
-            if (is_null($user)) return redirect()->route('admin');
+            if (is_null($user)) return redirect()->route('admin.home');
             $t = Turnover::where('user_id', $id);
         } else {
             $t = new Turnover();
         }
-//        dd($t->find(1)->hasOrder);
-
         $results = $t->orderBy('id', 'desc')->Paginate(15);
-        return view('admin.pages.data.index', compact('items', 'results', 'user'));
+        return $this->render($results, $user);
+    }
+
+    public function order($order = null)
+    {
+        if ($order) {
+            $results = Turnover::where('order', $order)->Paginate(2);
+            return $this->render($results, null, $order);
+        }
+        return redirect()->route('admin.home');
+    }
+
+    protected function render($results, $user = null, $order = null)
+    {
+        $items = $this->items;
+        return view('admin.pages.data.index', compact('items', 'results', 'user', 'order'));
     }
 
     /**
@@ -157,12 +170,12 @@ class DataController extends Controller
         ]);
 
         $t = Turnover::find($request->input('id'));
-        User::recoveryUser($t, Action::find($t->type_id));
-
+        if (!is_null($t)) {
+            User::recoveryUser($t, Action::find($t->type_id));
+        }
         $t->delete();
         return redirect()->back()->with('toast', '记录已经删除');
     }
-
 
 
 }
