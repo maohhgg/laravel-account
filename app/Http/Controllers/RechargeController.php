@@ -78,9 +78,9 @@ class RechargeController extends Controller
             'goodsInf' => $data['goods_inf']
         ])->setReturl(route('recharge.success', ['token' => base64_encode($data['order'])]))
             ->setNotifyurl(route('recharge.results'))
-            ->setAppKey(Config::get('CUSID'), Config::get('APPID'));
+            ->setAppKey(Config::get('CUS_ID'), Config::get('APP_ID'));
         $params = $re->toArray();
-        $params['sign'] = $re->sign(Config::get('APPKEY'));
+        $params['sign'] = $re->sign(Config::get('APP_KEY'));
         $url = Recharge::orderSubmitUri;
 
         ksort($params);
