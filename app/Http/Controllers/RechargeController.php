@@ -14,8 +14,16 @@ use Illuminate\Http\Request;
 
 class RechargeController extends Controller
 {
+    public $mark;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->mark = Config::get('RECHARGE');
+    }
+
     public function submit(Request $request)
     {
+        if ($this->mark == 0) return redirect('/');
         $this->validate($request, [
             'id' => 'required|numeric|exists:users,id',
             'pay_number' => 'required|numeric|min:0.01|max:9999999999'
@@ -51,7 +59,7 @@ class RechargeController extends Controller
 
     public function success(Request $request, $token = null)
     {
-        if (!$token) return redirect('/');
+        if ($this->mark == 0 && !$token) return redirect('/');
         $r = RechargeOrder::where('order', base64_decode($token))->first();
         $data = $request->input();
 

@@ -8,6 +8,8 @@ class Navigation extends Model
 {
     public $timestamps = false;
 
+    public $fillable = ['is_show'];
+
     public function children()
     {
         return $this

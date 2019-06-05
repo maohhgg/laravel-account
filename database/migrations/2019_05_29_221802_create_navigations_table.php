@@ -23,6 +23,7 @@ class CreateNavigationsTable extends Migration
             $table->integer('parent_nav');
             $table->boolean('is_admin');
             $table->boolean('is_nav');
+            $table->boolean('is_show');
         });
     }
 

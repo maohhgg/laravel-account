@@ -30,6 +30,7 @@ class HomeController extends Controller
 
     public function recharge()
     {
+        if (Config::get('RECHARGE') == 0) return redirect('/');
         $results = Config::get('recharge');
         return view('home.pages.recharge.recharge', compact('results'));
     }

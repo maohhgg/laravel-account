@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Config;
+use App\Navigation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,7 @@ class HomeController extends Controller
         'CUSID' => '商户号',
         'APPID' => 'APPID',
         'APPKEY' => 'MD5KEY',
+        'RECHARGE' => 'MD5KEY',
     ];
 
     public function index()
@@ -45,6 +47,7 @@ class HomeController extends Controller
             $results[$item] = 'required';
         }
         $this->validate($request, $results);
+
         $data = [];
         foreach ($keys as $item) {
             $data[$item] = $request->input($item);
@@ -53,6 +56,11 @@ class HomeController extends Controller
         foreach ($data as $key => $item) {
             Config::set($key, $item);
         }
+
+        $is_show = Config::get('RECHARGE');
+        Navigation::where('url','recharge')->update(['is_show' => $is_show]);
+        Navigation::where('url','rechargeOrder')->update(['is_show' => $is_show]);
+
         return redirect()->back()->with('toast', '服务器配置已经更新');
     }
 }

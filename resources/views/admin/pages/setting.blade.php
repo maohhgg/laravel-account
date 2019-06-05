@@ -15,14 +15,26 @@
                             {{  Form::hidden('url',URL::previous())  }}
 
                             @foreach($results as $key => $item)
-                                <div class="form-group mb-3">
-                                    <label class="form-label">{{ $item['name'] }}</label>
-                                    <input name="{{ $key }}" type="text"
-                                           class="form-control @error($key) border-danger @enderror"
-                                           @error($key) data-toggle="tooltip" data-placement="top"
-                                           title="{{ $message }}" @enderror
-                                           value="{{ old($key) ?? $item['value'] }}" required>
-                                </div>
+                                @if($key != 'RECHARGE')
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">{{ $item['name'] }}</label>
+                                        <input name="{{ $key }}" type="text"
+                                               class="form-control @error($key) border-danger @enderror"
+                                               @error($key) data-toggle="tooltip" data-placement="top"
+                                               title="{{ $message }}" @enderror
+                                               value="{{ old($key) ?? $item['value'] }}" required>
+                                    </div>
+                                @else
+                                    <div class="form-group mb-3">
+                                        <div class="switch d-inline m-r-10">
+                                            {{  Form::hidden($key, $item['value'], ['id'=>'check-status'])  }}
+                                            <input id="switch-button" type="checkbox"
+                                                   @if($item['value'] == 1) checked @endif>
+                                            <label for="switch-button" class="cr"></label>
+                                        </div>
+                                        <label>是否开启在线充值</label>
+                                    </div>
+                                @endif
                             @endforeach
 
                             <button type="submit" class="btn btn-primary">更新</button>
@@ -36,8 +48,20 @@
 
 @endsection
 @section('styles')
-<link href="{{ asset('plugins/fileupload/css/fileupload.css') }}">
+    <link href="{{ asset('plugins/fileupload/css/fileupload.css') }}">
 @endsection
 @section('script')
     <script src="{{ asset('plugins/fileupload/js/dropzone-amd-module.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#switch-button").click(function () {
+                console.log($(this).prop("checked"));
+                if ($(this).prop("checked")) {
+                    $('#check-status').val(1)
+                } else {
+                    $('#check-status').val(0)
+                }
+            })
+        })
+    </script>
 @endsection
