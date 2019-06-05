@@ -71,7 +71,7 @@ class AdminsController extends Controller
             'id' => 'required|numeric',
         ]);
         $id = $request->input('id');
-        if(auth()->user()->id == $id){
+        if(auth('admin')->user()->id == $id){
             return redirect()->back()->with('toast', '不能删除自己!');
         }
         Admin::find($request->input('id'))->delete();
@@ -151,11 +151,11 @@ class AdminsController extends Controller
     {
         $this->validate($request, [
             'current_password' => ['required', 'string', 'min:8', function ($attribute, $value, $fail) {
-                return Hash::check($value, auth()->user()->password) ? true : $fail('当前密码 不匹配');
+                return Hash::check($value, auth('admin')->user()->password) ? true : $fail('当前密码 不匹配');
             }],
             'password' => 'required|string|min:8|confirmed',
         ]);
-        Admin::where('id', auth()->user()->id)->update(['password' => Hash::make($request->input('password'))]);
+        Admin::where('id', auth('admin')->user()->id)->update(['password' => Hash::make($request->input('password'))]);
         return redirect($request->input('url'))->with('toast', '密码已经更新!');
     }
 

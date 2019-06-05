@@ -97,7 +97,7 @@ class Recharge
         $action = Action::find(3)->type->action;
         User::saveToUser($rechargeOrder->user_id, $rechargeOrder->pay_number, $action);
         $t = Turnover::create([
-            'data' => $data,
+            'data' => ($data / 100), // 单位是分 需要 /100
             'user_id' => $rechargeOrder->user_id,
             'type_id' => 3,
             'order' => $rechargeOrder->turn_order,

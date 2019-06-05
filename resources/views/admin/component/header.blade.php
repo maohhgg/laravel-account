@@ -50,17 +50,16 @@
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
 {{--                            <img src="{{ asset('images/user/'.Auth::user()->icon)}}" class="img-radius" alt="User-Profile-Image">--}}
-                            <span>{{ Auth::user()->name }}</span>
+                            <span>{{ auth('admin')->user()->name }}</span>
                         </div>
                         <ul class="pro-body">
 {{--                            <li><a href="{{ route('admin.settings') }}" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
                             <li><a href="{{ route('admin.password') }}" class="dropdown-item"><i class="feather icon-lock"></i> 修改密码</a></li>
-                            <li><a href="{{ route('admin.logout') }}"
+                            <li><a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                                    class="dropdown-item">
                                     <i class="feather icon-log-out"></i>  退出</a>
                             </li>
-
                             <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>

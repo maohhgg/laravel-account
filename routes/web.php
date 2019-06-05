@@ -12,7 +12,7 @@
 */
 
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 'Admin'], function ($router) {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($router) {
 
     // 后台单页面
     $router->get('/dash', 'HomeController@index');

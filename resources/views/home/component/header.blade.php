@@ -16,18 +16,17 @@
             <li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span>{{ Auth::user()->name }}</span>
+                        <span>{{ auth()->user()->name }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
 {{--                            <img src="{{ asset('images/user/'.Auth::user()->icon)}}" class="img-radius" alt="User-Profile-Image">--}}
-                            <span>{{ Auth::user()->name }}</span>
+                            <span>{{ auth()->user()->name }}</span>
                         </div>
                         <ul class="pro-body">
 {{--                            <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
                             <li><a href="{{ route('password') }}" class="dropdown-item"><i class="feather icon-lock"></i> 修改密码</a></li>
-                            <li><a href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                            <li><a onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                                    class="dropdown-item">
                                     <i class="feather icon-log-out"></i>  退出</a>
                             </li>

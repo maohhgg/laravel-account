@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Extensions\AuthenticatesLogout;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class LoginController extends \Illuminate\Routing\Controller
 {
-    use AuthenticatesUsers;
+
+    use AuthenticatesUsers, AuthenticatesLogout {
+        AuthenticatesLogout::logout insteadof AuthenticatesUsers;
+    }
 
     /**
      * Where to redirect users after login / registration.
@@ -25,7 +28,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:admin')->except('logout');
+        $this->middleware('guest.admin', ['except' => 'logout']);
         $this->username = $this->findUsername();
     }
 
