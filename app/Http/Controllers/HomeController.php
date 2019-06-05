@@ -42,7 +42,8 @@ class HomeController extends Controller
             'order' => '订单号',
             'data' => '金额',
             'is_cancel' => '状态',
-            'created_at' => '创建日期'];
+            'created_at' => '创建日期',
+            'action' => ''];
 
         $user = User::query()->find(auth()->user()->id);
         if (is_null($user)) return redirect()->back();

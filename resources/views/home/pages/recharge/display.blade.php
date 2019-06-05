@@ -9,7 +9,7 @@
 
             @foreach($results as $v)
                 <tr>
-                    <td><h6 class="m-0">{{ $v->order }}</h6></td>
+                    <td><h6 class="m-0"><a href="{{ route('restartPay' ,[$v->order]) }}">{{ $v->order }}</a></h6></td>
                     <td><h6 class="m-0 text-c-blue">{{ $v->pay_number }}</h6></td>
 
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
@@ -22,6 +22,11 @@
                             <h6 class="m-0 text-c-red">{{ $v->status }}</h6>
                         @endif
                     </td>
+                    @if ($v->is_cancel == 4)
+                        <td><a href="{{ route('restartPay' ,[$v->order]) }}">前往支付</a></td>
+                    @else
+                        <td></td>
+                    @endif
                 </tr>
             @endforeach
         @endcomponent
