@@ -45,9 +45,9 @@ class Controller extends BaseController
         }
         View::share('breadcrumbs', $this->breadcrumbs);
         if ($page) {
-            View::share('title', $page->name . ' - ' . $server);
+            View::share('title', $page->name . ' 后台管理 - ' . $server);
         } else {
-            View::share('title', $server);
+            View::share('title',  ' 后台管理 - ' . $server);
         }
     }
 
