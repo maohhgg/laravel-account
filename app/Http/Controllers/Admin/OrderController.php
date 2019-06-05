@@ -21,7 +21,8 @@ class OrderController extends Controller
         'torder' => '数据流水单号',
         'name' => '用户',
         'data' => '金额',
-        'created_at' => '日期',
+        'created_at' => '创建时间',
+        'updated_at' => '完成时间',
         'is_cancel' => '状态',
         'action' => '操作'];
 

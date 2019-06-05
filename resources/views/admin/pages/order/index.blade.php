@@ -30,6 +30,7 @@
                     <td><h6 class="m-0 text-c-blue">{{ $v->pay_number }}</h6></td>
 
                     <td><h6 class="m-0">{{ $v->created_at }}</h6></td>
+                    <td><h6 class="m-0">@if($v->updated_at != $v->created_at){{ $v->updated_at }}@else 未更新 @endif</h6></td>
                     <td>
                         @if($v->is_cancel == 0)
                             <h6 class="m-0 text-c-green">{{ $v->status }}</h6>
