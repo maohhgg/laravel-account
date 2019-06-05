@@ -50,7 +50,7 @@ class UsersController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return User::query()->create([
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],
@@ -97,7 +97,7 @@ class UsersController extends Controller
     public function updateForm($id = null)
     {
         if (!$id || !is_numeric($id)) return redirect()->route('admin');
-        $user = User::find($id);
+        $user = User::query()->find($id);
         return view('admin.pages.users.update', compact('user'));
     }
 
@@ -115,7 +115,7 @@ class UsersController extends Controller
      */
     public function autocomplete(Request $request)
     {
-        $data = User::select('id', 'name as text')
+        $data = User::query()->select('id', 'name as text')
             ->where("name", "LIKE", "%{$request->input('query')}%")
             ->limit(5)
             ->get();
@@ -137,7 +137,7 @@ class UsersController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        User::create([
+        User::query()->create([
             'name' => $request->input('name'),
             'password' => Hash::make($request->input('password'))
         ]);
@@ -161,7 +161,7 @@ class UsersController extends Controller
             'password' => 'string:min:8'
         ]);
         $data = $request->only('name', 'email', 'phone', 'password');
-        $u = User::find($request->input('id'));
+        $u = User::query()->find($request->input('id'));
         if ($data['password']!=$u->password){
             $data['password'] = Hash::make($data['password']);
         }
@@ -185,7 +185,7 @@ class UsersController extends Controller
             }],
             'password' => 'required|string|min:8|confirmed',
         ]);
-        User::where('id', auth()->user()->id)->update(['password' => Hash::make($request->input('password'))]);
+        User::query()->where('id', auth()->user()->id)->update(['password' => Hash::make($request->input('password'))]);
         return redirect($request->input('url'))->with('toast', '密码已经更新!');
     }
 
@@ -202,10 +202,10 @@ class UsersController extends Controller
             'id' => 'required|numeric',
         ]);
         $id = $request->input('id');
-        Turnover::where('user_id', $id)->delete();
-        RechargeOrder::where('user_id', $id)->delete();
-        Collect::where('user_id', $id)->delete();
-        User::find($id)->delete();
+        Turnover::query()->where('user_id', $id)->delete();
+        RechargeOrder::query()->where('user_id', $id)->delete();
+        Collect::query()->where('user_id', $id)->delete();
+        User::query()->find($id)->delete();
         return redirect()->back()->with('toast','用户已删除');
     }
 }

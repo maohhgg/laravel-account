@@ -44,7 +44,7 @@ class Type extends model
 
     public static function getTypeArray(){
         $changeTypes = $temp = [];
-        $types = self::where('id', '>', '0')->select('id', 'name')->with('actions')->get()->toArray();
+        $types = self::query()->where('id', '>', '0')->select('id', 'name')->with('actions')->get()->toArray();
 
         foreach ($types as $item) {
             foreach ($item['actions'] as $value) {

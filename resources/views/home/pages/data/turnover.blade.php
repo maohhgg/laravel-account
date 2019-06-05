@@ -16,7 +16,11 @@
             @endforeach
         @endcomponent
     @else
-        还没有数据
+        <div class="auth-wrapper offline">
+            <div class="text-center">
+                <h3 class="mb-4">还没有数据可以显示</h3>
+            </div>
+        </div>
     @endif
     <!-- [ Main Content ] start -->
 

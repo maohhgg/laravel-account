@@ -55,7 +55,11 @@
     @elseif(!is_null($order))
         <h2>不存在单号为<span class="text-c-red">{{ $order }}</span>的数据</h2>
     @else
-        还没有数据
+        <div class="auth-wrapper offline">
+            <div class="text-center">
+                <h3 class="mb-4">还没有会员充值</h3>
+            </div>
+        </div>
     @endif
     <!-- [ Main Content ] start -->
 

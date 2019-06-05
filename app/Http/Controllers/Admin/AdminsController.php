@@ -39,7 +39,7 @@ class AdminsController extends Controller
      */
     protected function create(array $data)
     {
-        return Admin::create([
+        return Admin::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -73,7 +73,7 @@ class AdminsController extends Controller
         if(auth('admin')->user()->id == $id){
             return redirect()->back()->with('toast', '不能删除自己!');
         }
-        Admin::find($request->input('id'))->delete();
+        Admin::query()->find($request->input('id'))->delete();
         return redirect()->back()->with('toast', '管理员已经创建!');
     }
 
@@ -110,7 +110,7 @@ class AdminsController extends Controller
     public function updateForm($id = null)
     {
         if (!$id || !is_numeric($id)) return redirect()->route('admin');
-        $admin = Admin::find($id);
+        $admin = Admin::query()->find($id);
         return view('admin.pages.admins.update', compact('admin'));
     }
 
@@ -135,7 +135,7 @@ class AdminsController extends Controller
             'icon' => 'numeric',
         ]);
 
-        Admin::find($request->input('id'))->update($request->only('name', 'email', 'icon'));
+        Admin::query()->find($request->input('id'))->update($request->only('name', 'email', 'icon'));
         return redirect($request->input('url'))->with('toast', '管理员数据已更新!');
     }
 
@@ -154,7 +154,7 @@ class AdminsController extends Controller
             }],
             'password' => 'required|string|min:8|confirmed',
         ]);
-        Admin::where('id', auth('admin')->user()->id)->update(['password' => Hash::make($request->input('password'))]);
+        Admin::query()->where('id', auth('admin')->user()->id)->update(['password' => Hash::make($request->input('password'))]);
         return redirect($request->input('url'))->with('toast', '密码已经更新!');
     }
 
@@ -173,7 +173,7 @@ class AdminsController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        Admin::create([
+        Admin::query()->create([
             'name' => $request->input('name'),
             'password' => Hash::make($request->input('password'))
         ]);

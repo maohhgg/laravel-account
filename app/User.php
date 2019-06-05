@@ -45,7 +45,7 @@ class User extends Authenticatable
      */
     public static function saveToUser(int $userId, float $amount, string $action)
     {
-        $user = self::find($userId);
+        $user = self::query()->find($userId);
         $user->balance = Type::turnover($user->balance, $amount, $action);
         $user->save();
     }
@@ -59,7 +59,7 @@ class User extends Authenticatable
      */
     public static  function recoveryUser(Turnover $turnover, string $action)
     {
-        $user = self::find($turnover->user_id);
+        $user = self::query()->find($turnover->user_id);
         $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));
         $user->save();
     }

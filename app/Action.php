@@ -33,8 +33,8 @@ class Action extends model
     public static function getCollect()
     {
         return [
-            self::OFFLINE => self::find(self::OFFLINE)->name,
-            self::ONLINE => self::find(self::ONLINE)->name
+            self::OFFLINE => self::query()->find(self::OFFLINE)->name,
+            self::ONLINE => self::query()->find(self::ONLINE)->name
         ];
     }
 

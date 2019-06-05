@@ -35,20 +35,20 @@ class Config extends Model
      */
     static public function get($key)
     {
-        $c = self::where('key', $key)->first();
+        $c = self::query()->where('key', $key)->first();
         return is_null($c) ? null : $c->value;
     }
 
     static public function getAll($key)
     {
-        $c = self::where('key', $key)->select('key', 'value', 'label')->first();
+        $c = self::query()->where('key', $key)->select('key', 'value', 'label')->first();
         return is_null($c) ? null : $c;
     }
 
     public function getNameAttribute()
     {
-        if($this->key == self::COLLECT_ONLINE) return Action::find(Action::ONLINE)->name;
-        else if($this->key == self::COLLECT_OFFLINE) return Action::find(Action::OFFLINE)->name;
+        if($this->key == self::COLLECT_ONLINE) return Action::query()->find(Action::ONLINE)->name;
+        else if($this->key == self::COLLECT_OFFLINE) return Action::query()->find(Action::OFFLINE)->name;
         else return $this->label;
     }
 
@@ -60,7 +60,7 @@ class Config extends Model
      */
     static public function set($key, $value)
     {
-        $c = self::where('key', $key)->first();
-        return $c != $value ? self::where('key', $key)->update(['value' => $value]) : false;
+        $c = self::query()->where('key', $key)->first();
+        return $c != $value ? self::query()->where('key', $key)->update(['value' => $value]) : false;
     }
 }

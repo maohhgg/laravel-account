@@ -39,9 +39,9 @@ class CollectController extends Controller
     {
         $user = null;
         if ($id) {
-            $user = User::where('id', $id)->first();
+            $user = User::query()->where('id', $id)->first();
             if (is_null($user)) return redirect()->route('admin.home');
-            $c = Collect::where('user_id', $id);
+            $c = Collect::query()->where('user_id', $id);
         } else {
             $c = new Collect();
         }
@@ -52,7 +52,7 @@ class CollectController extends Controller
     public function order($order = null)
     {
         if ($order) {
-            $results = Collect::where('order', $order)->Paginate(1);  //
+            $results = Collect::query()->where('order', $order)->Paginate(1);  //
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');
@@ -74,8 +74,8 @@ class CollectController extends Controller
     {
         $types = $this->types;
         if ($id) {
-            if (is_null(User::where('id', $id)->first())) return redirect()->route('admin');
-            $user = User::find($id);
+            $user = User::query()->find($id);
+            if (is_null($user)) return redirect()->route('admin');
             return view('admin.pages.collect.edit', compact('user', 'types'));
         } else {
             return view('admin.pages.collect.edit', compact('types'));
@@ -92,7 +92,7 @@ class CollectController extends Controller
     {
         $types = $this->types;
         if (!$id || !is_numeric($id)) return redirect()->route('admin');
-        $results = Collect::find($id);
+        $results = Collect::query()->find($id);
         return view('admin.pages.collect.edit', compact('results', 'types'));
     }
 
@@ -114,7 +114,7 @@ class CollectController extends Controller
 
         $data = $request->only('user_id', 'is_online', 'data', 'created_at');
 
-        $action = Action::find($data['is_online']);
+        $action = Action::query()->find($data['is_online']);
         $d = [
             'data' => $data['data'] * $this->interest[$data['is_online']],
             'user_id' => $data['user_id'],
@@ -123,12 +123,11 @@ class CollectController extends Controller
         ];
 
         $d['order'] = Order::order();
-        $data['turn_id'] = Turnover::create($d)->id;
         $data['order'] = Order::collect();
-//        dd($data);
+        $data['turn_id'] = Turnover::query()->create($d)->id;
 
         User::saveToUser($data['user_id'], $d['data'], $action->type->action);
-        Collect::create($data);
+        Collect::query()->create($data);
 
         return $request->input('method') ?
             redirect()->back()->with('toast', '创建完成') :
@@ -154,17 +153,17 @@ class CollectController extends Controller
 
         $data = $request->only('is_online', 'data', 'created_at');
 
-        $new = Action::find($data['is_online']);
+        $new = Action::query()->find($data['is_online']);
         $d = [
             'data' => $data['data'] * $this->interest[$data['is_online']],
             'type_id' => $new->id,
             'created_at' => Carbon::parse($data['created_at'])->yesterday()->toDateTimeString(),
         ];
 
-        $c = Collect::find($request->input('id'));
-        $t = Turnover::find($c->turn_id);
+        $c = Collect::query()->find($request->input('id'));
+        $t = Turnover::query()->find($c->turn_id);
 
-        $old = Action::find($t->type_id)->type->action;
+        $old = Action::query()->find($t->type_id)->type->action;
 
         User::recoveryUser($t, $old);
         User::saveToUser($t->user_id, $d['data'], $new);
@@ -172,7 +171,7 @@ class CollectController extends Controller
         $t->update($d);
         $c->update($data);
 
-        Collect::find($request->input('id'))->update($request->only('is_online', 'data', 'created_at'));
+        Collect::query()->find($request->input('id'))->update($request->only('is_online', 'data', 'created_at'));
         return redirect($request->input('url'))->with('toast', '汇总数据完成更新');
     }
 
@@ -188,10 +187,10 @@ class CollectController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        $c = Collect::find($request->input('id'));
-        $t = Turnover::find($c->turn_id);
+        $c = Collect::query()->find($request->input('id'));
+        $t = Turnover::query()->find($c->turn_id);
         if (!is_null($t)) {
-            User::recoveryUser($t, Action::find($t->type_id));
+            User::recoveryUser($t, Action::query()->find($t->type_id));
             $t->delete();
         }
 

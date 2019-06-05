@@ -39,9 +39,9 @@ class DataController extends Controller
         // 判断用户是否存在
         $user = null;
         if ($id) {
-            $user = User::where('id', $id)->first();
+            $user = User::query()->where('id', $id)->first();
             if (is_null($user)) return redirect()->route('admin.home');
-            $t = Turnover::where('user_id', $id);
+            $t = Turnover::query()->where('user_id', $id);
         } else {
             $t = new Turnover();
         }
@@ -52,7 +52,7 @@ class DataController extends Controller
     public function order($order = null)
     {
         if ($order) {
-            $results = Turnover::where('order', $order)->Paginate(1);
+            $results = Turnover::query()->where('order', $order)->Paginate(1);
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');
@@ -74,7 +74,7 @@ class DataController extends Controller
     {
         $results = [];
         $types = Type::getTypeArray();
-        $user = !empty($id) ? User::select('id', 'name')->find($id) : null;
+        $user = !empty($id) ? User::query()->select('id', 'name')->find($id) : null;
         return view('admin.pages.data.edit', compact('types', 'user', 'results'));
     }
 
@@ -86,11 +86,11 @@ class DataController extends Controller
      */
     public function updateForm($id = null)
     {
-        $results = Turnover::find($id);
+        $results = Turnover::query()->find($id);
         if (!$results) return redirect()->route('admin.data');
 
         $types = Type::getTypeArray();
-        $user = User::select('id', 'name')->find($results->user_id);
+        $user = User::query()->select('id', 'name')->find($results->user_id);
         return view('admin.pages.data.edit', compact('types', 'user', 'results'));
     }
 
@@ -112,12 +112,12 @@ class DataController extends Controller
         ]);
 
         $data = $request->only('user_id', 'type_id', 'data', 'description');
-        $action = Action::find($data['type_id'])->type->action;
+        $action = Action::query()->find($data['type_id'])->type->action;
 
         User::saveToUser($data['user_id'], $data['data'], $action);
         $data['order'] = Order::order();
         $data['is_recharge'] = 0;
-        Turnover::create($data);
+        Turnover::query()->create($data);
 
         return $request->input('method') ?
             redirect()->back()->with('toast', '创建完成') :
@@ -143,10 +143,10 @@ class DataController extends Controller
         ]);
         $data = $request->only('type_id', 'data', 'description', 'created_at');
 
-        $t = Turnover::find($request->input('id'));
+        $t = Turnover::query()->find($request->input('id'));
 
-        $old = Action::find($t->type_id)->type->action;
-        $new = Action::find($request->input('type_id'))->type->action;
+        $old = Action::query()->find($t->type_id)->type->action;
+        $new = Action::query()->find($request->input('type_id'))->type->action;
 
         User::recoveryUser($t, $old);
         User::saveToUser($t->user_id, $data['data'], $new);
@@ -161,16 +161,16 @@ class DataController extends Controller
      * @param Request $request
      * @return RedirectResponse
      * @throws ValidationException
+     * @throws \Exception
      */
     public function deleteId(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-
-        $t = Turnover::find($request->input('id'));
+        $t = Turnover::query()->find($request->input('id'));
         if (!is_null($t)) {
-            User::recoveryUser($t, Action::find($t->type_id));
+            User::recoveryUser($t, Action::query()->find($t->type_id)->type->action);
         }
         $t->delete();
         return redirect()->back()->with('toast', '记录已经删除');

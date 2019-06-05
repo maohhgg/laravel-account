@@ -16,10 +16,10 @@ class HomeController extends Controller
     {
         $temp = 0;
         $results = [];
-        $ts = Turnover::where('user_id', auth()->user()->id)->orderBy('created_at')->get()->toArray();
+        $ts = Turnover::query()->where('user_id', auth()->user()->id)->orderBy('created_at')->get()->toArray();
 
         foreach ($ts as $t) {
-            $temp = Type::turnover($temp, $t['data'], Action::find($t['type_id'])->type->action);
+            $temp = Type::turnover($temp, $t['data'], Action::query()->find($t['type_id'])->type->action);
             $results[] = [
                 'created_at' => "{$t['created_at']}",
                 'history' => "{$temp}"];
@@ -44,10 +44,10 @@ class HomeController extends Controller
             'is_cancel' => '状态',
             'created_at' => '创建日期'];
 
-        $user = User::find(auth()->user()->id);
+        $user = User::query()->find(auth()->user()->id);
         if (is_null($user)) return redirect()->back();
 
-        $r = RechargeOrder::where('user_id', $user->id);
+        $r = RechargeOrder::query()->where('user_id', $user->id);
         $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
 
         return view('home.pages.recharge.display', compact('results', 'items'));

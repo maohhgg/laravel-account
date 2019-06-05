@@ -30,12 +30,12 @@ class Controller extends BaseController
         $serverName = Config::get('SERVERNAME');
         $this->paginate = Config::get('PAGINATE');
 
-        $nav = Navigation::where(['parent_nav' => false,'is_admin' => true])
+        $nav = Navigation::query()->where(['parent_nav' => false,'is_admin' => true])
             ->orderBy('sequence')
             ->with('children')
             ->select('id','action','icon','name','url')
             ->get();
-        $page = Navigation::where('url', Route::currentRouteName())->with('parent')->first();
+        $page = Navigation::query()->where('url', Route::currentRouteName())->with('parent')->first();
 
 
         if ($page) {

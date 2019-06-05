@@ -21,7 +21,7 @@ class NobodyController extends BaseController
 
         if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {return redirect('/');}
 
-        $r = RechargeOrder::where('order' ,$data['cusorderid'])->first();
+        $r = RechargeOrder::query()->where('order' ,$data['cusorderid'])->first();
 
         if ($data['trxstatus'] == "0000") {
             if($r->turn_id == 0){

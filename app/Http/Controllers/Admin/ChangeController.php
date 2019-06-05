@@ -22,7 +22,7 @@ class ChangeController extends Controller
      */
     public function display()
     {
-        $types = Type::where('id', '>', '0')->with('actions')->get();
+        $types = Type::query()->where('id', '>', '0')->with('actions')->get();
         return view('admin.pages.change.index', compact('types'));
     }
 
@@ -41,7 +41,7 @@ class ChangeController extends Controller
         ]);
         $data = $request->only('name', 'change_type_id');
         $data['can_delete'] = 1;
-        Action::create($data);
+        Action::query()->create($data);
         return redirect()->back()->with('toast', '新的方式已经保存!');
     }
 
@@ -57,7 +57,7 @@ class ChangeController extends Controller
             'id' => 'required|numeric',
             'name' => 'required|string|unique:change_actions,name|max:255|min:1'
         ]);
-        Action::find($request->input('id'))->update($request->only('name'));
+        Action::query()->find($request->input('id'))->update($request->only('name'));
     }
 
     /**
@@ -71,7 +71,7 @@ class ChangeController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        Action::where([['id', $request->input('id')], ['can_delete', 1]])->delete();
+        Action::query()->where([['id', $request->input('id')], ['can_delete', 1]])->delete();
     }
 
 }

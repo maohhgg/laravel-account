@@ -42,14 +42,14 @@ class RechargeController extends Controller
         ]);
         $data = [
             'goods' => Order::goods(),  // 充值订单号  *当前无意义*
-            'goods_inf' => Action::find(Action::RECHARGE)->name,  // 充值的名字
+            'goods_inf' => Action::query()->find(Action::RECHARGE)->name,  // 充值的名字
             'order' => Order::recharge(),    // 充值订单号
             'turn_order' => Order::order(),
             'user_id' => $request->input('id'),
             'pay_number' => $request->input('pay_number') * 100,
             'is_cancel' => Recharge::PROCESS
         ];
-        RechargeOrder::create($data);
+        RechargeOrder::query()->create($data);
         // 订单保存结束
 
         return $this->render($data);
@@ -63,7 +63,7 @@ class RechargeController extends Controller
      */
     public function restartPay($order = null){
         if(!$order) redirect()->back();
-        $data = RechargeOrder::where('order',$order)->first()->toArray();
+        $data = RechargeOrder::query()->where('order',$order)->first()->toArray();
         return $this->render($data);
     }
 
@@ -97,7 +97,7 @@ class RechargeController extends Controller
     public function success(Request $request, $token = null)
     {
         if ($this->mark == 0 && !$token) return redirect('/');
-        $r = RechargeOrder::where('order', base64_decode($token))->first();
+        $r = RechargeOrder::query()->where('order', base64_decode($token))->first();
         $data = $request->input();
 
         if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {

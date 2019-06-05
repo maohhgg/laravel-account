@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('content')
     <!-- [ Main Content ] start -->
+    @if($results->isEmpty() && $online_results->isEmpty())
+        <div class="auth-wrapper offline">
+            <div class="text-center">
+                <h3 class="mb-4">还没有数据可以显示</h3>
+            </div>
+        </div>
+    @endif
+
     <div class="row">
         @if(!$online_results->isEmpty())
             <div class="col-sm-12 col-md-6">

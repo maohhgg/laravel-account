@@ -29,9 +29,9 @@ class OrderController extends Controller
     {
         $user = null;
         if ($id) {
-            $user = User::where('id', $id)->first();
+            $user = User::query()->where('id', $id)->first();
             if (is_null($user)) return redirect()->route('admin.home');
-            $r = RechargeOrder::where('user_id', $id);
+            $r = RechargeOrder::query()->where('user_id', $id);
         } else {
             $r = new RechargeOrder();
         }
@@ -44,7 +44,7 @@ class OrderController extends Controller
     public function order($order = null)
     {
         if ($order) {
-            $results = RechargeOrder::where('order', $order)->Paginate(1);
+            $results = RechargeOrder::query()->where('order', $order)->Paginate(1);
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');
@@ -70,10 +70,10 @@ class OrderController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        $c = RechargeOrder::find($request->input('id'));
-        $t = Turnover::find($c->turn_id);
+        $c = RechargeOrder::query()->find($request->input('id'));
+        $t = Turnover::query()->find($c->turn_id);
         if (!is_null($t)) {
-            User::recoveryUser($t, Action::find($t->type_id));
+            User::recoveryUser($t, Action::query()->find($t->type_id));
             $t->delete();
         }
 

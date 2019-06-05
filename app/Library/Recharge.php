@@ -115,14 +115,14 @@ class Recharge
     public static function saveStatus(RechargeOrder $rechargeOrder, int $data)
     {
         $amount = ($data / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
-        $action = Action::find(3)->type->action;
+        $action = Action::query()->find(3)->type->action;
 
         if ($rechargeOrder->pay_number != $amount){
             $rechargeOrder->update(['pay_number' => $amount]);
         }
 
         User::saveToUser($rechargeOrder->user_id, $amount, $action);
-        $t = Turnover::create([
+        $t = Turnover::query()->create([
             'data' => $amount,
             'user_id' => $rechargeOrder->user_id,
             'type_id' => 3,

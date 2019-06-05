@@ -67,7 +67,7 @@ class HomeController extends Controller
         }
 
         $is_show = Config::get(Config::RECHARGE_STAT);
-        Navigation::whereIn('url', ['recharge', 'rechargeOrder'])->update(['is_show' => $is_show]);
+        Navigation::query()->whereIn('url', ['recharge', 'rechargeOrder'])->update(['is_show' => $is_show]);
 
         return redirect()->back()->with('toast', '服务器配置已经更新');
     }
