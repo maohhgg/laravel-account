@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
     <div class="auth-wrapper">
         <div class="auth-content">
