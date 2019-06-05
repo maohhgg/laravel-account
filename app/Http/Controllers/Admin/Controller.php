@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Config;
-use App\Page;
 use App\Navigation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
