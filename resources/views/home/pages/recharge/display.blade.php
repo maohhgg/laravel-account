@@ -26,6 +26,10 @@
             @endforeach
         @endcomponent
     @else
-        还没有数据
+        <div class="auth-wrapper offline">
+            <div class="text-center">
+                <h3 class="mb-4">还没有提交过订单</h3>
+            </div>
+        </div>
     @endif
 @endsection

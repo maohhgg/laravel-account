@@ -30,14 +30,14 @@ class HomeController extends Controller
 
     public function recharge()
     {
-        if (Config::get('RECHARGE') == 0) return redirect('/');
+        if (Config::get('RECHARGE_STAT') == 0) return redirect('/');
         $results = Config::get('recharge');
         return view('home.pages.recharge.recharge', compact('results'));
     }
 
     public function display()
     {
-        if (Config::get('RECHARGE') == 0) return redirect('/');
+        if (Config::get('RECHARGE_STAT') == 0) return redirect('/');
         $items = [
             'order' => '订单号',
             'data' => '金额',

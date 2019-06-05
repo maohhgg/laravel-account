@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <div class="card">
-
+        <div class="card-header">
+            <h5>创建充值订单</h5>
+            <span class="d-block m-t-5">编辑 <code>订单</code> 信息</span>
+        </div>
         <div class="card-block">
             <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                 <form action="{{ route('recharge.submit') }}" method="post">
@@ -46,7 +49,7 @@
                             class="btn btn-primary shadow-2 text-uppercase btn-block @error('pay_number') border-danger @enderror "
                             style="max-width:150px;margin:0 auto;"
                             @error('pay_number') data-toggle="tooltip" data-placement="top"
-                            title="{{ $message }}" @enderror>充值
+                            title="{{ $message }}" @enderror>提交订单
                     </button>
                 </form>
             </div>
@@ -75,13 +78,14 @@
 
         $('document').ready(function () {
             $('#recharge-data-select .recharge-btn').click(function () {
-                $('#recharge-data-select .recharge-btn').removeClass('btn-primary');
-                $('#recharge-data-select .recharge-btn').addClass('btn-secondary');
+                $('#recharge-data-select .active-button').removeClass('btn-primary active-button').addClass('btn-secondary');
+                this.className = 'btn recharge-btn btn-primary active-button';
                 $(this).addClass('btn-primary');
                 updateNumber(this.getAttribute('data-content'))
             });
 
             $('#recharge-input').keyup(function () {
+                $('#recharge-data-select .active-button').removeClass('btn-primary active-button').addClass('btn-secondary');
                 updateNumber($(this).val());
             })
         })

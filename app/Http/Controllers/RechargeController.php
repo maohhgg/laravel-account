@@ -24,7 +24,7 @@ class RechargeController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->mark = Config::get('RECHARGE');
+        $this->mark = Config::get('RECHARGE_STAT');
     }
 
     /**
