@@ -66,7 +66,7 @@
                 else num = Number(num).toFixed(2);
                 return num;
             }
-            return
+            return Number(0.01);
         }
 
         function updateNumber(num) {
