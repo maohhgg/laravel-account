@@ -19,7 +19,7 @@
                         </h6>
                     </td>
 
-                    <td><h6 class="m-0">@if($v->is_online) {{ $types[1] }} @else {{ $types[0] }} @endif</h6></td>
+                    <td><h6 class="m-0">{{ $v->type->name  }}</h6></td>
 
                     <td><h6 class="m-0 text-c-blue">{{ $v->data }}</h6></td>
 

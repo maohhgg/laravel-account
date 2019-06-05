@@ -26,7 +26,7 @@ class Controller extends BaseController
     {
         $this->middleware('auth');
         $serverName = Config::get('SERVERNAME');
-        $this->paginate = Config::get('PAGINATE');
+        $this->paginate = Config::get('PAGINATE') * 2; // 前台的表格较小
         $nav = Navigation::where([['parent_nav', false], ['is_admin', false], ['is_nav', true], ['is_show', true]])
             ->with('children')
             ->orderBy('sequence')

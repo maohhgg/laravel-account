@@ -14,8 +14,10 @@ class CreateAdminConfigsTable extends Migration
     public function up()
     {
         Schema::create('admin_configs', function (Blueprint $table) {
-            $table->string('key');
-            $table->string('value');
+            $table->bigIncrements('id');
+            $table->string('key',255);
+            $table->string('value',255);
+            $table->string('label',128);
         });
     }
     //`label` varchar(150) DEFAULT NULL,

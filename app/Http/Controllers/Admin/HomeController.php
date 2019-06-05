@@ -12,14 +12,25 @@ use Illuminate\Validation\ValidationException;
 
 class HomeController extends Controller
 {
-    public $module = 'home';
-    public $settings = [
-        'SERVERNAME' => '网站名称',
-        'CUSID' => '商户号',
-        'APPID' => 'APPID',
-        'APPKEY' => 'MD5KEY',
-        'RECHARGE' => 'MD5KEY',
-    ];
+    public $settings;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->settings = [
+            Config::SERVER_NAME,
+            Config::PAGINATE,
+
+            Config::APP_ID,
+            Config::CUS_ID,
+            Config::APP_KEY,
+
+            Config::COLLECT_OFFLINE,
+            Config::COLLECT_ONLINE,
+
+            Config::RECHARGE_STAT,
+        ];
+    }
 
     public function index()
     {
@@ -28,10 +39,11 @@ class HomeController extends Controller
 
     public function settingForm()
     {
-        foreach ($this->settings as $key => $item) {
-            $results[$key] = ['name' => $item, 'value' => Config::get($key)];
+        $diff = Config::RECHARGE_STAT;
+        foreach ($this->settings as $item) {
+            $results[] = Config::getAll($item);
         }
-        return view('admin.pages.setting', compact('results'));
+        return view('admin.pages.setting', compact('results', 'diff'));
     }
 
     /**
@@ -41,15 +53,12 @@ class HomeController extends Controller
      */
     public function configSave(Request $request)
     {
-        $results = [];
-        $keys = array_keys($this->settings);
-        foreach ($keys as $item) {
-            $results[$item] = 'required';
-        }
-        $this->validate($request, $results);
+        $this->validate($request, array_combine($this->settings, array_map(function () {
+            return 'required';
+        }, $this->settings)));
 
         $data = [];
-        foreach ($keys as $item) {
+        foreach ($this->settings as $item) {
             $data[$item] = $request->input($item);
         }
 
@@ -57,9 +66,8 @@ class HomeController extends Controller
             Config::set($key, $item);
         }
 
-        $is_show = Config::get('RECHARGE');
-        Navigation::where('url','recharge')->update(['is_show' => $is_show]);
-        Navigation::where('url','rechargeOrder')->update(['is_show' => $is_show]);
+        $is_show = Config::get(Config::RECHARGE_STAT);
+        Navigation::whereIn('url', ['recharge', 'rechargeOrder'])->update(['is_show' => $is_show]);
 
         return redirect()->back()->with('toast', '服务器配置已经更新');
     }

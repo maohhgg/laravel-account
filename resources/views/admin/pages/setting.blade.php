@@ -14,22 +14,22 @@
                             @csrf
                             {{  Form::hidden('url',URL::previous())  }}
 
-                            @foreach($results as $key => $item)
-                                @if($key != 'RECHARGE')
+                            @foreach($results as $item)
+                                @if($item->key != $diff)
                                     <div class="form-group mb-3">
-                                        <label class="form-label">{{ $item['name'] }}</label>
-                                        <input name="{{ $key }}" type="text"
-                                               class="form-control @error($key) border-danger @enderror"
-                                               @error($key) data-toggle="tooltip" data-placement="top"
+                                        <label class="form-label">{{ $item->name }}</label>
+                                        <input name="{{ $item->key }}" type="text"
+                                               class="form-control @error($item->key) border-danger @enderror"
+                                               @error($item->key) data-toggle="tooltip" data-placement="top"
                                                title="{{ $message }}" @enderror
-                                               value="{{ old($key) ?? $item['value'] }}" required>
+                                               value="{{ old($item->key) ?? $item->value }}" required>
                                     </div>
                                 @else
                                     <div class="form-group mb-3">
                                         <div class="switch d-inline m-r-10">
-                                            {{  Form::hidden($key, $item['value'], ['id'=>'check-status'])  }}
+                                            {{  Form::hidden($item->key, $item->value, ['id'=>'check-status'])  }}
                                             <input id="switch-button" type="checkbox"
-                                                   @if($item['value'] == 1) checked @endif>
+                                                   @if($item->value == 1) checked @endif>
                                             <label for="switch-button" class="cr"></label>
                                         </div>
                                         <label>是否开启在线充值</label>

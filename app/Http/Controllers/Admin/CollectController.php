@@ -13,20 +13,27 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use function PHPSTORM_META\type;
 
 class CollectController extends Controller
 {
-    public $types = ['0' => '线下交易汇总', '1' => '二维码交易汇总'];
-    public $interest = ['0' => 0.0047, '1' => 0.0042];
-    public $items = [
-        'id' => '#ID',
-        'order' => '单号',
-        'name' => '用户',
-        'is_online' => '类型',
-        'data' => '总额',
-        'created_at' => '日期',
-        'action' => '操作'];
+    public $types;
+    public $interest;
+    public $items;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->types = Action::getCollect();
+        $this->interest = Action::collectInterest();
+        $this->items = [
+            'id' => '#ID',
+            'order' => '单号',
+            'name' => '用户',
+            'is_online' => '类型',
+            'data' => '总额',
+            'created_at' => '日期',
+            'action' => '操作'];
+    }
 
     public function display($id = null)
     {
@@ -38,14 +45,14 @@ class CollectController extends Controller
         } else {
             $c = new Collect();
         }
-        $results = $c->orderBy('id', 'desc')->Paginate(15);
+        $results = $c->orderBy('id', 'desc')->Paginate($this->paginate);
         return $this->render($results, $user);
     }
 
     public function order($order = null)
     {
         if ($order) {
-            $results = Collect::where('order', $order)->Paginate(2);
+            $results = Collect::where('order', $order)->Paginate(1);  //
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');
@@ -107,7 +114,7 @@ class CollectController extends Controller
 
         $data = $request->only('user_id', 'is_online', 'data', 'created_at');
 
-        $action = Action::find($data['is_online'] + 1);
+        $action = Action::find($data['is_online']);
         $d = [
             'data' => $data['data'] * $this->interest[$data['is_online']],
             'user_id' => $data['user_id'],
@@ -115,12 +122,12 @@ class CollectController extends Controller
             'created_at' => Carbon::parse($data['created_at'])->subday(-1)->toDateTimeString(),
         ];
 
-        User::saveToUser($data['user_id'], $d['data'], $action->type->action);
-
         $d['order'] = Order::order();
         $data['turn_id'] = Turnover::create($d)->id;
         $data['order'] = Order::collect();
 //        dd($data);
+
+        User::saveToUser($data['user_id'], $d['data'], $action->type->action);
         Collect::create($data);
 
         return $request->input('method') ?
@@ -147,7 +154,7 @@ class CollectController extends Controller
 
         $data = $request->only('is_online', 'data', 'created_at');
 
-        $new = Action::find($data['is_online'] + 1);
+        $new = Action::find($data['is_online']);
         $d = [
             'data' => $data['data'] * $this->interest[$data['is_online']],
             'type_id' => $new->id,

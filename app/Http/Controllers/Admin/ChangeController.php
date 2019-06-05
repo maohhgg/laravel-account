@@ -14,8 +14,6 @@ use Illuminate\View\View;
 
 class ChangeController extends Controller
 {
-    public $module = 'change';
-
 
     /**
      * view for display all change_actions

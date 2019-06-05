@@ -15,7 +15,6 @@ use Illuminate\View\View;
 
 class AdminsController extends Controller
 {
-    public $module = 'admins';
 
     /**
      * Get a validator for an incoming registration request.
@@ -94,7 +93,7 @@ class AdminsController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = Admin::paginate(15);
+        $results = Admin::paginate($this->paginate);
         return view('admin.pages.admins.index', compact('items', 'results'));
     }
 

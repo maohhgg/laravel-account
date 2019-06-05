@@ -36,7 +36,7 @@ class OrderController extends Controller
             $r = new RechargeOrder();
         }
 
-        $results = $r->orderBy('id', 'desc')->Paginate(15);
+        $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
 
         return $this->render($results, $user);
     }
@@ -44,7 +44,7 @@ class OrderController extends Controller
     public function order($order = null)
     {
         if ($order) {
-            $results = RechargeOrder::where('order', $order)->Paginate(2);
+            $results = RechargeOrder::where('order', $order)->Paginate(1);
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');

@@ -18,7 +18,6 @@ use Illuminate\View\View;
 
 class DataController extends Controller
 {
-    public $module = 'data';
     public $items = [
         'id' => '#ID',
         'order' => '单号',
@@ -46,14 +45,14 @@ class DataController extends Controller
         } else {
             $t = new Turnover();
         }
-        $results = $t->orderBy('id', 'desc')->Paginate(15);
+        $results = $t->orderBy('id', 'desc')->Paginate($this->paginate);
         return $this->render($results, $user);
     }
 
     public function order($order = null)
     {
         if ($order) {
-            $results = Turnover::where('order', $order)->Paginate(2);
+            $results = Turnover::where('order', $order)->Paginate(1);
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');

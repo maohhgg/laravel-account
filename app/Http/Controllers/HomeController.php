@@ -48,7 +48,7 @@ class HomeController extends Controller
         if (is_null($user)) return redirect()->back();
 
         $r = RechargeOrder::where('user_id', $user->id);
-        $results = $r->orderBy('id', 'desc')->Paginate(15);
+        $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
 
         return view('home.pages.recharge.display', compact('results', 'items'));
     }

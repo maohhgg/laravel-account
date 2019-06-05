@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Action extends model
 {
+    // 固定的3个类型id
+    const OFFLINE = 1;  // 线下交易汇总
+    const ONLINE = 2;   // 在线交易汇总
+    const RECHARGE = 3; // 充值
+
     public $timestamps = false;
     public $table = 'change_actions';
 
@@ -24,4 +29,24 @@ class Action extends model
     {
         return $this->hasMany('App\Turnover', 'type_id');
     }
+
+    public static function getCollect()
+    {
+        return [
+            self::OFFLINE => self::find(self::OFFLINE)->name,
+            self::ONLINE => self::find(self::ONLINE)->name
+        ];
+    }
+
+    public static function collectInterest()
+    {
+        return [
+            self::OFFLINE => (float)Config::get(Config::COLLECT_OFFLINE),
+            self::ONLINE => (float)Config::get(Config::COLLECT_ONLINE)
+        ];
+//        [Action::OFFLINE] = 0.0047;
+//        [Action::ONLINE] = 0.0042;
+    }
+
+
 }

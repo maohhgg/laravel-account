@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Action;
 use App\Collect;
 use App\Library\Recharge;
 use App\RechargeOrder;
@@ -70,10 +71,11 @@ class UsersController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = User::Paginate(15);
-        $types = Type::getTypeArray();
+        $results = User::Paginate($this->paginate);
+        $actionTypes = Type::getTypeArray();
+        $collectTypes = Action::getCollect();
 
-        return view('admin.pages.users.index', compact('items', 'results', 'types'));
+        return view('admin.pages.users.index', compact('items', 'results', 'actionTypes','collectTypes'));
     }
 
     /**
@@ -201,8 +203,8 @@ class UsersController extends Controller
         ]);
         $id = $request->input('id');
         Turnover::where('user_id', $id)->delete();
-        Collect::where('user_id', $id)->delete();
         RechargeOrder::where('user_id', $id)->delete();
+        Collect::where('user_id', $id)->delete();
         User::find($id)->delete();
         return redirect()->back()->with('toast','用户已删除');
     }

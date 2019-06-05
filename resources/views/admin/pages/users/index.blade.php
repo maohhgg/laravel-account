@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">类型</label>
-                                    {{ Form::select('user_id', $types, null, ['id'=>'turnover-type-id','class'=>'js-data-ajax form-control']) }}
+                                    {{ Form::select('user_id', $actionTypes, null, ['id'=>'turnover-type-id','class'=>'js-data-ajax form-control']) }}
                                 </div>
 
                                 <div class="form-group">
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">类型</label>
-                                    {{ Form::select('is_online', ['0' => '线下交易汇总', '1' => '二维码交易汇总'], null, ['id'=>'collect-type-id','class'=>'js-data-ajax form-control']) }}
+                                    {{ Form::select('is_online', $collectTypes, null, ['id'=>'collect-type-id','class'=>'js-data-ajax form-control']) }}
                                 </div>
 
                                 <div class="form-group">
