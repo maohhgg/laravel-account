@@ -23,7 +23,7 @@ class CreatRechargeOrdersTable extends Migration
             $table->string('goods_inf');
             $table->decimal('pay_number',14,2);
             $table->boolean('is_cancel')->default(1);
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 
