@@ -26,12 +26,16 @@ class RechargeController extends Controller
             'order' => Order::recharge(),
             'turn_order' =>  Order::order(),
             'user_id' => $request->input('id'),
-            'pay_number' => $request->input('pay_number') * 100,
+            'pay_number' => $request->input('pay_number'),
             'is_cancel' => Recharge::PROCESS
         ];
+        RechargeOrder::create($data);
+        // 订单保存结束
+
+        // 渲染新页面和数据
         $re = Recharge::bind([
             'order' => $data['order'],
-            'number' => $data['pay_number'],
+            'number' => $data['pay_number'] * 100,    // 只有提交给支付平台的金额需要 * 100
             'goodsId' => $data['goods'],
             'goodsInf' => $data['goods_inf']
         ])->setReturl(route('recharge.success', ['token' => base64_encode($data['order'])]))
@@ -42,7 +46,6 @@ class RechargeController extends Controller
         $url = Recharge::orderSubmitUri;
 
         ksort($params);
-        RechargeOrder::create($data);
         return view('home.pages.recharge.confirm', compact('params','url'));
     }
 
