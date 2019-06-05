@@ -3,8 +3,8 @@
 
 <head>
     <!--[if lt IE 10]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
     <!-- Meta -->
