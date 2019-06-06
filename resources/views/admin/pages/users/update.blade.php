@@ -38,7 +38,7 @@
 
                             <div class="form-group mb-3">
                                 <label class="form-label">邮箱地址
-                                    <small>输入<span class="text-c-purple">default@example.org</span> 删除</small>
+                                    <small>输入<span class="text-c-purple">example@example.org</span> 删除</small>
                                 </label>
                                 @if ($errors->has('email'))
                                     {{ Form::text('email', old('email'), $user->validateError($errors->first('email'))) }}
