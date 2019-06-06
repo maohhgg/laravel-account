@@ -2,9 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Config extends Model
+/**
+ * @property mixed key
+ * @property mixed value
+ * @property string label
+ */
+class Config extends BaseModel
 {
 
     const SERVER_NAME = 'SERVER_NAME';
@@ -29,20 +32,25 @@ class Config extends Model
 
     protected $appends = ['name'];
 
-    /**
-     * @param $key
-     * @return string|null
-     */
-    static public function get($key)
-    {
-        $c = self::query()->where('key', $key)->first();
-        return is_null($c) ? null : $c->value;
-    }
+    private static $config = [];
 
-    static public function getAll($key)
+    /**
+     * @param string $key
+     * @param bool|string $attribute
+     * @param bool $all
+     * @return string|null|Config
+     */
+    static public function get($key, $all = false, $attribute = false)
     {
-        $c = self::query()->where('key', $key)->select('key', 'value', 'label')->first();
-        return is_null($c) ? null : $c;
+        if (!in_array($key, array_keys(self::$config))) {
+            $config = self::query()->where('key', $key)->select('key', 'value', 'label')->first();
+            if (is_null($config)) return null;
+            self::$config[$key] = $config;
+        }
+
+        return $all == true ?
+            self::$config[$key] :
+            ($attribute === false ? self::$config[$key]->value : self::$config[$key]->{$attribute});
     }
 
     public function getNameAttribute()
@@ -60,7 +68,13 @@ class Config extends Model
      */
     static public function set($key, $value)
     {
-        $c = self::query()->where('key', $key)->first();
-        return $c != $value ? self::query()->where('key', $key)->update(['value' => $value]) : false;
+        if ($value != self::get($key)) {
+            $config = self::query()->where('key', $key)->update(['value' => $value]);
+            if (!is_null($config)) {
+                self::$config[$key] = $value;
+                return true;
+            }
+        }
+        return false;
     }
 }

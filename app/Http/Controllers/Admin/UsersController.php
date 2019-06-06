@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Action;
 use App\Collect;
-use App\Library\Recharge;
 use App\RechargeOrder;
 use App\Type;
 use App\Turnover;
 use App\User;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,7 +46,7 @@ class UsersController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param array $data
-     * @return User
+     * @return Model
      */
     protected function create(array $data)
     {
@@ -71,11 +71,11 @@ class UsersController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = User::Paginate($this->paginate);
+        $results = User::query()->Paginate($this->paginate);
         $actionTypes = Type::getTypeArray();
         $collectTypes = Action::getCollect();
 
-        return view('admin.pages.users.index', compact('items', 'results', 'actionTypes','collectTypes'));
+        return view('admin.pages.users.index', compact('items', 'results', 'actionTypes', 'collectTypes'));
     }
 
     /**
@@ -141,7 +141,7 @@ class UsersController extends Controller
             'name' => $request->input('name'),
             'password' => Hash::make($request->input('password'))
         ]);
-        return redirect($request->input('url'))->with('toast','用户创建完成');
+        return redirect($request->input('url'))->with('toast', '用户创建完成');
     }
 
     /**
@@ -156,18 +156,18 @@ class UsersController extends Controller
         $this->validate($request, [
             'id' => 'required',
             'name' => 'string',
-            'email' => 'string|email|max:255',
-            'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/'],
-            'password' => 'string:min:8'
+            'email' => 'nullable:email|max:255',
+            'phone' => ['nullable', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/'],
+            'password' => 'nullable:min:8'
         ]);
-        $data = $request->only('name', 'email', 'phone', 'password');
-        $u = User::query()->find($request->input('id'));
-        if ($data['password']!=$u->password){
-            $data['password'] = Hash::make($data['password']);
-        }
 
-        $u->update($data);
-        return redirect($request->input('url'))->with('toast','用户数据完成更新');
+        $data = [];
+        foreach (['name', 'email', 'phone', 'password'] as $item) {
+            $value = $request->input($item);
+            if ($value) $data[$item] = $value;
+        }
+        User::query()->update($data);
+        return redirect($request->input('url'))->with('toast', '用户数据完成更新');
     }
 
     /**
@@ -195,6 +195,7 @@ class UsersController extends Controller
      * @param Request $request
      * @return void
      * @throws ValidationException
+     * @throws \Exception
      */
     public function deleteId(Request $request)
     {
@@ -206,6 +207,6 @@ class UsersController extends Controller
         RechargeOrder::query()->where('user_id', $id)->delete();
         Collect::query()->where('user_id', $id)->delete();
         User::query()->find($id)->delete();
-        return redirect()->back()->with('toast','用户已删除');
+        return redirect()->back()->with('toast', '用户已删除');
     }
 }

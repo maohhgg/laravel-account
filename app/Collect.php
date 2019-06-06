@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Collect extends Model
+class Collect extends BaseModel
 {
     protected $fillable = [
         'data', 'is_online', 'user_id', 'created_at', 'turn_id', 'order'

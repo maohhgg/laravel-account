@@ -103,9 +103,9 @@
                     <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
                     <td><h6 class="m-0">{{ $v->id }}</h6></td>
                     <td><h6 class="m-0">{{ $v->name }}</h6></td>
-                    <td><h6 class="m-0">{{ $v->phone }}</h6></td>
+                    <td><h6 class="m-0">@if($v->phoneDefault()) 未添加 @else {{ $v->phone }} @endif</h6></td>
                     <td><h6 class="m-0">{{ $v->balance }}</h6></td>
-                    <td><h6 class="m-0">{{ $v->email }}</h6></td>
+                    <td><h6 class="m-0">@if($v->emailDefault()) 未添加 @else {{ $v->email }} @endif</h6></td>
 
                     <td><h6 class="m-0">{{ $v->created_at->format('Y-m-d') }}</h6></td>
                     <td><h6 class="m-0">{{ $v->updated_at->format('Y-m-d') }}</h6></td>

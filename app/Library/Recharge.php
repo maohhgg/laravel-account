@@ -7,6 +7,7 @@ use App\Action;
 use App\RechargeOrder;
 use App\Turnover;
 use App\User;
+use Illuminate\Database\Eloquent\Model;
 
 class Recharge
 {
@@ -108,11 +109,11 @@ class Recharge
     }
 
     /**
-     * @param RechargeOrder $rechargeOrder
+     * @param Model $rechargeOrder
      * @param int $data
      * @return int | null
      */
-    public static function saveStatus(RechargeOrder $rechargeOrder, int $data)
+    public static function saveStatus(Model $rechargeOrder, int $data)
     {
         $amount = ($data / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
         $action = Action::query()->find(3)->type->action;

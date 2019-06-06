@@ -18,25 +18,30 @@
                                 <div class="col-sm-10">
                                     <h3 class="mb-4">登录</h3>
                                     <div class="form-group mb-3">
+
                                         <input name="login" type="text"
-                                               class="form-control @if($errors->any()) border-danger @endif" placeholder="用户名/电话/邮箱"
-                                               @if($errors->any()) data-toggle="tooltip" data-placement="top" title="{{ $errors->first() }}"
+                                               class="form-control @if($errors->any()) border-danger @endif"
+                                               placeholder="用户名/电话/邮箱"
+                                               @if($errors->any()) data-toggle="tooltip" data-placement="top"
+                                               title="{{ $errors->first() }}"
                                                @endif
-                                               value="{{ old('login') }}" required>
+                                               value="{{ old('login') }}">
+
                                     </div>
+
                                     <div class="input-group mb-4">
-                                        <input name="password" type="password" class="form-control" placeholder="密码"
-                                               required>
+                                        {{ Form::password('password', ['class' => 'form-control']) }}
                                     </div>
+
                                     <div class="form-group text-left">
                                         <div class="checkbox checkbox-fill d-inline">
-                                            <input name="remember" type="checkbox" name="checkbox-fill-1"
-                                                   id="checkbox-fill-a1" {{ old('remember') ? 'checked' : '' }}>
-                                            <label for="checkbox-fill-a1" class="cr">记住我</label>
+
+                                            <input name="remember" type="checkbox"
+                                                   id="checkbox-fill" {{ old('remember') }}>
+                                            <label for="checkbox-fill" class="cr">记住我</label>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary shadow-2 mb-4">登录</button>
-{{--                                    <p class="mb-2 text-muted">忘记密码了？ <a href="{{ route('admin.password.request') }}">重置</a></p>--}}
                                 </div>
 
                             </div>

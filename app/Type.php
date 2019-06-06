@@ -4,9 +4,7 @@
 namespace App;
 
 
-use Illuminate\Database\Eloquent\Model;
-
-class Type extends model
+class Type extends BaseModel
 {
     const INCOME = 'income';
     const EXPENDITURE = 'expenditure';

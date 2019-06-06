@@ -4,9 +4,7 @@
 namespace App;
 
 
-use Illuminate\Database\Eloquent\Model;
-
-class Action extends model
+class Action extends BaseModel
 {
     // 固定的3个类型id
     const OFFLINE = 1;  // 线下交易汇总

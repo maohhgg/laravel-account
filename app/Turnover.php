@@ -2,21 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Turnover extends Model
+class Turnover extends BaseModel
 {
     protected $fillable = ['user_id', 'type_id', 'data', 'description', 'created_at', 'order', 'is_recharge'];
 
     public $timestamps = false;
 
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->created_at = $model->freshTimestamp();
-        });
-    }
 
     public function user()
     {

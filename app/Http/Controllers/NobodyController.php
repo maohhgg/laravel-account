@@ -10,16 +10,18 @@ use App\RechargeOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
+
 class NobodyController extends BaseController
 {
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function success(Request $request)
     {
         $data = $request->input();
-        $fp = fopen('success1.txt', 'w');
-        fwrite($fp, json_encode($data));
-        fclose($fp);
 
-        if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {return redirect('/');}
+        if (count($data) < 1 || !RechargeUtil::ValidSign($data, Config::get('APP_KEY'))) {return redirect('/');}
 
         $r = RechargeOrder::query()->where('order' ,$data['cusorderid'])->first();
 

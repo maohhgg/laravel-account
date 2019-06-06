@@ -40,8 +40,9 @@ class HomeController extends Controller
     public function settingForm()
     {
         $diff = Config::RECHARGE_STAT;
+        $results = [];
         foreach ($this->settings as $item) {
-            $results[] = Config::getAll($item);
+            $results[] = Config::get($item, true);
         }
         return view('admin.pages.setting', compact('results', 'diff'));
     }
@@ -59,16 +60,21 @@ class HomeController extends Controller
 
         $data = [];
         foreach ($this->settings as $item) {
-            $data[$item] = $request->input($item);
+            $value = $request->input($item);
+            if (!is_null($value)) $data[$item] = $value;
         }
 
+        $toast = [];
         foreach ($data as $key => $item) {
-            Config::set($key, $item);
+            if (Config::set($key, $item) != false) {
+                $toast[] = Config::get($key, false,'name');
+            }
         }
+        $toast = count($toast) > 0 ? implode(' ', $toast) . '已经更新' : '配置没发生变化';
 
         $is_show = Config::get(Config::RECHARGE_STAT);
         Navigation::query()->whereIn('url', ['recharge', 'rechargeOrder'])->update(['is_show' => $is_show]);
 
-        return redirect()->back()->with('toast', '服务器配置已经更新');
+        return redirect()->back()->with('toast', $toast);
     }
 }

@@ -3,9 +3,8 @@
 namespace App;
 
 use App\Library\Recharge;
-use Illuminate\Database\Eloquent\Model;
 
-class RechargeOrder extends Model
+class RechargeOrder extends BaseModel
 {
     protected $fillable = ['user_id', 'turn_id', 'turn_order', 'order', 'goods', 'goods_inf', 'pay_number', 'is_cancel'];
 

@@ -101,7 +101,7 @@ class RechargeController extends Controller
         $r = RechargeOrder::query()->where('order', base64_decode($token))->first();
         $data = $request->input();
 
-        if (count($data) < 1 && !RechargeUtil::ValidSign($data, Config::get('APPKEY'))) {
+        if (count($data) < 1 || !RechargeUtil::ValidSign($data, Config::get('APP_KEY'))) {
             return redirect('/');
         }
 
