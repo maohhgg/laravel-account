@@ -25,7 +25,7 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
-        $serverName = Config::get('SERVERNAME');
+        $serverName = Config::get('SERVER_NAME');
         $this->paginate = Config::get('PAGINATE') * 2; // 前台的表格较小
         $nav = Navigation::query()->where([['parent_nav', false], ['is_admin', false], ['is_nav', true], ['is_show', true]])
             ->with('children')

@@ -47,8 +47,8 @@ class Config extends Model
 
     public function getNameAttribute()
     {
-        if($this->key == self::COLLECT_ONLINE) return Action::query()->find(Action::ONLINE)->name;
-        else if($this->key == self::COLLECT_OFFLINE) return Action::query()->find(Action::OFFLINE)->name;
+        if ($this->key == self::COLLECT_ONLINE) return Action::query()->find(Action::ONLINE)->name . ' 收费利率';
+        else if ($this->key == self::COLLECT_OFFLINE) return Action::query()->find(Action::OFFLINE)->name . ' 收费利率';
         else return $this->label;
     }
 

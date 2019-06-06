@@ -27,7 +27,7 @@ class Controller extends BaseController
     {
         $this->middleware('auth.admin:admin');
 
-        $serverName = Config::get('SERVERNAME');
+        $serverName = Config::get('SERVER_NAME');
         $this->paginate = Config::get('PAGINATE');
 
         $nav = Navigation::query()->where(['parent_nav' => false,'is_admin' => true])
@@ -39,7 +39,7 @@ class Controller extends BaseController
 
 
         if ($page) {
-            $title = $page->name . ' 后台管理 - ' . $serverName;
+            $title = $page->name . ' - 后台管理 - ' . $serverName;
             $this->breadcrumbs = [];
             while ($page->parent) {
                 $b = $page;
@@ -48,7 +48,7 @@ class Controller extends BaseController
                 $page = $page->parent;
             }
         } else {
-            $title = ' 后台管理 - ' . $serverName;
+            $title = ' - 后台管理 - ' . $serverName;
         }
 
         View::share('menus', $nav);

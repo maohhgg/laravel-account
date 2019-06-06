@@ -23,7 +23,7 @@
                         @endif
                     </td>
                     @if ($v->is_cancel == 4)
-                        <td><a href="{{ route('restartPay' ,[$v->order]) }}">前往支付</a></td>
+                        <td><a class="text-c-green" href="{{ route('restartPay' ,[$v->order]) }}">前往支付</a></td>
                     @else
                         <td></td>
                     @endif
