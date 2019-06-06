@@ -70,7 +70,7 @@ class HomeController extends Controller
                 $toast[] = Config::get($key, false,'name');
             }
         }
-        $toast = count($toast) > 0 ? implode(' ', $toast) . '已经更新' : '配置没发生变化';
+        $toast = count($toast) > 0 ? implode( ' 和 ', $toast) . '已经更新' : '配置没发生变化';
 
         $is_show = Config::get(Config::RECHARGE_STAT);
         Navigation::query()->whereIn('url', ['recharge', 'rechargeOrder'])->update(['is_show' => $is_show]);

@@ -50,7 +50,7 @@ class Config extends BaseModel
 
         return $all == true ?
             self::$config[$key] :
-            ($attribute === false ? self::$config[$key]->value : self::$config[$key]->{$attribute});
+            ($attribute === false ? self::$config[$key]->value : self::$config[$key]->getAttribute($attribute));
     }
 
     public function getNameAttribute()
@@ -71,7 +71,7 @@ class Config extends BaseModel
         if ($value != self::get($key)) {
             $config = self::query()->where('key', $key)->update(['value' => $value]);
             if (!is_null($config)) {
-                self::$config[$key] = $value;
+                self::$config[$key]->value = $value;
                 return true;
             }
         }
