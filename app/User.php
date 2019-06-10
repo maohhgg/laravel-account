@@ -55,6 +55,7 @@ class User extends Authenticatable
     {
         $user = self::query()->find($userId);
         $user->balance = Type::turnover($user->balance, $amount, $action);
+        $user->timestamps = false;
         $user->save();
     }
 
@@ -76,6 +77,7 @@ class User extends Authenticatable
     {
         $user = self::query()->find($turnover->user_id);
         $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));
+        $user->timestamps = false;
         $user->save();
     }
 }

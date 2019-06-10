@@ -166,7 +166,11 @@ class UsersController extends Controller
             $value = $request->input($item);
             if ($value) $data[$item] = $value;
         }
-        User::query()->find($request->input('id'))->update($data);
+        if (in_array('password', array_keys($data))) $data['password'] = Hash::make($data['password']);
+
+        $user = User::query()->find($request->input('id'));
+        $user->timestamps = false;
+        $user->update($data);
         return redirect($request->input('url'))->with('toast', '用户数据完成更新');
     }
 
@@ -185,7 +189,9 @@ class UsersController extends Controller
             }],
             'password' => 'required|string|min:8|confirmed',
         ]);
-        User::query()->where('id', auth()->user()->id)->update(['password' => Hash::make($request->input('password'))]);
+        $user = User::query()->where('id', auth()->user()->id);
+        $user->timestamps = false;
+        $user->update(['password' => Hash::make($request->input('password'))]);
         return redirect($request->input('url'))->with('toast', '密码已经更新!');
     }
 
