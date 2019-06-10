@@ -166,7 +166,7 @@ class UsersController extends Controller
             $value = $request->input($item);
             if ($value) $data[$item] = $value;
         }
-        User::query()->update($data);
+        User::query()->find($request->input('id'))->update($data);
         return redirect($request->input('url'))->with('toast', '用户数据完成更新');
     }
 
