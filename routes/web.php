@@ -20,6 +20,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($router) {
 
     $router->get('settings', 'HomeController@settingForm')->name('admin.settings');
     $router->post('config/save', 'HomeController@configSave')->name('admin.config.save');
+    $router->post('backup', 'ExcelController@backup')->name('admin.backup');
 
 
     // 管理员修改自己帐号
