@@ -19,20 +19,17 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="form-label">金额</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend" id="recharge-data-select">
-                                <button class="btn btn-secondary recharge-btn" data-content="100" type="button">
-                                    100元
-                                </button>
-                                <button class="btn btn-secondary recharge-btn" data-content="500" type="button">
-                                    500元
-                                </button>
-                                <button class="btn btn-secondary recharge-btn" data-content="2000" type="button">
-                                    2000元
-                                </button>
-                            </div>
-                            {{  Form::text(null, null, ['class'=>'form-control','placeholder'=>'其他','id'=>'recharge-input']) }}
+                        <label class="form-label">类型</label>
+                        <div class="btn-group input-group mr-2" role="group" aria-label="First group"  id="recharge-data-select">
+                            <button class="btn btn-secondary recharge-btn" data-content="5000" type="button">
+                                黄金会员服务费
+                            </button>
+                            <button class="btn btn-secondary recharge-btn" data-content="10000" type="button">
+                                铂金会员服务费
+                            </button>
+                            <button class="btn btn-secondary recharge-btn" data-content="20000" type="button">
+                                钻石会员服务费
+                            </button>
                         </div>
                     </div>
 

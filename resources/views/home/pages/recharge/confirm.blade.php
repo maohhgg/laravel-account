@@ -8,12 +8,15 @@
                 </div>
                 <div class="card-block">
                     <div class="mb-5">
+                        <h5 class="text-muted mb-4">
+                            <span class="text-c-blue">{{ auth()->user()->name }}</span>
+                            <span class="f-14 mr-1">支付</span>
+                            <span class="text-c-green">{{ $params['goodsinf'] }}</span>
+                        </h5>
+
                         <h2 class="mb-4 text-center f-w-500 text-c-red">{{ $money }}<span
                                     class=" m-r-3 f-14 text-muted">元</span></h2>
-                        <h5 class="text-muted">
-                            <span class="f-14 mr-1">充值给：</span>
-                            <span class="text-c-blue">{{ auth()->user()->name }}</span>
-                        </h5>
+
                     </div>
                     <form action="{{ $url }}" method="post">
                         @foreach($params as $key =>  $param)

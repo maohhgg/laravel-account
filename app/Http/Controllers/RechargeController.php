@@ -40,9 +40,23 @@ class RechargeController extends Controller
             'id' => 'required|numeric|exists:users,id',
             'pay_number' => 'required|numeric|min:0.01|max:9999999999'
         ]);
+        switch ($request->input('pay_number')){
+            case '5000.00':
+                $type = Action::RECHARGE_GOLD;
+                break;
+            case '10000.00':
+                $type = Action::RECHARGE_PLATINUM;
+                break;
+            case '20000.00':
+                $type = Action::RECHARGE_DIAMOND;
+                break;
+            default:
+                $type = Action::RECHARGE;
+                break;
+        }
         $data = [
             'goods' => Order::goods(),  // 充值订单号  *当前无意义*
-            'goods_inf' => Action::query()->find(Action::RECHARGE)->name,  // 充值的名字
+            'goods_inf' => Action::query()->find($type)->name,  // 充值的名字
             'order' => Order::recharge(),    // 充值订单号
             'turn_order' => Order::order(),
             'user_id' => $request->input('id'),
@@ -82,7 +96,6 @@ class RechargeController extends Controller
         $params = $re->toArray();
         $params['sign'] = $re->sign(Config::get('APP_KEY'));
         $url = Recharge::orderSubmitUri;
-
         ksort($params);
         return view('home.pages.recharge.confirm', compact('params', 'money','url'));
     }
