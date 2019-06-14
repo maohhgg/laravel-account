@@ -22,11 +22,9 @@
                         @foreach($params as $key =>  $param)
                             {{  Form::hidden($key,  $param)  }}
                         @endforeach
-{{--                        <button type="submit" class="btn btn-primary shadow-2 text-uppercase btn-block"--}}
-{{--                                style="max-width:150px;margin:0 auto;">前往充值页面--}}
-{{--                        </button>--}}
-                            <input type="button" class="btn btn-primary shadow-2 text-uppercase btn-block"
-                                   style="max-width:150px;margin:0 auto;" value="前往充值页面">
+                        <button type="submit" class="btn btn-primary shadow-2 text-uppercase btn-block"
+                                style="max-width:150px;margin:0 auto;">前往充值页面
+                        </button>
                     </form>
 
                 </div>
