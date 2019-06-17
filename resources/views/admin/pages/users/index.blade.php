@@ -42,7 +42,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label">数值</label>
-                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control']) }}
+                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','step'=>'0.01']) }}
                                 </div>
 
                             </div>
@@ -80,7 +80,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label">数值</label>
-                                    {{ Form::number('data',null,['id'=>'collect-data','class'=>'form-control']) }}
+                                    {{ Form::number('data',null,['id'=>'collect-data','class'=>'form-control','step'=>'0.01']) }}
                                 </div>
 
                                 <div class="form-group mb-4">
