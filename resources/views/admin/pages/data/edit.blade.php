@@ -53,7 +53,7 @@
 
                             <div class="form-group mb-4">
                                 <label class="form-label">数值</label>
-                                <input name="data" type="number"
+                                <input name="data" type="number" step="0.01"
                                        class="form-control  @error('data') border-danger @enderror"
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
