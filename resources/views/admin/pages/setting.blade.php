@@ -46,7 +46,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label class="text-c-red">数据备份</label>
-                                    {{ Form::select('database', ['users' => '用户数据','collects'=>'汇总数据','recharge_orders'=>'充值记录','turnovers'=>'交易数据'], null, ['class'=>'js-data-single  form-control']) }}
+                                    {{ Form::select('database', ['users' => '用户数据','recharge_orders'=>'充值记录','turnovers'=>'交易数据'], null, ['class'=>'js-data-single  form-control']) }}
                                 </div>
                                 <button class="btn btn-info" type="submit">下载备份文件</button>
                             </form>

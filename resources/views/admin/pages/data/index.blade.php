@@ -30,9 +30,7 @@
 
                     <td>
                         <h6 class="m-0">
-                            @if(!is_null($v->collect))
-                                汇总数据：<a href="{{ route('admin.collect.order',[$v->collect->order]) }}">{{ $v->collect->order }}</a>
-                            @elseif(!is_null($v->hasOrder))
+                            @if(!is_null($v->hasOrder))
                                 充值订单：<a href="{{ route('admin.order.order',[$v->hasOrder->order]) }}">{{ $v->hasOrder->order }}</a>
                             @else
                                 空

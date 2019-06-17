@@ -9,6 +9,7 @@ use App\Library\Order;
 use App\Type;
 use App\Turnover;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -92,6 +93,59 @@ class DataController extends Controller
         $types = Type::getTypeArray();
         $user = User::query()->select('id', 'name')->find($results->user_id);
         return view('admin.pages.data.edit', compact('types', 'user', 'results'));
+    }
+
+    /**
+     * Show the form for creating a new Collect.
+     * @param null $id user_id
+     * @return Factory|View
+     */
+    public function createCollectForm($id = null)
+    {
+        $types = Action::getCollect();
+        if ($id) {
+            $user = User::query()->find($id);
+            if (is_null($user)) return redirect()->route('admin');
+            return view('admin.pages.data.collect.edit', compact('user', 'types'));
+        } else {
+            return view('admin.pages.data.collect.edit', compact('types'));
+        }
+    }
+
+
+    /**
+     * create a Collect
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
+    public function createCollect(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|numeric',
+            'is_online' => 'required|numeric',
+            'data' => 'required|numeric|min:0.01|max:99999999999',
+            'created_at' => 'required|date'
+        ]);
+
+        $data = $request->only('user_id', 'is_online', 'data', 'created_at');
+
+        $action = Action::query()->find($data['is_online']);
+        $d = [
+            'data' => $data['data'],
+            'user_id' => $data['user_id'],
+            'type_id' => $action->id,
+            'created_at' => Carbon::parse($data['created_at'])->toDateTimeString(),
+        ];
+
+        $d['order'] = Order::order();
+        User::saveToUser($data['user_id'], $d['data'], $action->type->action);
+        Turnover::query()->create($d);
+
+        return $request->input('method') ?
+            redirect()->back()->with('toast', '创建完成') :
+            redirect()->route('admin.data')->with('toast', '创建完成');
     }
 
 

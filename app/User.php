@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Library\ValidateError;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -61,10 +62,10 @@ class User extends Authenticatable
     /**
      * recovery user balance and total
      *
-     * @param Turnover $turnover
+     * @param Model $turnover
      * @param string $action
      */
-    public static function recoveryUser(Turnover $turnover, string $action)
+    public static function recoveryUser(Model $turnover, string $action)
     {
         $user = self::query()->find($turnover->user_id);
         $user->balance = Type::turnover($user->balance, $turnover->data, Type::reverse($action));

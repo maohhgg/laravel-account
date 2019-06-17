@@ -42,6 +42,7 @@ class Controller extends BaseController
         View::share('active', Route::currentRouteName());
         View::share('menus', $nav);
         View::share('title',  $title);
+        View::share('icp',  Config::get('RECORD_ICP'));
 
     }
 }

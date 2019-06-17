@@ -84,6 +84,11 @@
             </div>
         </div>
     </div>
+    @if ($icp)
+        <div class="pcoded-footer text-center">
+            <div class="text-center">{{ $icp }}</div>
+        </div>
+    @endif
 </div>
 <!-- [ Content ] end -->
 

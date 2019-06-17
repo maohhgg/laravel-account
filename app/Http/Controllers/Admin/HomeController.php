@@ -25,8 +25,7 @@ class HomeController extends Controller
             Config::CUS_ID,
             Config::APP_KEY,
 
-            Config::COLLECT_OFFLINE,
-            Config::COLLECT_ONLINE,
+            Config::RECORD_ICP,
 
             Config::RECHARGE_STAT,
         ];

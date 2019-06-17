@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Collect;
+use App\Action;
 use App\Turnover;
 
 class DataController extends Controller
@@ -27,8 +27,16 @@ class DataController extends Controller
             'data' => '金额(元)',
             'created_at' => '日期'];
         $id = auth()->user()->id;
-        $online_results = Collect::query()->where([['user_id', $id], ['is_online', 1]])->orderBy('id', 'desc')->Paginate($this->paginate, ['*'], 'oPage');
-        $results = Collect::query()->where([['user_id', $id], ['is_online', 0]])->orderBy('id', 'desc')->Paginate($this->paginate, ['*'], 'lPage');
+        $online_results = Turnover::query()
+            ->where([['user_id', $id], ['type_id', Action::ONLINE]])
+            ->orderBy('created_at', 'desc')
+            ->Paginate($this->paginate, ['*'], 'oPage');
+
+        $results = Turnover::query()
+            ->where([['user_id', $id],  ['type_id', Action::OFFLINE]])
+            ->orderBy('created_at', 'desc')
+            ->Paginate($this->paginate, ['*'], 'lPage');
+
         return view('home.pages.data.collect', compact('items', 'results', 'online_results'));
     }
 

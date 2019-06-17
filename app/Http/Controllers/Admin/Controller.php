@@ -55,6 +55,7 @@ class Controller extends BaseController
         View::share('breadcrumbs', $this->breadcrumbs);
         View::share('active', str_replace('admin.','', Route::currentRouteName()));
         View::share('title',  $title);
+        View::share('icp',  Config::get('RECORD_ICP'));
     }
 
 }

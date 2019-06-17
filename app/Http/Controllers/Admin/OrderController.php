@@ -65,6 +65,7 @@ class OrderController extends Controller
      * @param Request $request
      * @return void
      * @throws ValidationException
+     * @throws \Exception
      */
     public function deleteId(Request $request)
     {

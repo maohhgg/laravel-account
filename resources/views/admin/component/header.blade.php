@@ -22,7 +22,7 @@
                             <span class="pcoded-mtext">数据</span>
                         </a>
                     </li>
-                    <li><a class="dropdown-item" href="{{ route('admin.collect.create') }}">
+                    <li><a class="dropdown-item" href="{{ route('admin.data.collect') }}">
                             <span class="pcoded-micon"><i class="feather icon-file-plus"></i></span>
                             <span class="pcoded-mtext">汇总数据</span>
                         </a>

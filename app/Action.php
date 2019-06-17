@@ -39,15 +39,4 @@ class Action extends BaseModel
         ];
     }
 
-    public static function collectInterest()
-    {
-        return [
-            self::OFFLINE => (float)Config::get(Config::COLLECT_OFFLINE),
-            self::ONLINE => (float)Config::get(Config::COLLECT_ONLINE)
-        ];
-//        [Action::OFFLINE] = 0.0047;
-//        [Action::ONLINE] = 0.0042;
-    }
-
-
 }

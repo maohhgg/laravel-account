@@ -25,8 +25,4 @@ class Turnover extends BaseModel
         return $this->hasOne('App\RechargeOrder', 'turn_id', 'id');
     }
 
-    public function collect()
-    {
-        return $this->hasOne('App\Collect', 'turn_id', 'id');
-    }
 }

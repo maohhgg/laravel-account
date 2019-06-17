@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\CollectsExport;
 use App\Exports\OrderExport;
 use App\Exports\TurnoverExport;
 use App\Exports\UsersExport;
@@ -28,10 +27,6 @@ class ExcelController extends Controller
             case 'users':
                 $export = UsersExport::class;
                 $name = '全部用户';
-                break;
-            case 'collects':
-                $export = CollectsExport::class;
-                $name = '汇总数据';
                 break;
             case 'recharge_orders':
                 $export = OrderExport::class;

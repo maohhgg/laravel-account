@@ -2272,6 +2272,11 @@ p.text-muted {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+.pcoded-footer{
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+}
 
 .pcoded-navbar {
   display: block;

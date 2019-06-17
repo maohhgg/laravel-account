@@ -18,8 +18,7 @@ class Config extends BaseModel
 
     const RECHARGE_STAT = 'RECHARGE_STAT';
 
-    const COLLECT_OFFLINE = 'COLLECT_OFFLINE';
-    const COLLECT_ONLINE = 'COLLECT_ONLINE';
+    const RECORD_ICP = 'RECORD_ICP';
 
     const PAGINATE = 'PAGINATE';
 
@@ -55,9 +54,7 @@ class Config extends BaseModel
 
     public function getNameAttribute()
     {
-        if ($this->key == self::COLLECT_ONLINE) return Action::query()->find(Action::ONLINE)->name . '收费利率';
-        else if ($this->key == self::COLLECT_OFFLINE) return Action::query()->find(Action::OFFLINE)->name . '收费利率';
-        else return $this->label;
+        return $this->label;
     }
 
 

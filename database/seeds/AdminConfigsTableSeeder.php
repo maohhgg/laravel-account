@@ -17,8 +17,7 @@ class AdminConfigsTableSeeder extends Seeder
             ['key' => 'RECHARGE_STAT', 'value' => 0, 'label' => '是否启用在线充值'],
             ['key' => 'PAGINATE', 'value' => 15, 'label' => '表格显示多少项'],
 
-            ['key' => 'COLLECT_OFFLINE', 'value' => 0.0047, 'label' => '离线补差利率'],
-            ['key' => 'COLLECT_ONLINE', 'value' => 0.0042, 'label' => '在线补差利率'],
+            ['key' => 'RECORD_ICP', 'value' => '', 'label' => 'ICP备案信息'],
         ]);
     }
 }

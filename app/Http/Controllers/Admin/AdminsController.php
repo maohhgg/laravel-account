@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,7 +37,7 @@ class AdminsController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param array $data
-     * @return Admin
+     * @return Builder|Model
      */
     protected function create(array $data)
     {
@@ -63,6 +65,7 @@ class AdminsController extends Controller
      * @param Request $request
      * @return void
      * @throws ValidationException
+     * @throws \Exception
      */
     public function deleteId(Request $request)
     {
@@ -93,7 +96,7 @@ class AdminsController extends Controller
             'updated_at' => '上次登录时间',
             'action' => '操作'];
 
-        $results = Admin::paginate($this->paginate);
+        $results = Admin::query()->paginate($this->paginate);
         return view('admin.pages.admins.index', compact('items', 'results'));
     }
 
