@@ -166,6 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Backup\BackupServiceProvider::class,
 
         /*
          * Application Service Providers...
