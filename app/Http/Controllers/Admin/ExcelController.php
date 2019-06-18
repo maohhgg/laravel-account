@@ -23,7 +23,7 @@ class ExcelController extends Controller
             'database' => 'string'
         ]);
 
-        switch ($request->input('database')){
+        switch ($request->input('database')) {
             case 'users':
                 $export = UsersExport::class;
                 $name = '全部用户';
@@ -41,7 +41,7 @@ class ExcelController extends Controller
                 break;
         }
 
-        return Excel::download(new $export, $name.'.csv');
+        return Excel::download(new $export, date('Y-m-d', time()) . $name . '.csv');
 
     }
 }
