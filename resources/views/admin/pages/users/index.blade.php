@@ -85,7 +85,7 @@
 
                                 <div class="form-group mb-4">
                                     <label class="form-label">日期</label>
-                                    {{ Form::date('created_at', date('Y-m-d',strtotime('-1 day')),['class'=>'form-control','id' => 'collect-date']) }}
+                                    {{ Form::date('created_at', date('Y-m-d',time()),['class'=>'form-control','id' => 'collect-date']) }}
                                 </div>
 
                             </div>
