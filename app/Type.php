@@ -14,7 +14,7 @@ class Type extends BaseModel
 
     public function actions()
     {
-        return $this->hasMany('App\Action', 'change_type_id');
+        return $this->hasMany('App\Action', 'change_type_id')->where('id', '>', '2');
     }
 
     public static function reverse(string $action)

@@ -50,7 +50,7 @@
                                        class="form-control  @error('created_at') border-danger @enderror"
                                        @error('created_at') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
-                                       value="@if(isset($result)) {{ date('Y-m-d',strtotime($results->created_at)) }}@else{{ old('created_at') ?? date('Y-m-d',strtotime('-1 day')) }}@endif"
+                                       value="@if(isset($result)) {{ date('Y-m-d',strtotime($results->created_at)) }}@else{{ old('created_at') ?? date('Y-m-d',time()) }}@endif"
                                 />
                             </div>
 
