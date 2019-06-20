@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>创建新的汇总</h5>
+                    <h5>@if($results) 编辑汇总数据 @else 创建新的汇总数据 @endif</h5>
                     <span class="d-block m-t-5">编辑 <code>汇总</code> 信息</span>
                 </div>
                 <div class="card-block">
