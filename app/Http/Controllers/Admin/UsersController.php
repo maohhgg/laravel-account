@@ -117,7 +117,7 @@ class UsersController extends Controller
     {
         $data = User::query()->select('id', 'name as text')
             ->where("name", "LIKE", "%{$request->input('query')}%")
-            ->limit(5)
+            ->limit($this->paginate)
             ->get();
         return response()->json($data);
     }

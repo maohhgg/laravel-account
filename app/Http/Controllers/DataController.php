@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Action;
+use App\Collect;
 use App\Turnover;
 
 class DataController extends Controller

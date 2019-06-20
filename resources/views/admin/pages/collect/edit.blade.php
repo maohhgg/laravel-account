@@ -44,12 +44,21 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="form-label">汇总金额总计</label>
+                                <input name="total" type="number" step="0.01"
+                                       class="form-control  @error('data') border-danger @enderror"
+                                       @error('data') data-toggle="tooltip" data-placement="top"
+                                       title="{{ $message }}" @enderror
+                                       value="@if(isset($results)){{ floatval($results->total) }}@else{{ old('data') }}@endif"/>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="form-label">汇总补差金额</label>
                                 <input name="data" type="number" step="0.01"
                                        class="form-control  @error('data') border-danger @enderror"
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
-                                       value="@if(isset($results)){{ floatval($results->data) }}@else{{ old('data') }}@endif"/>
+                                       value="@if(isset($results)){{ floatval($results->turnover->data) }}@else{{ old('data') }}@endif"/>
                             </div>
 
                             <div class="form-group mb-4">
@@ -58,8 +67,7 @@
                                        class="form-control  @error('created_at') border-danger @enderror"
                                        @error('created_at') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
-                                       value="@if(isset($result)) {{ date('Y-m-d',strtotime($results->created_at)) }}@else{{ old('created_at') ?? date('Y-m-d',time()) }}@endif"
-                                />
+                                       value="@if(isset($results)){{date('Y-m-d',strtotime($results->turnover->created_at))}}@else{{old('created_at') ?? date('Y-m-d',time())}}@endif"/>
                             </div>
 
                             <button type="submit" class="btn btn-primary">@if(isset($results)) 更新 @else 创建 @endif</button>

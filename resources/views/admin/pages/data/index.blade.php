@@ -31,7 +31,11 @@
                     <td>
                         <h6 class="m-0">
                             @if(!is_null($v->hasOrder))
-                                充值订单：<a href="{{ route('admin.order.order',[$v->hasOrder->order]) }}">{{ $v->hasOrder->order }}</a>
+                                充值订单：
+                                <a href="{{ route('admin.order.order',[$v->hasOrder->order]) }}">{{ $v->hasOrder->order }}</a>
+                            @elseif(!is_null($v->collect))
+                                汇总数据：
+                                <a href="{{ route('admin.collect.order',[$v->collect->order]) }}">{{ $v->collect->order }}</a>
                             @else
                                 空
                             @endif
@@ -47,7 +51,11 @@
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"
+                           @if (in_array($v->type->name, \App\Action::getCollect()))
+                           data-url="{{ route('admin.collect.update.from.turnover', [$v->id]) }}"
+                           @else
                            data-url="{{ route('admin.data.update', [$v->id]) }}"
+                           @endif
                            data-content="{{ $v->id }}">
                             <i class="icon feather icon-settings"></i>
                         </a>

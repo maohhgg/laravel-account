@@ -14,15 +14,10 @@ $(window).on('load', function() {
                 window.location.href = this.getAttribute('data-url');
                 break;
             case 'collect':
-                $('#collect-user-id').val(this.getAttribute('data-user-id'));
-                $('#collect-user').val(this.getAttribute('data-name'));
-                $('#createCollectModal').modal('show');
+                window.location.href = this.getAttribute('data-collect-url');
                 break;
-
             case 'push':
-                $('#turnover-user-id').val(this.getAttribute('data-user-id'));
-                $('#turnover-user').val(this.getAttribute('data-name'));
-                $('#createTurnoverModal').modal('show');
+                window.location.href = this.getAttribute('data-data-url');
                 break;
             case 'delete':
                 $('#deleteModalBody').html(this.getAttribute('data-name'));

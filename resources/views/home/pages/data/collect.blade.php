@@ -19,7 +19,15 @@
 
                     @foreach($online_results as $v)
                         <tr>
-                            <td><h6 class="m-0 text-c-purple">{{ $v->data }}</h6></td>
+                            <td>
+                                <h6 class="m-0 text-c-purple">
+                                    @if (!is_null($v->collect))
+                                        {{ $v->collect->total }}
+                                    @else
+                                        0
+                                    @endif
+                                </h6>
+                            </td>
                             <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                         </tr>
                     @endforeach
@@ -37,7 +45,15 @@
 
                     @foreach($results as $v)
                         <tr>
-                            <td><h6 class="m-0 text-c-purple">{{ $v->data }}</h6></td>
+                            <td>
+                                <h6 class="m-0 text-c-purple">
+                                    @if (!is_null($v->collect))
+                                        {{ $v->collect->total }}
+                                    @else
+                                        0
+                                    @endif
+                                </h6>
+                            </td>
                             <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                         </tr>
                     @endforeach
