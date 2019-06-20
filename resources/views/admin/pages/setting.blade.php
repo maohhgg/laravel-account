@@ -23,7 +23,7 @@
                                                    class="form-control @error($item->key) border-danger @enderror"
                                                    @error($item->key) data-toggle="tooltip" data-placement="top"
                                                    title="{{ $message }}" @enderror
-                                                   value="{{ old($item->key) ?? $item->value }}" required>
+                                                   value="{{ old($item->key) ?? $item->value }}">
                                         </div>
                                     @else
                                         <div class="form-group mb-3">
