@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Library\Recharge;
+use Carbon\Carbon;
 
 class RechargeOrder extends BaseModel
 {
@@ -26,7 +27,10 @@ class RechargeOrder extends BaseModel
         switch ($this->is_cancel) {
             case Recharge::PROCESS:
                 if (abs(time() - strtotime($this->created_at)) > 900) {
-                    $this->update(['is_cancel' => Recharge::CANCEL]);
+                    $this->update([
+                        'is_cancel' => Recharge::CANCEL,
+                        'created_at' => Carbon::parse(strtotime($this->created_at) + 900)->toDateTimeString()
+                    ]);
                     $result = '已取消';
                 } else {
                     $result = '等待支付';
