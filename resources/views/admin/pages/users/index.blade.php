@@ -102,7 +102,7 @@
                 <tr>
                     <td><h6 class="m-0">{{ $loop->iteration }}</h6></td>
                     <td><h6 class="m-0">{{ $v->id }}</h6></td>
-                    <td><h6 class="m-0 text-c-blue"><a href="{{ route('admin.data.user',[$v->id])  }}">{{ $v->name }}</a></h6></td>
+                    <td><h6 class="m-0 text-c-blue">{{ $v->name }}</h6></td>
                     <td><h6 class="m-0">@if($v->phoneDefault()) 未添加 @else {{ $v->phone }} @endif</h6></td>
                     <td><h6 class="m-0 text-c-yellow">{{ $v->balance }}</h6></td>
                     <td><h6 class="m-0">@if($v->emailDefault()) 未添加 @else {{ $v->email }} @endif</h6></td>

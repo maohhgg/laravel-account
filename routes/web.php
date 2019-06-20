@@ -62,10 +62,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($router) {
         $router->get('/order/{order}', 'DataController@order')->name('admin.data.order');
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
-        $router->get('collect', 'DataController@createCollectForm')->name('admin.data.collect');
 
         $router->post('add', 'DataController@create')->name('admin.data.add');
-        $router->post('collect.add', 'DataController@createCollect')->name('admin.data.collect.add');
         $router->post('save', 'DataController@update')->name('admin.data.save');
         $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
     });
@@ -79,6 +77,22 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($router) {
         $router->post('add', 'ChangeController@create')->name('admin.change.add');
         $router->post('save', 'ChangeController@updateAction')->name('admin.change.save');
         $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
+    });
+
+    // 每日汇总数据管理
+    Route::prefix('collect')->group(function ($router) {
+        // 展示页面
+        $router->get('/', 'CollectController@display')->name('admin.collect');
+        $router->get('create/{id?}', 'CollectController@createFrom')->name('admin.collect.create');
+        $router->get('/user/{id?}', 'CollectController@display')->name('admin.collect.user');
+        $router->get('/order/{order}', 'CollectController@order')->name('admin.collect.order');
+        $router->get('update/{id}', 'CollectController@updateForm')->name('admin.collect.update');
+        $router->get('update/turnover/{id}', 'CollectController@updateFromTurnoverForm')->name('admin.collect.update.from.turnover');
+
+        // post 处理页面
+        $router->post('add', 'CollectController@create')->name('admin.collect.add');
+        $router->post('save', 'CollectController@updateCollect')->name('admin.collect.save');
+        $router->post('delete', 'CollectController@deleteId')->name('admin.collect.delete');;
     });
 
     // 订单数据管理

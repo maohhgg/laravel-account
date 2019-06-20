@@ -9,22 +9,26 @@
                     <span class="d-block m-t-5">编辑 <code>汇总</code> 信息</span>
                 </div>
                 <div class="card-block">
-                    <form action=" {{ route('admin.data.collect.add') }}"
+                    <form action="@if(isset($results)) {{ route('admin.collect.save') }} @else {{ route('admin.collect.add') }} @endif"
                           method="post">
                         @csrf
                         {{  Form::hidden('url',URL::previous())  }}
 
                         <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 
-                            <div class="form-group">
+                            <div class="form-group"  >
                                 <label class="form-label">用户
                                     @error('user_id')
-                                    <h6 class="text-c-red"> {{ $message }}</h6>
+                                        <h6 class="text-c-red"> {{ $message }}</h6>
                                     @enderror
                                 </label>
                                 @if(isset($user))
                                     {{  Form::hidden('user_id',$user->id )  }}
-                                    {{  Form::text(null, $results->user->id, array('class'=>'form-control','disabled')) }}
+                                    {{  Form::text(null, $user->name, array('class'=>'form-control','disabled')) }}
+                                @elseif(isset($results))
+                                    {{  Form::hidden('id', $results->id)  }}
+                                    {{  Form::hidden('user_id',$results->user->id )  }}
+                                    {{  Form::text(null, $results->user->name, array('class'=>'form-control','disabled')) }}
                                 @else
                                     {{ Form::select('user_id', [], null, ['placeholder' => '选择一个用户','class'=>'js-data-ajax col-sm-12']) }}
                                 @endif
@@ -32,11 +36,15 @@
 
                             <div class="form-group">
                                 <label class="form-label">类型</label>
-                                {{ Form::select('is_online', $types, null, ['class'=>'js-data-single  form-control']) }}
+                                @if(isset($results))
+                                    {{ Form::select('is_online', $types, $results->is_online, ['class'=>'js-data-single  form-control']) }}
+                                @else
+                                    {{ Form::select('is_online', $types, null, ['class'=>'js-data-single  form-control']) }}
+                                @endif
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">汇总补差金额数值</label>
+                                <label class="form-label">汇总补差金额</label>
                                 <input name="data" type="number" step="0.01"
                                        class="form-control  @error('data') border-danger @enderror"
                                        @error('data') data-toggle="tooltip" data-placement="top"
@@ -54,7 +62,7 @@
                                 />
                             </div>
 
-                            <button type="submit" class="btn btn-primary">创建</button>
+                            <button type="submit" class="btn btn-primary">@if(isset($results)) 更新 @else 创建 @endif</button>
                         </div>
 
                     </form>
