@@ -12,6 +12,7 @@
                     <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                         <form action="{{ route('admin.users.create') }}" method="post">
                             @csrf
+                            {{  Form::hidden('url',URL::previous())  }}
                             <div class="form-group mb-3">
                                 <label class="form-label">用户名</label>
                                 <input name="name" type="text"

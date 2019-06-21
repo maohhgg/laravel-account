@@ -16,7 +16,9 @@
                     <td>
                         {{--                        <img class="rounded-circle" style="width:40px;"--}}
                         {{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
-                        <span>{{ $v->user->name }}</span>
+                        <h6 class="m-0">
+                            <a href="{{ route('admin.data.user',[$v->user->id]) }}">{{ $v->user->name }}</a>
+                        </h6>
                     </td>
 
                     <td>

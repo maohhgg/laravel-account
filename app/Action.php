@@ -6,9 +6,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ChangeAction extends model
+class Action extends model
 {
     public $timestamps = false;
+    public $table = 'change_actions';
 
     protected $fillable = [
         'name', 'change_type_id',
@@ -16,7 +17,7 @@ class ChangeAction extends model
 
     public function type()
     {
-        return $this->belongsTo('App\ChangeType', 'change_type_id');
+        return $this->belongsTo('App\Type', 'change_type_id');
     }
 
     public function turnover()

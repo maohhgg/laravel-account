@@ -48,7 +48,8 @@
                             <span>{{ Auth::user()->name }}</span>
                         </div>
                         <ul class="pro-body">
-{{--                            <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
+{{--                            <li><a href="{{ route('admin.settings') }}" class="dropdown-item"><i class="feather icon-settings"></i> 修改个人资料</a></li>--}}
+                            <li><a href="{{ route('admin.password') }}" class="dropdown-item"><i class="feather icon-lock"></i> 修改密码</a></li>
                             <li><a href="{{ route('admin.logout') }}"
                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                                    class="dropdown-item">

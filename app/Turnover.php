@@ -25,6 +25,6 @@ class Turnover extends Model
 
     public function type()
     {
-        return $this->belongsTo('App\ChangeAction', 'type_id');
+        return $this->belongsTo('App\Action', 'type_id');
     }
 }

@@ -18,36 +18,54 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
     $router->get('/dash', 'HomeController@index');
     $router->get('/', 'HomeController@index')->name('admin');
 
+    // 管理员修改自己帐号
+    $router->get('settings', 'AdminsController@settingForm')->name('admin.settings');
+    $router->get('password', 'AdminsController@passwordForm')->name('admin.password');
+    $router->post('password/update', 'AdminsController@updatePassword')->name('admin.password.update');
+
+
     Route::prefix('users')->group(function ($router) {
+        // 展示页面
         $router->get('/', 'UsersController@index')->name('admin.users');
-        $router->get('create', 'UsersController@showCreateForm')->name('admin.users.create');
-        $router->post('create', 'UsersController@save');
+        $router->get('create', 'UsersController@createForm')->name('admin.users.create');
         $router->get('update/{id}', 'UsersController@updateForm')->name('admin.users.update');
-        $router->post('save', 'UsersController@update')->name('admin.users.save');
-        $router->post('delete', 'UsersController@deleteId')->name('admin.users.delete');;
+
+        // post 处理页面
+        $router->post('create', 'UsersController@createWithNamePassword');
+        $router->post('save', 'UsersController@updateUser')->name('admin.users.save');
+        $router->post('delete', 'UsersController@deleteId')->name('admin.users.delete');
     });
 
     Route::prefix('admins')->group(function ($router) {
+        // 展示页面
         $router->get('/', 'AdminsController@index')->name('admin.admins');
-        $router->get('create', 'AdminsController@showCreateForm')->name('admin.admins.create');
-        $router->post('create', 'AdminsController@save');
+        $router->get('create', 'AdminsController@createForm')->name('admin.admins.create');
         $router->get('update/{id}', 'AdminsController@updateForm')->name('admin.admins.update');
-        $router->post('save', 'AdminsController@updateData')->name('admin.admins.save');
-        $router->post('delete', 'AdminsController@deleteId')->name('admin.admins.delete');;
+
+        // post 处理页面
+        $router->post('create', 'AdminsController@createWithNamePassword');
+        $router->post('save', 'AdminsController@updateAdmin')->name('admin.admins.save');
+        $router->post('delete', 'AdminsController@deleteId')->name('admin.admins.delete');
     });
 
     Route::prefix('data')->group(function ($router) {
-        $router->get('/', 'DataController@index')->name('admin.data');
+
+        $router->get('/', 'DataController@display')->name('admin.data');
+        $router->get('/user/{id?}', 'DataController@display')->name('admin.data.user');
         $router->get('create/{id?}', 'DataController@createForm')->name('admin.data.create');
         $router->get('update/{id}', 'DataController@updateForm')->name('admin.data.update');
-        $router->post('create', 'DataController@create');
+
+        $router->post('add', 'DataController@create')->name('admin.data.add');
         $router->post('save', 'DataController@update')->name('admin.data.save');
         $router->post('delete', 'DataController@deleteId')->name('admin.data.delete');;
     });
 
     Route::prefix('change')->group(function ($router) {
+        // 展示页面
         $router->get('/', 'ChangeController@index')->name('admin.change');
-        $router->post('save', 'ChangeController@updateData')->name('admin.change.save');
+
+        // post 处理页面
+        $router->post('save', 'ChangeController@updateAction')->name('admin.change.save');
         $router->post('create', 'ChangeController@create')->name('admin.change.create');
         $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
     });
@@ -63,8 +81,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
 Route::prefix('admin')->namespace('Admin\Auth')->group(function ($router) {
     // 管理员登录注销
     $router->get('login', 'LoginController@showLogin')->name('admin.login');
-    $router->post('login', 'LoginController@login');
     $router->get('logout', 'LoginController@logout')->name('admin.logout');
+
+    $router->post('login', 'LoginController@login');
     $router->post('logout', 'LoginController@logout');
 
 });
@@ -73,6 +92,12 @@ Route::prefix('admin')->namespace('Admin\Auth')->group(function ($router) {
 Auth::routes();
 
 Route::middleware('auth')->group(function ($router) {
+
     $router->get('/','HomeController@index')->name('home');
     $router->get('data/history','DataController@history')->name('data.history');
+
+    // 用户修改自己帐号
+    $router->get('settings', 'Admin\UsersController@settingForm')->name('user.settings');
+    $router->get('password', 'Admin\UsersController@passwordForm')->name('user.password');
+    $router->post('password/update', 'Admin\UsersController@updatePassword')->name('user.password.update');
 });

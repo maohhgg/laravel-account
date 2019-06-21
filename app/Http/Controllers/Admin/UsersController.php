@@ -4,13 +4,17 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\ChangeType;
+use App\Type;
 use App\Turnover;
 use App\User;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 
 class UsersController extends Controller
@@ -38,7 +42,7 @@ class UsersController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param array $data
-     * @return \App\User
+     * @return User
      */
     protected function create(array $data)
     {
@@ -65,15 +69,26 @@ class UsersController extends Controller
             'action' => '操作'];
 
         $results = User::Paginate(10);
-        $changeTypes = ChangeType::where('id', '>', '0')->with('actions')->get();
-        return view('admin.pages.users.index', compact('items', 'results', 'changeTypes'));
+        $types = Type::getTypeArray();
+        return view('admin.pages.users.index', compact('items', 'results', 'types'));
     }
 
-    public function showCreateForm()
+    /**
+     * Show the form for creating a new user.
+     *
+     * @return Factory|View
+     */
+    public function createForm()
     {
         return view('admin.pages.users.create');
     }
 
+    /**
+     * Show the form for update a user.
+     *
+     * @param null $id
+     * @return Factory|View
+     */
     public function updateForm($id = null)
     {
         if (!$id || !is_numeric($id)) return redirect()->route('admin');
@@ -83,7 +98,8 @@ class UsersController extends Controller
 
 
     /**
-     * Show the form for creating a new resource.
+     * response username json resource for creating a new turnover.
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -96,20 +112,36 @@ class UsersController extends Controller
         return response()->json($data);
     }
 
-    public function save(Request $request)
+
+    /**
+     * create User with name and password
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
+    public function createWithNamePassword(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|string|unique:users,name',
             'password' => 'required|string|min:8',
         ]);
-        $data = $request->input();
-        $data['password'] = Hash::make($data['password']);
-        $user = new User($data);
-        $user->save();
-        return redirect()->route('admin.users');
+
+        User::create([
+            'name' => $request->input('name'),
+            'password' => Hash::make($request->input('password'))
+        ]);
+        return redirect($request->input('url'))->with('toast','用户创建完成');
     }
 
-    public function update(Request $request)
+    /**
+     *  method post delete a User
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     */
+    public function updateUser(Request $request)
     {
         $this->validate($request, [
             'name' => 'string',
@@ -117,14 +149,17 @@ class UsersController extends Controller
             'phone' => ['required', 'regex:/^13\d{9}$|^14\d{9}$|^15\d{9}$|^17\d{9}$|^18\d{9}$/']
         ]);
 
-        $data = $request->input();
-
-        unset($data['id']);
-        $user = User::find($request->input('id'));
-        $user->update($data);
-        return redirect()->route('admin.users');
+        User::find($request->input('id'))->update($request->only('name', 'email', 'phone'));
+        return redirect($request->input('url'))->with('toast','用户数据完成更新');
     }
 
+    /**
+     *  method post delete a User
+     *
+     * @param Request $request
+     * @return void
+     * @throws ValidationException
+     */
     public function deleteId(Request $request)
     {
         $this->validate($request, [
@@ -132,7 +167,7 @@ class UsersController extends Controller
         ]);
         $id = $request->input('id');
         Turnover::where('user_id', $id)->delete();
-        User::where('id', $id)->delete();
-        return redirect()->route('admin.users');
+        User::find($id)->delete();
+        return redirect()->back()->with('toast','用户已删除');
     }
 }

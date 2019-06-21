@@ -4,7 +4,7 @@ $(window).on('load', function() {
         content: '#toolbar-options',
         style: 'primary',
         event: 'click',
-        adjustment: 25,
+        adjustment: 20,
         hideOnClick: true
     });
 
