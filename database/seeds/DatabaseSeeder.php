@@ -13,10 +13,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminsTableSeeder::class,
-            AdminConfigsTableSeeder::class,
+            ServerConfigsTableSeeder::class,
             ChangeTypesTableSeeder::class,
             NavigationsTableSeeder::class,
             ChangeActionsTableSeeder::class,
+            OrderStatusTableSeeder::class,
         ]);
     }
 }

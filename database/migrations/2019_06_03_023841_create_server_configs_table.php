@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminConfigsTable extends Migration
+class CreateServerConfigsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAdminConfigsTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_configs', function (Blueprint $table) {
+        Schema::create('server_configs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('key',255);
             $table->string('value',255);
@@ -34,6 +34,6 @@ class CreateAdminConfigsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_configs');
+        Schema::dropIfExists('server_configs');
     }
 }

@@ -27,7 +27,7 @@ class Config extends BaseModel
 
     public $timestamps = false;
 
-    protected $table = 'admin_configs';
+    protected $table = 'server_configs';
 
     protected $appends = ['name'];
 
