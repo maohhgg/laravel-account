@@ -146,7 +146,7 @@ Route::middleware('auth')->group(function ($router) {
 
     // 用户修改自己帐号
     $router->get('settings', 'Admin\UsersController@settingForm')->name('settings');
-    $router->get('password', 'Admin\UsersController@passwordForm')->name('password');
+    $router->get('password', 'HomeController@passwordForm')->name('password');
     $router->post('password/update', 'Admin\UsersController@updatePassword')->name('password.save');
 });
 

@@ -24,8 +24,6 @@ use Illuminate\View\View;
 class UsersController extends Controller
 {
 
-    public $module = 'users';
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -99,11 +97,6 @@ class UsersController extends Controller
         if (!$id || !is_numeric($id)) return redirect()->route('admin');
         $user = User::query()->find($id);
         return view('admin.pages.users.update', compact('user'));
-    }
-
-    public function passwordForm()
-    {
-        return view('home.pages.password');
     }
 
 

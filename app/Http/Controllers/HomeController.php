@@ -53,4 +53,9 @@ class HomeController extends Controller
 
         return view('home.pages.recharge.display', compact('results', 'items'));
     }
+
+    public function passwordForm()
+    {
+        return view('home.pages.password');
+    }
 }
