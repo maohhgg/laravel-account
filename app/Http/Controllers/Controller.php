@@ -36,7 +36,7 @@ class Controller extends BaseController
         if ($page) {
             $title = $page->name . ' - ' . $serverName;
         } else {
-            $title = ' 后台管理 - ' . $serverName;
+            $title = $serverName;
         }
 
         View::share('active', Route::currentRouteName());
