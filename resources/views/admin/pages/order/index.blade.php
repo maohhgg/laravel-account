@@ -14,7 +14,7 @@
                     <td><h6 class="m-0">{{ $loop->remaining+1 }}</h6></td>
                     <td><h6 class="m-0">{{ $v->order }}</h6></td>
                     <td>
-                        @if($v->is_cancel == 0)
+                        @if($v->orderStatus->id == 1)
                             <h6 class="m-0">
                                 <a href="{{ route('admin.data.order',[$v->turnover->order]) }}">{{ $v->turnover->order }}</a>
                             </h6>
@@ -32,25 +32,32 @@
                     <td><h6 class="m-0">{{ $v->created_at }}</h6></td>
                     <td><h6 class="m-0">@if($v->updated_at != $v->created_at){{ $v->updated_at }}@else 未更新 @endif</h6></td>
                     <td>
-                        @if($v->is_cancel == 0)
-                            <h6 class="m-0 text-c-green">{{ $v->status }}</h6>
-                        @elseif($v->is_cancel > 1)
-                            <h6 class="m-0 text-c-purple">{{ $v->status }}</h6>
+                        @if($v->order_status_id == \App\Library\Recharge::SUCCESS)
+                            <h6 class="m-0 text-c-green">{{ $v->orderStatus->label }}</h6>
+                        @elseif($v->order_status_id == \App\Library\Recharge::PROCESS)
+                            <h6 class="m-0 text-c-purple">{{ $v->orderStatus->label}}</h6>
                         @else
-                            <h6 class="m-0 text-c-red">{{ $v->status }}</h6>
+                            <h6 class="m-0 text-c-red">{{ $v->orderStatus->label }}</h6>
                         @endif
                     </td>
 
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"
-                           data-content="{{ $v->id }}">
+                           data-content="{{ $v->id }}"
+                           data-cancel="{{ $v->orderStatus }}">
                             <i class="icon feather icon-settings"></i>
                         </a>
+                    </td>
+                    <td>
+                        @if($v->is_cancel == \App\Library\Recharge::SUCCESS)
+                            <a href="#!" class="label theme-bg f-12 text-white">退款</a>
+                        @endif
                     </td>
                 </tr>
             @endforeach
         @endcomponent
         <div id="toolbar-options" class="hidden">
+            <a data-content="refresh"><i class="icon feather icon-refresh-ccw"></i></a>
             <a data-content="delete"><i class="feather icon-trash-2"></i></a>
         </div>
     @elseif(!is_null($order))

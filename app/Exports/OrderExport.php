@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\RechargeOrder;
+use App\Order;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class OrderExport implements FromCollection
@@ -12,6 +12,6 @@ class OrderExport implements FromCollection
     */
     public function collection()
     {
-        return RechargeOrder::all();
+        return Order::all();
     }
 }

@@ -9,20 +9,20 @@
 
             @foreach($results as $v)
                 <tr>
-                    <td><h6 class="m-0"><a href="{{ route('restartPay' ,[$v->order]) }}">{{ $v->order }}</a></h6></td>
+                    <td><h6 class="m-0 text-c-blue">{{ $v->order }}</h6></td>
                     <td><h6 class="m-0 text-c-blue">{{ $v->pay_number }}</h6></td>
-
-                    <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                     <td>
-                        @if($v->is_cancel == 0)
-                            <h6 class="m-0 text-c-green">{{ $v->status }}</h6>
-                        @elseif($v->is_cancel > 1)
-                            <h6 class="m-0 text-c-yellow">{{ $v->status }}</h6>
+                        @if($v->order_status_id == \App\Library\Recharge::SUCCESS)
+                            <h6 class="m-0 text-c-green">{{ $v->orderStatus->label }}</h6>
+                        @elseif($v->order_status_id == \App\Library\Recharge::PROCESS)
+                            <h6 class="m-0 text-c-purple">{{ $v->orderStatus->label}}</h6>
                         @else
-                            <h6 class="m-0 text-c-red">{{ $v->status }}</h6>
+                            <h6 class="m-0 text-c-red">{{ $v->orderStatus->label }}</h6>
                         @endif
                     </td>
-                    @if ($v->is_cancel == 4)
+                    <td><h6 class="m-0">{{ $v->created_at }}</h6></td>
+
+                    @if($v->order_status_id == \App\Library\Recharge::PROCESS)
                         <td><a class="text-c-green" href="{{ route('restartPay' ,[$v->order]) }}">前往支付</a></td>
                     @else
                         <td></td>

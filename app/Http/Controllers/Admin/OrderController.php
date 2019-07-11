@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Action;
-use App\RechargeOrder;
+use App\Order;
 use App\Turnover;
 use App\User;
 use Illuminate\Http\Request;
@@ -14,7 +14,6 @@ use Illuminate\Validation\ValidationException;
 class OrderController extends Controller
 {
     public $types = ['0' => '线下交易汇总', '1' => '二维码交易汇总'];
-    public $interest = ['0' => 0.0047, '1' => 0.0042];
     public $items = [
         'id' => '#ID',
         'order' => '单号',
@@ -24,7 +23,8 @@ class OrderController extends Controller
         'created_at' => '创建时间',
         'updated_at' => '完成时间',
         'is_cancel' => '状态',
-        'action' => '操作'];
+        'action' => '操作',
+        'rollback' => ''];
 
     public function display($id = null)
     {
@@ -32,9 +32,9 @@ class OrderController extends Controller
         if ($id) {
             $user = User::query()->where('id', $id)->first();
             if (is_null($user)) return redirect()->route('admin.home');
-            $r = RechargeOrder::query()->where('user_id', $id);
+            $r = Order::query()->where('user_id', $id);
         } else {
-            $r = new RechargeOrder();
+            $r = new Order();
         }
 
         $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
@@ -45,7 +45,7 @@ class OrderController extends Controller
     public function order($order = null)
     {
         if ($order) {
-            $results = RechargeOrder::query()->where('order', $order)->Paginate(1);
+            $results = Order::query()->where('order', $order)->Paginate(1);
             return $this->render($results, null, $order);
         }
         return redirect()->route('admin.home');
@@ -72,7 +72,7 @@ class OrderController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        $c = RechargeOrder::query()->find($request->input('id'));
+        $c = Order::query()->find($request->input('id'));
         $t = Turnover::query()->find($c->turn_id);
         if (!is_null($t)) {
             User::recoveryUser($t, Action::query()->find($t->type_id));

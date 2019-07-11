@@ -22,7 +22,7 @@ class Turnover extends BaseModel
 
     public function hasOrder()
     {
-        return $this->hasOne('App\RechargeOrder', 'turn_id', 'id');
+        return $this->hasOne('App\Order', 'turn_id', 'id');
     }
 
     public function collect()

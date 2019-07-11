@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Action;
 use App\Collect;
-use App\Library\Order;
+use App\Library\OrderNumber;
 use App\Turnover;
 use App\User;
 use Carbon\Carbon;
@@ -103,7 +103,7 @@ class CollectController extends Controller
         if (is_null($t->collect)){
             $results = Collect::query()->create([
                 'total' => 0,
-                'order' => Order::collect(),
+                'order' => OrderNumber::collect(),
                 'is_online' => $t->type_id,
                 'turn_id' => $t->id,
                 'user_id' => $t->user_id
@@ -140,8 +140,8 @@ class CollectController extends Controller
             'created_at' => Carbon::parse($request->input('created_at'))->toDateTimeString(),
         ];
 
-        $d['order'] = Order::order();
-        $data['order'] = Order::collect();
+        $d['order'] = OrderNumber::order();
+        $data['order'] = OrderNumber::collect();
         $data['turn_id'] = Turnover::query()->create($d)->id;
 
         User::saveToUser($data['user_id'], $d['data'], $action->type->action);

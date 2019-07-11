@@ -4,7 +4,8 @@
 namespace App\Library;
 
 use App\Action;
-use App\RechargeOrder;
+use App\Config;
+use App\Order;
 use App\Turnover;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -16,11 +17,10 @@ class Recharge
     const orderQueryUri = 'https://vsp.allinpaygd.com/apiweb/gateway/query';
     const orderRefund = 'https://vsptest.allinpaygd.com/apiweb/gateway/refund';
 
-    const SUCCESS = 0;
-    const CANCEL = 1;
-    const NORESULTS = 2;
-    const UNKOWN = 3;
-    const PROCESS = 4;
+    const SUCCESS = 1;
+    const CANCEL = 2;
+    const PROCESS = 3;
+    const FAIL = 4;
 
     const Code = [
         '0000' => '交易成功',
@@ -46,17 +46,19 @@ class Recharge
     public $randomstr;
 
 
-    public static function bind(array $array)
-    {
-        return new Recharge($array['order'], $array['number'], $array['goodsId'], $array['goodsInf']);
-    }
-
-    private function __construct($orderId, $number, $goodsId, $goodsInf)
+    /**
+     * Recharge constructor.
+     * @param string $orderId
+     * @param int $number
+     * @param string $goodsId
+     * @param string $goodsInfo
+     */
+    private function __construct($orderId, $number, $goodsId, $goodsInfo)
     {
         $this->orderid = $orderId;
         $this->trxamt = $number;
         $this->goodsid = $goodsId;
-        $this->goodsinf = $goodsInf;
+        $this->goodsinf = $goodsInfo;
         $this->validtime = 15;
         $this->gateid = '';
         $this->charset = 'UTF-8';
@@ -68,7 +70,7 @@ class Recharge
      * @param string $url
      * @return $this
      */
-    public function setReturl($url)
+    public function setRetUrl($url)
     {
         $this->returl = $url;
         return $this;
@@ -80,7 +82,7 @@ class Recharge
      * @param string $url
      * @return $this
      */
-    public function setNotifyurl($url)
+    public function setNotifyUrl($url)
     {
         $this->notifyurl = $url;
         return $this;
@@ -109,28 +111,105 @@ class Recharge
     }
 
     /**
-     * @param Model $rechargeOrder
-     * @param int $data
-     * @return int | null
+     * @param Model $order
+     * @param int $amount
+     * @return int
      */
-    public static function saveStatus(Model $rechargeOrder, int $data)
+    private static function saveTurnover(Model $order, int $amount)
     {
-        $amount = ($data / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
         $action = Action::query()->find(3)->type->action;
 
-        if ($rechargeOrder->pay_number != $amount){
-            $rechargeOrder->update(['pay_number' => $amount]);
+        if ($order->turn_id) {
+            $t = Turnover::query()->find($order->turn_id);
+            if ($t->data != $amount) {
+                User::recoveryUser($t, $action);
+                User::saveToUser($order->user_id, $amount, $action);
+                $t->data = $amount;
+                $t->save();
+            }
+        } else {
+            $t = Turnover::query()->create([
+                'data' => $amount,
+                'user_id' => $order->user_id,
+                'type_id' => 3,
+                'order' => $order->turn_order,
+                'description' => '',
+                'created_at' => $order->created_at,
+            ]);
+            User::saveToUser($order->user_id, $amount, $action);
         }
 
-        User::saveToUser($rechargeOrder->user_id, $amount, $action);
-        $t = Turnover::query()->create([
-            'data' => $amount,
-            'user_id' => $rechargeOrder->user_id,
-            'type_id' => 3,
-            'order' => $rechargeOrder->turn_order,
-            'description' => '',
-            'created_at' => $rechargeOrder->created_at,
-        ]);
-        return $t ? $t->id : null;
+        return $t->id;
+    }
+
+
+    public static function bind(array $array)
+    {
+        $recharge = new Recharge(
+            $array['order'],
+            $array['pay_number'] * 100,
+            $array['goods'],
+            $array['goods_inf']);
+
+        $recharge->setReturl(route('recharge.success', ['token' => base64_encode($array['order'])]))
+            ->setNotifyUrl(route('recharge.results'))
+            ->setAppKey(Config::get('CUS_ID'), Config::get('APP_ID'));
+
+        $params = $recharge->toArray();
+        $params['sign'] = $recharge->sign(Config::get('APP_KEY'));
+        ksort($params);
+        return $params;
+    }
+
+    /**
+     * @param $token
+     * @param $code
+     * @param $orderAmount
+     * @return array
+     */
+    public static function response($token, $code, $orderAmount)
+    {
+        $order = Order::query()->where('order', $token)->first();
+
+        $orderAmount = ($orderAmount / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
+        $status = 200;
+        $message = self::Code[$code];
+
+        switch ($message) {
+            case '交易成功':
+                if($order->order_status_id != self::SUCCESS){
+                    $order->turn_id = self::saveTurnover($order, $orderAmount);
+                    $order->order_status_id = self::SUCCESS;
+                    if ($order->pay_number != $orderAmount) $order->pay_number = $orderAmount;
+                    $order->save();
+                }
+                break;
+            default:
+                $status = 400;
+                break;
+        }
+        return ['code' => $status, 'message' => $message];
+    }
+
+    /**
+     * @param $token
+     * @param $code
+     * @param $orderAmount
+     * @return array
+     */
+    public static function query($token)
+    {
+
+    }
+
+    /**
+     * @param $token
+     * @param $code
+     * @param $orderAmount
+     * @return array
+     */
+    public static function refund($token)
+    {
+
     }
 }

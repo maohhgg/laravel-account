@@ -6,12 +6,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Action;
 use App\Collect;
-use App\Library\Order;
-use App\RechargeOrder;
+use App\Library\OrderNumber;
+use App\Order;
 use App\Type;
 use App\Turnover;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,6 +34,7 @@ class DataController extends Controller
      * display all turnover data
      *
      * @param null|number $id user_id
+     * @param null $order
      * @return Factory|View
      */
     public function display($id = null, $order = null)
@@ -117,7 +117,7 @@ class DataController extends Controller
         $action = Action::query()->find($data['type_id'])->type->action;
 
         User::saveToUser($data['user_id'], $data['data'], $action);
-        $data['order'] = Order::order();
+        $data['order'] = OrderNumber::order();
         $data['is_recharge'] = 0;
         Turnover::query()->create($data);
 
@@ -174,7 +174,7 @@ class DataController extends Controller
             User::recoveryUser($t, Action::query()->find($t->type_id)->type->action);
         }
         if (!is_null($t->hasOrder)){
-            RechargeOrder::query()->find($t->hasOrder->id)->delete();
+            Order::query()->find($t->hasOrder->id)->delete();
         }
         if (!is_null($t->collect)){
             Collect::query()->find($t->collect->id)->delete();

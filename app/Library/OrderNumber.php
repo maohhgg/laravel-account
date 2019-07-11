@@ -4,7 +4,7 @@
 namespace App\Library;
 
 
-class Order
+class OrderNumber
 {
     public static function goods()
     {

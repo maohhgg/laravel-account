@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Action;
 use App\Collect;
-use App\RechargeOrder;
+use App\Order;
 use App\Type;
 use App\Turnover;
 use App\User;
@@ -203,7 +203,7 @@ class UsersController extends Controller
         ]);
         $id = $request->input('id');
         Turnover::query()->where('user_id', $id)->delete();
-        RechargeOrder::query()->where('user_id', $id)->delete();
+        Order::query()->where('user_id', $id)->delete();
         Collect::query()->where('user_id', $id)->delete();
         User::query()->find($id)->delete();
         return redirect()->back()->with('toast', '用户已删除');

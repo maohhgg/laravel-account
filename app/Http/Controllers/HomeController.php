@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Action;
-use App\RechargeOrder;
+use App\Order;
 use App\Turnover;
 use App\Config;
 use App\Type;
@@ -48,7 +48,7 @@ class HomeController extends Controller
         $user = User::query()->find(auth()->user()->id);
         if (is_null($user)) return redirect()->back();
 
-        $r = RechargeOrder::query()->where('user_id', $user->id);
+        $r = Order::query()->where('user_id', $user->id);
         $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
 
         return view('home.pages.recharge.display', compact('results', 'items'));

@@ -14,7 +14,7 @@
                             <span class="text-c-green">{{ $params['goodsinf'] }}</span>
                         </h5>
 
-                        <h2 class="mb-4 text-center f-w-500 text-c-red">{{ $money }}<span
+                        <h2 class="mb-4 text-center f-w-500 text-c-red">{{ $params['trxamt'] / 100 }}<span
                                     class=" m-r-3 f-14 text-muted">元</span></h2>
 
                     </div>
