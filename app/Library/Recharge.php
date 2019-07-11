@@ -131,7 +131,7 @@ class Recharge
             $t = Turnover::query()->create([
                 'data' => $amount,
                 'user_id' => $order->user_id,
-                'type_id' => 3,
+                'type_id' => $order->goods,
                 'order' => $order->turn_order,
                 'description' => '',
                 'created_at' => $order->created_at,
@@ -171,7 +171,7 @@ class Recharge
     {
         $order = Order::query()->where('order', $token)->first();
 
-        $orderAmount = ($orderAmount / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
+        $orderAmount = floatval($orderAmount / 100); // 单位是（分） 数据库保存的是（元） 需要 / 100
         $status = 200;
         $message = self::Code[$code];
 
