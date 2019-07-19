@@ -5,7 +5,7 @@
             <div class="b-bg">
                 <img src="{{ asset('images/resource/logo.png') }}" alt="">
             </div>
-            <span class="b-title">查看数据</span>
+            <span class="b-title">{{ $servername }}</span>
         </a>
     </div>
     <a class="mobile-menu" id="mobile-header" href="#">
