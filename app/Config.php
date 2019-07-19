@@ -11,6 +11,7 @@ class Config extends BaseModel
 {
 
     const SERVER_NAME = 'SERVER_NAME';
+    const SERVER_TITLE = 'SERVER_TITLE';
 
     const CUS_ID = 'CUS_ID';
     const APP_ID = 'APP_ID';

@@ -25,6 +25,7 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
+        $serverTitle = Config::get('SERVER_TITLE');
         $serverName = Config::get('SERVER_NAME');
         $this->paginate = Config::get('PAGINATE') * 2; // 前台的表格较小
         $nav = Navigation::query()->where([['parent_nav', false], ['is_admin', false], ['is_nav', true], ['is_show', true]])
@@ -34,14 +35,15 @@ class Controller extends BaseController
 
         $page = Navigation::query()->where('url', Route::currentRouteName())->with('parent')->first();
         if ($page) {
-            $title = $page->name . ' - ' . $serverName;
+            $title = $page->name . ' - ' . $serverTitle;
         } else {
-            $title = ' 后台管理 - ' . $serverName;
+            $title = ' 后台管理 - ' . $serverTitle;
         }
 
         View::share('active', Route::currentRouteName());
         View::share('menus', $nav);
         View::share('title',  $title);
+        View::share('servername',  $serverName);
         View::share('icp',  Config::get('RECORD_ICP'));
 
     }

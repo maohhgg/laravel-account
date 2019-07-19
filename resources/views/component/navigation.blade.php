@@ -5,7 +5,7 @@
                 <div class="b-bg">
                     <img src="{{ asset('images/resource/logo.png') }}" alt="">
                 </div>
-                <span class="b-title"></span>
+                <span class="b-title">{{ $servername }}</span>
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="#"><span></span></a>
         </div>

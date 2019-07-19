@@ -19,6 +19,7 @@ class HomeController extends Controller
         parent::__construct();
         $this->settings = [
             Config::SERVER_NAME,
+            Config::SERVER_TITLE,
             Config::PAGINATE,
 
             Config::APP_ID,
