@@ -31,8 +31,9 @@ class HomeController extends Controller
     public function recharge()
     {
         if (Config::get('RECHARGE_STAT') == 0) return redirect('/');
+        $actions = Action::query()->whereIn('id',  [3,4,5])->get();
         $results = Config::get('recharge');
-        return view('home.pages.recharge.recharge', compact('results'));
+        return view('home.pages.recharge.recharge', compact('results','actions'));
     }
 
     public function display()
@@ -48,8 +49,10 @@ class HomeController extends Controller
         $user = User::query()->find(auth()->user()->id);
         if (is_null($user)) return redirect()->back();
 
-        $r = RechargeOrder::query()->where('user_id', $user->id);
-        $results = $r->orderBy('id', 'desc')->Paginate($this->paginate);
+        $results =  RechargeOrder::query()
+            ->where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->Paginate($this->paginate);
 
         return view('home.pages.recharge.display', compact('results', 'items'));
     }
