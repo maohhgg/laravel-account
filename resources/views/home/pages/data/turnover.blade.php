@@ -12,7 +12,7 @@
 
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
                     <td><h6 class="m-0">{{ $v->type->name}}</h6></td>
-                    <td><h6 class="m-0 text-c-purple">{{ $v->data }}</h6></td>
+                    <td><h6 class="m-0 text-c-purple">{{ sprintf('%0.2f',$v->data) }}</h6></td>
 
                     <td>
                         @if($v->children)
@@ -30,7 +30,7 @@
                     <td>
                         @if($v->children)
                             <h6 class="m-0 text-c-purple">
-                                {{ $v->children->data }}
+                                {{ sprintf('%0.2f',$v->children->data) }}
                             </h6>
                         @endif
                     </td>
@@ -38,10 +38,10 @@
                         <h6 class="m-0 text-c-blue">
                             @if($v->children)
                                 <i class="feather @if($v->children->history > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ $v->children->history }}
+                                {{ sprintf('%0.2f',$v->children->history) }}
                             @else
                                 <i class="feather @if($v->history > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ $v->history }}
+                                {{ sprintf('%0.2f',$v->history) }}
                             @endif
                         </h6>
                     </td>

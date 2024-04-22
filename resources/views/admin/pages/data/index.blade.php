@@ -29,7 +29,7 @@
                     <td>
                         <h6 class="m-0">
                             <i class="feather @if($v->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                            {{ $v->data }}
+                            {{ sprintf('%0.2f', $v->data) }}
                         </h6>
                     </td>
 
@@ -45,7 +45,7 @@
                         @if($v->children)
                             <h6 class="m-0">
                                 <i class="feather @if($v->children->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ $v->children->data }}
+                                {{ sprintf('%0.2f', $v->children->data) }}
                             </h6>
                         @endif
                     </td>
@@ -53,7 +53,7 @@
                     <td>
                         @if($v->children)
                             <h6 class="m-0 text-c-purple">
-                                {{ $v->children->history }}
+                                {{ sprintf('%0.2f', $v->children->history) }}
                             </h6>
                         @endif
                     </td>

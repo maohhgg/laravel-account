@@ -62,7 +62,7 @@
                                            class="form-control  @error('extend_data') border-danger @enderror" min="0.001" max="1"
                                            @error('extend_data') data-toggle="tooltip" data-placement="top"
                                            title="{{ $message }}" @enderror
-                                           value="@if(!$results){{ old('extend_data') }}@elseif($results->children){{ abs(floatval($results->children->data)) }}@endif"
+                                           value="@if(!$results){{ old('extend_data') }}@elseif($results->children && $results->children->data != 0){{ floatval(abs($results->children->data) /abs($results->data)) }}@endif"
                                            step="0.001"/>
                                 </div>
                             </div>

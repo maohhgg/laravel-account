@@ -75,6 +75,8 @@
                                 <img class="rounded-circle" style="width:40px;"
                                      src="{{ asset('images/user/'.$v->icon) }}" alt="activity-user">
                             </td>
+                        @elseif($key == 'balance')
+                            <td><h6 class="m-0">{{ sprintf('%0.2f',$v->{$key}) }}</h6></td>
                         @elseif($key == 'action')
                             <td>
                                 <a class="text-white label bg-c-blue f-16 toolbar"
