@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChangeActionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateChangeActionsTable extends Migration
      */
     public function up():void
     {
-        Schema::create('change_actions', function (Blueprint $table) {
+        Schema::create('trade_types', function (Blueprint $table) {
             $table->integerIncrements('id');
-            $table->string('name');
-            $table->integer('change_type_id');
+            $table->string('name',64);
+            $table->boolean('is_increase');
+            $table->boolean('is_used')->default(false);
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateChangeActionsTable extends Migration
      */
     public function down():void
     {
-        Schema::dropIfExists('change_actions');
+        Schema::dropIfExists('change_types');
     }
-}
+};

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\TradeType;
 use App\Models\Turnover;
-use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -67,7 +67,7 @@ class UsersController extends Controller
         ];
 
         $results = User::Paginate(10);
-        $types = Type::getTypeArray();
+        $types = TradeType::getTypes();
 
         return view('admin.pages.users.index', compact('items', 'results', 'types'));
     }

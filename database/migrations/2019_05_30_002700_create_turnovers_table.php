@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTurnoversTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,6 +20,7 @@ class CreateTurnoversTable extends Migration
             $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();
+            $table->integer('parent_id')->nullable();
             $table->timestamp('created_at');
         });
     }
@@ -33,4 +34,4 @@ class CreateTurnoversTable extends Migration
     {
         Schema::dropIfExists('turnovers');
     }
-}
+};

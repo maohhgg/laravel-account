@@ -65,12 +65,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
 
     Route::prefix('change')->group(function ($router) {
         // 展示页面
-        $router->get('/', 'ChangeController@index')->name('admin.change');
+        $router->get('/', 'TypeController@index')->name('admin.change');
 
         // post 处理页面
-        $router->post('save', 'ChangeController@updateAction')->name('admin.change.save');
-        $router->post('create', 'ChangeController@create')->name('admin.change.create');
-        $router->post('delete', 'ChangeController@deleteId')->name('admin.change.delete');;
+        $router->post('save', 'TypeController@updateAction')->name('admin.change.save');
+        $router->post('create', 'TypeController@create')->name('admin.change.create');
+        $router->post('delete', 'TypeController@deleteId')->name('admin.change.delete');;
     });
 
     Route::prefix('autocomplete')->group(function ($router) {

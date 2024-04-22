@@ -12,25 +12,56 @@
 
             @foreach($results as $v)
                 <tr>
+
                     <td><h6 class="m-0">{{ $v->id }}</h6></td>
+
                     <td>
-                        {{--                        <img class="rounded-circle" style="width:40px;"--}}
-                        {{--                             src="{{ asset('images/user/'.$v->user->icon) }}" alt="activity-user">--}}
                         <h6 class="m-0">
                             <a href="{{ route('admin.data.user',[$v->user->id]) }}">{{ $v->user->name }}</a>
                         </h6>
                     </td>
 
                     <td>
-                        <h6 class="m-0 @if($v->type->type->action == 'income') text-c-green  @else text-c-red @endif">{{ $v->type->name.$v->description}}</h6>
+                        <h6 class="m-0 @if($v->type->is_increase) text-c-green  @else text-c-red @endif">{{ $v->type->name }}</h6>
                     </td>
+
+                    <td><h6 class="m-0">{{ $v->description }}</h6></td>
+
                     <td>
                         <h6 class="m-0">
-                            <i class="feather @if($v->type->type->action == 'income') icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                            <i class="feather @if($v->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
                             {{ $v->data }}
                         </h6>
                     </td>
+
+                    <td>
+                        @if($v->children)
+                            <h6 class="m-0 @if($v->children->type->is_increase) text-c-green  @else text-c-red @endif">
+                                {{ $v->children->type->name }}
+                            </h6>
+                        @endif
+                    </td>
+
+                    <td>
+                        @if($v->children)
+                            <h6 class="m-0">
+                                <i class="feather @if($v->children->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                                {{ $v->children->data }}
+                            </h6>
+                        @endif
+                    </td>
+
+                    <td>
+                        @if($v->children)
+                            <h6 class="m-0">
+                                <i class="feather @if($v->children->data+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                                {{ $v->children->data+$v->data }}
+                            </h6>
+                        @endif
+                    </td>
+
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
+
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"
                            data-url="{{ route('admin.data.update', [$v->id]) }}"

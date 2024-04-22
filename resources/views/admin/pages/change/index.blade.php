@@ -3,57 +3,56 @@
 
     <div class="row">
         @if($types)
-            @foreach($types as $type)
+            @foreach($types as $key =>  $item)
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="m-b-30">{{ $type->name }}</h5>
+                            <h5 class="m-b-30">{{  $key }}</h5>
                         </div>
                         <div class="card-block task-setting">
 
-                            @if(!$type->actions->isEmpty())
-                                @foreach($type->actions as $action )
+                            @if($item)
+                                @foreach($item as $k => $v )
                                     <div class="row">
                                         <div class="col-sm-12 mb-3">
                                             <div class="input-group">
                                                 <input type="text" class="form-control"
-                                                       id="changeAction{{ $action->id }}"
-                                                       value="{{ $action->name }}">
+                                                       id="changeAction{{ $k }}"
+                                                       value="{{ $v }}">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-primary updateChangeType" type="button"
-                                                            data-action="{{ $action->id }}" data-type="{{ $type->id }}">
+                                                    <button class="btn btn-primary updateChangeType" type="button" data-type="{{ $k }}">
                                                         重命名
                                                     </button>
-                                                    @if($action->turnover->isEmpty())
-                                                        <button class="btn btn-danger deleteChangeType" type="button"
-                                                                data-action="{{ $action->id }}"
-                                                                data-type="{{ $type->id }}">
-                                                            删除
-                                                        </button>
-                                                    @endif
+
+                                                    <button class="btn btn-danger deleteChangeType" type="button" data-type="{{ $v }}">
+                                                        删除
+                                                    </button>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <span> 还没有{{ $type->name }}, 请添加新的{{ $type->name }} </span>
+                                <span> 还没有{{ $key }}, 请添加新的{{ $key }} </span>
                             @endif
 
                             <div class="row text-center mt-2">
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-primary addChangeType"
-                                            data-type="{{$type->id}}" data-type-name="{{$type->name}}">
-                                        添加新的{{ $type->name }}
+                                    <button type="button" class="btn btn-primary addChangeType" data-type="{{$key=='收入方式' ? 1 : 0}}" data-type-name="{{$key}}">
+                                        添加新的{{ $key }}
                                     </button>
                                 </div>
                             </div>
+
                         </div>
+
                     </div>
                 </div>
             @endforeach
         @endif
     </div>
+
 
     <div class="modal fade" id="createActionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel"
          aria-hidden="true">
@@ -69,7 +68,7 @@
                     <form method="post" id="create-change-form" action="{{ route('admin.change.create') }}">
                         @csrf
                         <div class="form-group">
-                            <input type="hidden" name="change_type_id" id="change-type-id">
+                            <input type="hidden" name="is_increase" id="change-type-id">
                             <label for="recipient-name" class="col-form-label">名称</label>
                             <input name="name" type="text"
                                    class="form-control tooltip-test @error('name') border-danger @enderror"

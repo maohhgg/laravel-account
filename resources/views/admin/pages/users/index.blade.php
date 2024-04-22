@@ -22,7 +22,7 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">用户</label>
-
+                                    <input name="exist_extend" type="hidden" id="exist_extend" value="0">
                                     {{ Form::hidden('',null,['id'=>'turnover-user-id']) }}
                                     {{ Form::text('',null,['id'=>'turnover-user','class'=>'form-control','disabled']) }}
 
@@ -34,8 +34,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label">
-                                        详细
-                                        <small>为类型的补充，和类型一起显示(<span class="text-c-red">* 可以为空</span>)</small>
+                                        补充说明 <span>(如 微信扫码、刷卡 <span class="text-c-red">可以为空</span>)</span>
                                     </label>
                                     {{ Form::text('description',null,['id'=>'turnover-description','class'=>'form-control','placeholder'=>'添加描述']) }}
                                 </div>
@@ -44,6 +43,19 @@
                                     <label class="form-label">数值</label>
                                     {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
                                 </div>
+
+                                <div class="form-group mb-4"  id="extend_content" style="display: none">
+                                    <label class="form-label">额外信息</label>
+                                    <div class="form-group">
+                                        <label class="form-label">类型</label>
+                                        {{ Form::select('extend_type_id', $types, null, ['id'=>'extend_type_id','class'=>'js-data-single  form-control']) }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">数值</label>
+                                        {{ Form::number('extend_data',null,['id'=>'extend_data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-success" id="extend_button">添加额外信息</button>
 
                             </div>
                             <div class="modal-footer">
@@ -114,15 +126,43 @@
     <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
     <script>
+        let hidden = function (){
+            $('#extend_content').css("display","none");
+            $('#extend_button').attr('class',"btn btn-warning");
+            $('#extend_button').html("添加额外信息")
+        }
+        let show = function () {
+            $('#extend_content').css("display","block");
+            $('#extend_button').attr('class',"btn btn-success");
+            $('#extend_button').html("删除额外信息")
+        }
+
+        let fun = function(){
+            exist = $("#exist_extend").attr('value');
+            if(exist == 1){
+                hidden()
+                $("#exist_extend").attr('value', 0);
+            } else {
+                show();
+                $("#exist_extend").attr('value', 1);
+            }
+        }
+
+        $("#extend_button").click(fun)
+
         const CSRFTOKEN = '{{ csrf_token() }}';
         const ADDURL = '{{ route('admin.data.add') }}';
         $(document).ready(function () {
             $('#createTurnoverButton').click(function () {
+                $('#createTurnoverButton').attr('disabled');
                 let data = {
                     '_token': CSRFTOKEN,
                     'user_id': $('#turnover-user-id').val(),
                     'type_id': $('#turnover-type-id').find(":selected").val(),
                     'data': $('#turnover-data').val(),
+                    'exist_extend': $('#exist_extend').val(),
+                    'extend_type_id': $('#extend_type_id').find(":selected").val(),
+                    'extend_data': $('#extend_data').val(),
                     'method': 'ajax'
                 };
                 let desc = $('#turnover-description').val();

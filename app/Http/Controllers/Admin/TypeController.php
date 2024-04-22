@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Action;
+use App\Models\TradeType;
 use App\Models\Type;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class ChangeController extends Controller
+class TypeController extends Controller
 {
     public string $module = 'change';
 
@@ -21,7 +22,7 @@ class ChangeController extends Controller
      */
     public function index(): View
     {
-        $types = Type::where('id', '>', '0')->with('actions')->get();
+        $types = TradeType::getTypes();
         return view('admin.pages.change.index', compact('types'));
     }
 
@@ -35,10 +36,10 @@ class ChangeController extends Controller
     public function create(Request $request): RedirectResponse
     {
         $this->validate($request, [
-            'name' => 'required|string|unique:change_actions,name',
-            'change_type_id' => 'required|exists:change_types,id',
+            'name' => 'required|string|unique:trade_types,name',
+            'is_increase' => 'required|numeric',
         ]);
-        Action::create($request->only('name', 'change_type_id'));
+        TradeType::create($request->only('name', 'is_increase'));
         return redirect()->back()->with('toast','新的方式已经保存!');
     }
 
@@ -54,7 +55,7 @@ class ChangeController extends Controller
             'id' => 'required|numeric',
             'name' => 'required|string|max:64|max:1'
         ]);
-        Action::find($request->input('id'))->update($request->only('name'));
+        TradeType::find($request->input('id'))->update($request->only('name'));
     }
 
     /**
@@ -68,7 +69,7 @@ class ChangeController extends Controller
         $this->validate($request, [
             'id' => 'required|numeric',
         ]);
-        Action::find($request->input('id'))->delete();
+        TradeType::find($request->input('id'))->delete();
     }
 
 }

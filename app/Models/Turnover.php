@@ -4,10 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Turnover extends Model
 {
-    protected $fillable = ['user_id', 'type_id', 'data', 'history', 'description'];
+    protected $fillable = [
+        'user_id',
+        'type_id',
+        'data',
+        'history',
+        'description',
+        'parent_id'
+    ];
 
     public $timestamps = false;
 
@@ -26,6 +34,11 @@ class Turnover extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Action', 'type_id');
+        return $this->belongsTo('App\Models\TradeType', 'type_id');
+    }
+
+    public function children(): hasOne
+    {
+        return $this->hasOne(self::class, 'parent_id', 'id');
     }
 }

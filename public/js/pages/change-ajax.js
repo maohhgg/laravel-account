@@ -1,22 +1,21 @@
 $(document).ready(function () {
 
     $('.updateChangeType').click(function () {
-        let actionId = this.getAttribute('data-action');
-        let typeId = this.getAttribute('data-type');
-        let input = '#changeAction' + actionId;
+        let id = this.getAttribute('data-type');
+        let input = '#changeAction' + id;
         $.post(
             UPDATEURL,
-            {'_token': CSRFTOKEN, 'id': actionId, 'change_type_id': typeId, 'name': $(input).val()}
+            {'_token': CSRFTOKEN, 'id': id, 'name': $(input).val()}
         ).done(function () {
             window.location.reload();
         });
     });
 
     $('.deleteChangeType').click(function () {
-        let actionId = this.getAttribute('data-action');
+        let id = this.getAttribute('data-type');
         $.post(
             DELETEURL,
-            {'_token': CSRFTOKEN, 'id': actionId}
+            {'_token': CSRFTOKEN, 'id': id}
         ).done(function () {
             window.location.reload();
         });
