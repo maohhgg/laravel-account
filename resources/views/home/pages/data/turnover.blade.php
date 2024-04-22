@@ -37,7 +37,7 @@
                     <td>
                         <h6 class="m-0 text-c-blue">
                             @if($v->children)
-                                <i class="feather @if($v->children->history > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                                <i class="feather @if($v->children->history+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
                                 {{ sprintf('%0.2f',$v->children->history) }}
                             @else
                                 <i class="feather @if($v->history > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
