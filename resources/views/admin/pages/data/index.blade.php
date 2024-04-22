@@ -52,9 +52,11 @@
 
                     <td>
                         @if($v->children)
-                            <h6 class="m-0 text-c-purple">
-                                {{ sprintf('%0.2f', $v->children->history) }}
-                            </h6>
+                            <i class="feather @if($v->children->history+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                            {{ sprintf('%0.2f',$v->children->history) }}
+                        @else
+                            <i class="feather @if($v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                            {{ sprintf('%0.2f',$v->history) }}
                         @endif
                     </td>
 
