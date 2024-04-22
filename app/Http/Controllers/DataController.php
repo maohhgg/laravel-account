@@ -14,15 +14,12 @@ class DataController extends Controller
     public function history():View
     {
         $items = [
-            'data' => '金额(元)',
+            'created_at' => '日期',
             'type' => '类型',
-            'deal' => '交易方式',
-            'other' => '其他费用',
-            'extend_data' => '其他费用金额',
+            'data' => '交易金额(元)',
             'extend_tax' => '费率',
-            'true_data' => '到账金额',
-            'history' => '变更后余额(元)',
-            'created_at' => '日期'
+            'true_data' => '手续费(元)',
+            'history' => '余额(元)',
         ];
 
         $results = Turnover::where([['user_id', auth()->user()->id], ['parent_id', null]])

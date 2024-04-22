@@ -14,13 +14,23 @@
     <!-- Styles -->
     <link href="{{ asset('plugins/animation/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css')  }}" rel="stylesheet">
+    <style>
+        #body-background-image {
+            background-image: url('/images/bg1.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
 
 </head>
 
 <body>
-
-<div class="auth-wrapper">
-    @yield('content')
+<div id="body-background-image">
+    <div class="auth-wrapper">
+        @yield('content')
+    </div>
 </div>
 
 

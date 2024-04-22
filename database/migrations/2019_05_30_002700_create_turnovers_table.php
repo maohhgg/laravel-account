@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('turnovers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('data',10,2);
-            $table->decimal('history',10,2);
+            $table->decimal('data',10,4);
+            $table->decimal('history',10,4);
             $table->string('description')->nullable();
             $table->integer('type_id');
             $table->integer('user_id')->index();

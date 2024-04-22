@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integerIncrements('id');
             $table->string('name',64);
             $table->boolean('is_increase');
+            $table->boolean('is_tax')->default(false);
             $table->boolean('is_used')->default(false);
             $table->timestamps();
         });

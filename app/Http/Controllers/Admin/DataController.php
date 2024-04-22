@@ -29,11 +29,10 @@ class DataController extends Controller
             'id' => '#ID',
             'avatar' => '用户',
             'type' => '行为',
-            'description' => '交易类型',
-            'data' => '交易金额',
+            'data' => '交易金额(元)',
             'other' => '其他费用',
-            'extend_data' => '其他费用金额',
-            'true_data' => '到账金额',
+            'extend_data' => '其他费用金额(元)',
+            'true_data' => '余额(元)',
             'created_at' => '时间',
             'action' => '操作'
         ];
@@ -101,11 +100,18 @@ class DataController extends Controller
             'description' => 'nullable'
         ]);
 
+
+
+        var_dump($request->input('extend_data'));
+        var_dump($request->only('data')['data']);
+        var_dump($request->only('data')['data'] * $request->input('extend_data'));
+
         $id = Turnover::create(
             $this->saveToUser(
                 $request->only('user_id', 'type_id', 'data', 'description')
             )
         )->id;
+
 
         if ($request->input('exist_extend') != 0){
             Turnover::create(
@@ -114,7 +120,7 @@ class DataController extends Controller
                     'parent_id' => $id,
                     'description' => '系统自动完成',
                     'type_id'=>$request->input('extend_type_id'),
-                    'data' => $request->input('extend_data'),
+                    'data' => $request->only('data')['data'] * $request->input('extend_data'),
                 ])
             );
         }
@@ -157,7 +163,7 @@ class DataController extends Controller
                     $this->saveToUser([
                         ...$request->only('user_id'),
                         'type_id'=>$request->input('extend_type_id'),
-                        'data' => $request->input('extend_data'),
+                        'data' => $request->only('data')['data'] * $request->input('extend_data'),
                     ])
                 );
             }
@@ -167,7 +173,7 @@ class DataController extends Controller
                     'parent_id' => $cache->id,
                     'description' => '系统自动完成',
                     'type_id'=>$request->input('extend_type_id'),
-                    'data' => $request->input('extend_data'),
+                    'data' => $request->only('data')['data'] * $request->input('extend_data'),
                 ])
             );
 

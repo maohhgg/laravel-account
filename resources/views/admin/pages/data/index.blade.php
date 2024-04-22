@@ -25,7 +25,6 @@
                         <h6 class="m-0 @if($v->type->is_increase) text-c-green  @else text-c-red @endif">{{ $v->type->name }}</h6>
                     </td>
 
-                    <td><h6 class="m-0">{{ $v->description }}</h6></td>
 
                     <td>
                         <h6 class="m-0">
@@ -53,9 +52,8 @@
 
                     <td>
                         @if($v->children)
-                            <h6 class="m-0">
-                                <i class="feather @if($v->children->data+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ $v->children->data+$v->data }}
+                            <h6 class="m-0 text-c-purple">
+                                {{ $v->children->history }}
                             </h6>
                         @endif
                     </td>

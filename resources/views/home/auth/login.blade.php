@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="auth-content">
-        <div class="auth-bg">
-            <span class="r"></span>
-            <span class="r s"></span>
-            <span class="r s"></span>
-            <span class="r"></span>
-        </div>
+{{--        <div class="auth-bg">--}}
+{{--            <span class="r"></span>--}}
+{{--            <span class="r s"></span>--}}
+{{--            <span class="r s"></span>--}}
+{{--            <span class="r"></span>--}}
+{{--        </div>--}}
         <div class="card">
             <!-- Authentication card start -->
             <form class="md-float-material form-material" action="{{ route('login') }}" method="post">

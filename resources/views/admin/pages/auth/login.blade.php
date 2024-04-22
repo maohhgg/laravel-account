@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-md-4 col-lg-6 d-none d-md-flex d-lg-flex theme-bg align-items-center justify-content-center">
-                        <img src="{{ asset('images/user/lock.png') }}" alt="lock images" class="img-fluid">
+                        <img src="{{ asset('images/logo.png') }}" alt="lock images" class="img-fluid">
                     </div>
                     <div class="col-md-8 col-lg-6">
                         <div class="card-body text-center">

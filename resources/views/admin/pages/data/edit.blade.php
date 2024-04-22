@@ -36,20 +36,12 @@
                             <div class="form-group">
                                 <label class="form-label">类型</label>
                                 @if($results)
-                                    {{ Form::select('type_id', $types, $results->type_id, ['class'=>'js-data-single  form-control']) }}
+                                    {{ Form::select('type_id', $types, $results->type_id, ['id'=> 'type_id','class'=>'js-data-single  form-control']) }}
                                 @else
-                                    {{ Form::select('type_id', $types, null, ['class'=>'js-data-single  form-control']) }}
+                                    {{ Form::select('type_id', $types, null, ['id'=> 'type_id','class'=>'js-data-single  form-control']) }}
                                 @endif
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label class="form-label">
-                                    补充说明 <span>(如 微信扫码、刷卡 <span class="text-c-red">可以为空</span>)</span>
-                                </label>
-                                <input name="description" type="text" class="form-control"
-                                       value="@if(!$results){{ old('description') }}@else{{$results->description }}@endif"
-                                       placeholder="添加描述"/>
-                            </div>
 
                             <div class="form-group mb-4">
                                 <label class="form-label">数值</label>
@@ -61,30 +53,22 @@
                                        step="0.01"/>
                             </div>
 
-                            <div class="form-group mb-4"  id="extend_content" style="display: none">
-                                <label class="form-label">额外信息</label>
+                            <div class="form-group mb-4"  id="extend_content" style="@if($results && $results->children) display:block @else display:none @endif">
+                                <label class="form-label">手续费</label>
+                                <input name="extend_type_id" type="hidden" id="extend_type_id" value="4">
                                 <div class="form-group">
-                                    <label class="form-label">类型</label>
-                                    @if($results && $results->children)
-                                        {{ Form::select('extend_type_id', $types, $results->children->type_id, ['class'=>'js-data-single  form-control']) }}
-                                    @else
-                                        {{ Form::select('extend_type_id', $types, null, ['class'=>'js-data-single  form-control']) }}
-                                    @endif
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">数值</label>
+                                    <label class="form-label">费率（0到1的小数）</label>
                                     <input name="extend_data" type="number"
-                                           class="form-control  @error('extend_data') border-danger @enderror" min="0.01"
+                                           class="form-control  @error('extend_data') border-danger @enderror" min="0.001" max="1"
                                            @error('extend_data') data-toggle="tooltip" data-placement="top"
                                            title="{{ $message }}" @enderror
                                            value="@if(!$results){{ old('extend_data') }}@elseif($results->children){{ abs(floatval($results->children->data)) }}@endif"
-                                           step="0.01"/>
+                                           step="0.001"/>
                                 </div>
                             </div>
 
 
                                 <button type="submit" class="btn btn-primary">@if($results) 更新 @else 创建 @endif</button>
-                                <button type="button" class="btn btn-success" id="extend_button">添加额外信息</button>
                         </div>
 
                     </form>
@@ -105,35 +89,22 @@
     <script>
         let hidden = function (){
             $('#extend_content').css("display","none");
-            $('#extend_button').attr('class',"btn btn-warning");
-            $('#extend_button').html("添加额外信息")
         }
         let show = function () {
             $('#extend_content').css("display","block");
-            $('#extend_button').attr('class',"btn btn-success");
-            $('#extend_button').html("删除额外信息")
-        }
-
-        let fun = function(){
-            exist = $("#exist_extend").attr('value');
-            if(exist == 1){
-                hidden()
-                $("#exist_extend").attr('value', 0);
-            } else {
-                show();
-                $("#exist_extend").attr('value', 1);
-            }
         }
 
         $(document).ready(function () {
-            exist = $("#exist_extend").attr('value');
-            if(exist != 0){
-                show()
-            } else {
-                hidden();
-            }
-
-            $("#extend_button").click(fun)
+            $('#type_id').on('change', function() {
+                let k = $(this).find(":selected").val();
+                if(k == 2 || k == 3){
+                    show();
+                    $("#exist_extend").attr('value', 1);
+                } else {
+                    hidden();
+                    $("#exist_extend").attr('value', 0);
+                }
+            });
 
             $(".js-data-ajax").select2({
                 ajax: {
