@@ -43,32 +43,41 @@
                             </div>
 
 
-                            <div class="form-group mb-4">
-                                <label class="form-label">数值</label>
+                            <div class="form-group">
+                                <label class="form-label">金额</label>
                                 <input name="data" type="number"
-                                       class="form-control  @error('data') border-danger @enderror" min="0.01"
+                                       class="form-control  @error('data') border-danger @enderror" min="0.001"
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
                                        value="@if(!$results){{ old('data') }}@else{{ abs(floatval($results->data)) }}@endif"
-                                       step="0.01"/>
+                                       step="0.001"/>
                             </div>
 
-                            <div class="form-group mb-4"  id="extend_content" style="@if($results && $results->children) display:block @else display:none @endif">
-                                <label class="form-label">手续费</label>
+                            <div class="form-group"  id="extend_content" style="@if($results && $results->children) display:block @else display:none @endif">
                                 <input name="extend_type_id" type="hidden" id="extend_type_id" value="4">
-                                <div class="form-group">
-                                    <label class="form-label">费率（0到1的小数）</label>
-                                    <input name="extend_data" type="number"
-                                           class="form-control  @error('extend_data') border-danger @enderror" min="0.001" max="1"
-                                           @error('extend_data') data-toggle="tooltip" data-placement="top"
-                                           title="{{ $message }}" @enderror
-                                           value="@if(!$results){{ old('extend_data') }}@elseif($results->children && $results->children->data != 0){{ floatval(abs($results->children->data) /abs($results->data)) }}@endif"
-                                           step="0.001"/>
+
+                                <label class="form-label">手续费 费率</label>
+                                <div class="input-group">
+                                    <input
+                                        name="extend_data"
+                                        type="number"
+                                        class="form-control @error('extend_data') border-danger @enderror"
+                                        min="0.01"
+                                        max="100"
+                                        @error('extend_data') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror
+                                        value="@if(!$results){{ old('extend_data') }}@elseif($results->children && $results->children->data != 0){{ floatval(abs($results->children->data) /abs($results->data)) * 100 }}@endif"
+                                        step="0.01"
+                                    />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
+
+
                             </div>
 
 
-                                <button type="submit" class="btn btn-primary">@if($results) 更新 @else 创建 @endif</button>
+                            <button type="submit" class="btn btn-primary">@if($results) 更新 @else 创建 @endif</button>
                         </div>
 
                     </form>

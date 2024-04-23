@@ -102,10 +102,6 @@ class DataController extends Controller
 
 
 
-        var_dump($request->input('extend_data'));
-        var_dump($request->only('data')['data']);
-        var_dump($request->only('data')['data'] * $request->input('extend_data'));
-
         $id = Turnover::create(
             $this->saveToUser(
                 $request->only('user_id', 'type_id', 'data', 'description')
@@ -114,13 +110,15 @@ class DataController extends Controller
 
 
         if ($request->input('exist_extend') != 0){
+            $tax = $request->only('data')['data'] * $request->input('extend_data') / 100;
+
             Turnover::create(
                 $this->saveToUser([
                     ...$request->only('user_id'),
                     'parent_id' => $id,
                     'description' => '系统自动完成',
                     'type_id'=>$request->input('extend_type_id'),
-                    'data' => $request->only('data')['data'] * $request->input('extend_data'),
+                    'data' => $tax,
                 ])
             );
         }
@@ -154,38 +152,43 @@ class DataController extends Controller
         ]);
 
         $cache = Turnover::find($request->input('id'));
+        if (!$cache->id){
+            return redirect()->back()->with('toast','完成');
+        }
+
+        if ($cache->children) {
+            $this->recoveryUser($cache->children->id);
+        }
         $this->recoveryUser($cache->id);
+        $cache->update($this->saveToUser(
+            $request->only('user_id', 'type_id', 'data', 'description')
+        ));
+
 
         if ($request->input('exist_extend') != 0){
+            $tax = $request->only('data')['data'] * $request->input('extend_data') / 100;
+
             if ($cache->children){
-                $this->recoveryUser($cache->children->id);
                 $cache->children->update(
                     $this->saveToUser([
                         ...$request->only('user_id'),
                         'type_id'=>$request->input('extend_type_id'),
-                        'data' => $request->only('data')['data'] * $request->input('extend_data'),
+                        'data' => $tax,
+                    ])
+                );
+            } else {
+                Turnover::create(
+                    $this->saveToUser([
+                        ...$request->only('user_id'),
+                        'parent_id' => $cache->id,
+                        'type_id'=>$request->input('extend_type_id'),
+                        'data' => $tax,
                     ])
                 );
             }
-            Turnover::create(
-                $this->saveToUser([
-                    ...$request->only('user_id'),
-                    'parent_id' => $cache->id,
-                    'description' => '系统自动完成',
-                    'type_id'=>$request->input('extend_type_id'),
-                    'data' => $request->only('data')['data'] * $request->input('extend_data'),
-                ])
-            );
-
-
         } elseif ($cache->children) {
-            $this->recoveryUser($cache->children->id);
-            Turnover::find($cache->children->id)->delete();
+            $cache->children->delete();
         }
-
-        $cache->update($this->saveToUser(
-            $request->only('user_id', 'type_id', 'data', 'description')
-        ));
 
         return redirect($request->input('url'))->with('toast', '记录更新完成');
     }
@@ -203,6 +206,9 @@ class DataController extends Controller
         ]);
 
         $cache = Turnover::find($request->input('id'));
+        if (!$cache->id){
+            return redirect()->back()->with('toast','完成');
+        }
 
         $this->recoveryUser($cache->id);
 
@@ -225,7 +231,7 @@ class DataController extends Controller
     protected function saveToUser(array $data): array
     {
         $user = User::find($data['user_id']);
-        $type= TradeType::find($data['type_id']);
+        $type = TradeType::find($data['type_id']);
 
         if ($type->is_increase){
             $user->total += $data['data'];
@@ -249,13 +255,12 @@ class DataController extends Controller
      */
     protected function recoveryUser(int $id): void
     {
-        $turnover = Turnover::find($id);
-        $type= TradeType::find($turnover->type_id);
-        $user = User::find($turnover->user_id);
+        $cache = Turnover::find($id);
+        $user = User::find($cache->user_id);
 
-        $user->balance -= $turnover->data;;
+        $user->balance -= $cache->data;;
 
-        if ($type->is_increase) $user->total -= $turnover->data;
+        if ($cache->type->is_increase) $user->total -= $cache->data;
 
         $user->save();
     }

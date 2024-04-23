@@ -32,30 +32,22 @@
                                     {{ Form::select('user_id', $types, null, ['id'=>'turnover-type-id','class'=>'js-data-ajax form-control']) }}
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="form-label">
-                                        补充说明 <span>(如 微信扫码、刷卡 <span class="text-c-red">可以为空</span>)</span>
-                                    </label>
-                                    {{ Form::text('description',null,['id'=>'turnover-description','class'=>'form-control','placeholder'=>'添加描述']) }}
-                                </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">数值</label>
-                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
+                                    <label class="form-label">金额</label>
+                                    {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.001','step'=>'0.001']) }}
                                 </div>
 
-                                <div class="form-group mb-4"  id="extend_content" style="display: none">
-                                    <label class="form-label">额外信息</label>
-                                    <div class="form-group">
-                                        <label class="form-label">类型</label>
-                                        {{ Form::select('extend_type_id', $types, null, ['id'=>'extend_type_id','class'=>'js-data-single  form-control']) }}
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">数值</label>
-                                        {{ Form::number('extend_data',null,['id'=>'extend_data','class'=>'form-control','min'=>'0.01','step'=>'0.01']) }}
+                                <div class="form-group"  id="extend_content" style="display: none">
+                                    <input name="extend_type_id" type="hidden" id="extend_type_id" value="4">
+                                    <label class="form-label">手续费 费率</label>
+                                    <div class="input-group">
+                                        {{ Form::number('extend_data',null,['id'=>'extend_data','class'=>'form-control','min'=>'0.01','max'=> '100','step'=>'0.01']) }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-success" id="extend_button">添加额外信息</button>
 
                             </div>
                             <div class="modal-footer">
@@ -128,33 +120,28 @@
     <script src="{{ asset('plugins/toolbar/js/jquery.toolbar.min.js') }}"></script>
     <script src="{{ asset('js/pages/ac-toolbar.js') }}"></script>
     <script>
+
         let hidden = function (){
             $('#extend_content').css("display","none");
-            $('#extend_button').attr('class',"btn btn-warning");
-            $('#extend_button').html("添加额外信息")
         }
         let show = function () {
             $('#extend_content').css("display","block");
-            $('#extend_button').attr('class',"btn btn-success");
-            $('#extend_button').html("删除额外信息")
         }
-
-        let fun = function(){
-            exist = $("#exist_extend").attr('value');
-            if(exist == 1){
-                hidden()
-                $("#exist_extend").attr('value', 0);
-            } else {
-                show();
-                $("#exist_extend").attr('value', 1);
-            }
-        }
-
-        $("#extend_button").click(fun)
 
         const CSRFTOKEN = '{{ csrf_token() }}';
         const ADDURL = '{{ route('admin.data.add') }}';
         $(document).ready(function () {
+            $('#turnover-type-id').on('change', function() {
+                let k = $(this).find(":selected").val();
+                if(k == 2 || k == 3){
+                    show();
+                    $("#exist_extend").attr('value', 1);
+                } else {
+                    hidden();
+                    $("#exist_extend").attr('value', 0);
+                }
+            });
+
             $('#createTurnoverButton').click(function () {
                 $('#createTurnoverButton').attr('disabled');
                 let data = {
@@ -163,7 +150,7 @@
                     'type_id': $('#turnover-type-id').find(":selected").val(),
                     'data': $('#turnover-data').val(),
                     'exist_extend': $('#exist_extend').val(),
-                    'extend_type_id': $('#extend_type_id').find(":selected").val(),
+                    'extend_type_id': $('#extend_type_id').val(),
                     'extend_data': $('#extend_data').val(),
                     'method': 'ajax'
                 };
