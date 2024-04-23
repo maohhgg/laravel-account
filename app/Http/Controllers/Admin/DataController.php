@@ -98,12 +98,13 @@ class DataController extends Controller
         ]);
 
         $tax = 0;
-        $type = (int)$request->input('type_id');
+
         if ($request->input('tax_rate')) {
             $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
         }
 
         //储蓄卡交易 封顶20
+        $type = (int)$request->input('type_id');
         if ($type == TradeType::CREDIT_CARD && $tax < -20){
             $tax = -20;
         }
@@ -156,22 +157,21 @@ class DataController extends Controller
             'tax_rate' => 'nullable|numeric|min:0.001',
         ]);
 
+        //储蓄卡交易 封顶20
+        $type = (int)$request->input('type_id');
+        if ($request->input('tax_rate')) {
+            $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
+        }
+        if ($type == TradeType::CREDIT_CARD && $tax < -20){
+            $tax = -20;
+        }
+
         $cache = Turnover::find($request->input('id'));
+
         if (!$cache->id){
             return redirect()->back()->with('toast','完成');
         }
-
-        $tax = 0;
-        if ($request->input('tax_rate')){
-            $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
-        }
-
-        if ((int)$request->input('type_id') == TradeType::CREDIT_CARD){
-            if ($tax > 20) {
-                $tax = 20;
-            }
-        }
-
+        
 
         DB::beginTransaction();
         try {
