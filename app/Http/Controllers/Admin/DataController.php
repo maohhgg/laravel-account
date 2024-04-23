@@ -102,6 +102,12 @@ class DataController extends Controller
             $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
         }
 
+        if ((int)$request->input('type_id') == TradeType::CREDIT_CARD){
+            if ($tax > 20) {
+                $tax = 20;
+            }
+        }
+        
         DB::beginTransaction();
         try {
             if ((int)$request->input('type_id') == TradeType::ADD_CREDIT) {
