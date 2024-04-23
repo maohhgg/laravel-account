@@ -10,7 +10,7 @@
                     <div class="card theme-bg bitcoin-wallet">
                         <div class="card-block" >
                             <h5 class="text-white mb-2">余额</h5>
-                            <h2 class="text-white mb-2 f-w-300">{{ auth()->user()->balance }}</h2>
+                            <h2 class="text-white mb-2 f-w-300">{{ sprintf('%0.2f', auth()->user()->balance) }}</h2>
                             <i class="fas fa-yen-sign f-70 text-white"></i>
                         </div>
                     </div>
