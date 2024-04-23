@@ -36,7 +36,7 @@
                         </div>
                         <div class="card-block">
                             <div align="center">
-                                <image src="/qrcode.jpg"></image>
+                                <image src="/images/qrcode.jpg"></image>
                             </div>
                         </div>
                     </div>
