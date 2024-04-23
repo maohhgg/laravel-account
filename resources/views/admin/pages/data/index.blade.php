@@ -22,42 +22,46 @@
                     </td>
 
                     <td>
-                        <h6 class="m-0 @if($v->type->is_increase) text-c-green  @else text-c-red @endif">{{ $v->type->name }}</h6>
+                        <h6 class="m-0 text-c-purple">{{ $v->type->name }}</h6>
                     </td>
 
 
                     <td>
-                        <h6 class="m-0">
-                            <i class="feather @if($v->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                        <h6 class="m-0 text-c-purple">
                             {{ sprintf('%0.2f', $v->data) }}
                         </h6>
                     </td>
 
                     <td>
-                        @if($v->children)
-                            <h6 class="m-0 @if($v->children->type->is_increase) text-c-green  @else text-c-red @endif">
-                                {{ $v->children->type->name }}
+                        @if($v->tax)
+                            <h6 class="m-0 text-c-red">
+                                {{ $v->taxType->name }}
                             </h6>
-                        @endif
-                    </td>
-
-                    <td>
-                        @if($v->children)
-                            <h6 class="m-0">
-                                <i class="feather @if($v->children->type->is_increase) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ sprintf('%0.2f', $v->children->data) }}
-                            </h6>
-                        @endif
-                    </td>
-
-                    <td>
-                        @if($v->children)
-                            <i class="feather @if($v->children->history+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                            {{ sprintf('%0.2f',$v->children->history) }}
                         @else
-                            <i class="feather @if($v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                            {{ sprintf('%0.2f',$v->history) }}
+                            -
                         @endif
+                    </td>
+
+                    <td>
+                        @if($v->tax)
+                            <h6 class="m-0">
+                                <i class="feather icon-arrow-down text-c-red"></i>
+                                {{ sprintf('%0.2f', $v->tax) }}
+                            </h6>
+                        @else
+                            -
+                        @endif
+                    </td>
+
+                    <td>
+                        <h6 class="m-0 text-c-blue">
+                            @if($v->tax)
+                                <i class="feather icon-arrow-down text-c-red"></i>
+                            @else
+                                <i class="feather icon-arrow-up text-c-green"></i>
+                            @endif
+                            {{ sprintf('%0.2f',$v->history) }}
+                        </h6>
                     </td>
 
                     <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>

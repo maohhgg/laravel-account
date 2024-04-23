@@ -8,19 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class TradeType extends model
 {
     use HasFactory;
-    const INCOME = 'income';
-    const EXPENDITURE = 'expenditure';
+
+    public $timestamps = false;
+
+    const ADD_CREDIT = 1;
+    const CHARGES = 2;
 
     protected $fillable = [
         'name',
         'is_increase'
     ];
 
-
-    static function reverse(string $action): string
-    {
-        return $action == self::INCOME ? self::EXPENDITURE : self::INCOME;
-    }
 
     static function turnover($balance, $data, $action): float
     {
@@ -39,16 +37,32 @@ class TradeType extends model
 
     static function getTypes(): array
     {
-        $income = $expenditure = [];
-        $t = self::where('id', '>', '0')->select('id', 'name', 'is_increase')->get();
+        $result = [];
+        $t = self::where('visible', true)->select('id', 'name')->orderBy('id', 'desc')->get();
 
         foreach ($t as $i) {
-            $i->is_increase ? $income[$i->id] = $i->name : $expenditure[$i->id] = $i->name;
+            $result[$i->id] = $i->name;
+        }
+
+        return $result;
+    }
+
+    static function getTypesToshow(): array
+    {
+        $a = $b = [];
+
+        $t = self::where('is_trade', '=', 1)->select('id', 'name')->get();
+        foreach ($t as $i) {
+            $a[$i->id] = $i->name;
+        }
+        $t = self::where('is_trade','=', 0)->select('id', 'name')->get();
+        foreach ($t as $i) {
+            $b[$i->id] = $i->name;
         }
 
         return [
-            '收入方式' => $income,
-            '支出方式' => $expenditure
+            '交易类型' => $b,
+            '余额可变操作' => $a,
         ];
     }
 }

@@ -22,7 +22,7 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">用户</label>
-                                    <input name="exist_extend" type="hidden" id="exist_extend" value="0">
+                                    <input name="exist_extend" type="hidden" id="exist_extend" value="1">
                                     {{ Form::hidden('',null,['id'=>'turnover-user-id']) }}
                                     {{ Form::text('',null,['id'=>'turnover-user','class'=>'form-control','disabled']) }}
 
@@ -38,11 +38,10 @@
                                     {{ Form::number('data',null,['id'=>'turnover-data','class'=>'form-control','min'=>'0.001','step'=>'0.001']) }}
                                 </div>
 
-                                <div class="form-group"  id="extend_content" style="display: none">
-                                    <input name="extend_type_id" type="hidden" id="extend_type_id" value="4">
+                                <div class="form-group"  id="extend_content">
                                     <label class="form-label">手续费 费率</label>
                                     <div class="input-group">
-                                        {{ Form::number('extend_data',null,['id'=>'extend_data','class'=>'form-control','min'=>'0.01','max'=> '100','step'=>'0.01']) }}
+                                        {{ Form::number('tax_rate',null,['id'=>'tax_rate','class'=>'form-control','min'=>'0.01','max'=> '100','step'=>'0.01']) }}
                                         <div class="input-group-append">
                                             <span class="input-group-text">%</span>
                                         </div>
@@ -130,14 +129,14 @@
 
         const CSRFTOKEN = '{{ csrf_token() }}';
         const ADDURL = '{{ route('admin.data.add') }}';
+
         $(document).ready(function () {
             $('#turnover-type-id').on('change', function() {
-                let k = $(this).find(":selected").val();
-                if(k == 2 || k == 3){
-                    show();
+                if($(this).find(":selected").val() === 1){
+                    hidden();
                     $("#exist_extend").attr('value', 1);
                 } else {
-                    hidden();
+                    show();
                     $("#exist_extend").attr('value', 0);
                 }
             });
@@ -149,9 +148,7 @@
                     'user_id': $('#turnover-user-id').val(),
                     'type_id': $('#turnover-type-id').find(":selected").val(),
                     'data': $('#turnover-data').val(),
-                    'exist_extend': $('#exist_extend').val(),
-                    'extend_type_id': $('#extend_type_id').val(),
-                    'extend_data': $('#extend_data').val(),
+                    'tax_rate': $('#tax_rate').val(),
                     'method': 'ajax'
                 };
                 let desc = $('#turnover-description').val();

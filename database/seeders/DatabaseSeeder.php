@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $now = now()->format('Y-m-d H:i:s');
 
         Admin::factory()->create(['name'=>'admin', 'created_at'=> $now, 'updated_at'=>$now]);
+        Admin::factory()->create(['name'=>'demo', 'created_at'=> $now, 'updated_at'=>$now]);
 
         Page::factory()->create(['name' => '会员列表','url' => 'admin.users','navigation_id' => '5']);
         Page::factory()->create(['name' => '建立新会员','url' => 'admin.users.create','navigation_id' => '5']);
@@ -36,11 +37,11 @@ class DatabaseSeeder extends Seeder
         Page::factory()->create(['name' => '历史记录','url' => 'data.history','navigation_id' => '8']);
 
 
-        TradeType::factory()->create(['name' => '充值', 'is_increase' => true]);
-        TradeType::factory()->create(['name' => '刷卡交易(借记卡、贷记卡)', 'is_increase' => true,'is_tax' => true]);
-        TradeType::factory()->create(['name' => '二维码', 'is_increase' => true, 'is_tax' => true]);
-        TradeType::factory()->create(['name' => '手续费', 'is_increase' => false]);
-        TradeType::factory()->create(['name' => '消费', 'is_increase' => false]);
+        TradeType::factory()->create(['name' => '充值', 'is_increase' => true, 'is_trade' => true]);
+        TradeType::factory()->create(['name' => '手续费', 'is_increase' => false, 'is_trade' => true, 'visible' => false]);
+        TradeType::factory()->create(['name' => '刷卡交易(借记卡)']);
+        TradeType::factory()->create(['name' => '刷卡交易(贷记卡)']);
+        TradeType::factory()->create(['name' => '二维码']);
 
         Navigation::factory()->create(['action' => 'home','icon' => 'home','name' => '首页','url' => 'admin','parent_id' => '0','is_admin' => '1']);
         Navigation::factory()->create(['action' => 'menu','icon' => 'users','name' => '用户','url' => '','parent_id' => '0','is_admin' => '1']);

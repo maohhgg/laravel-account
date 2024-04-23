@@ -14,7 +14,9 @@ class Turnover extends Model
         'data',
         'history',
         'description',
-        'parent_id'
+        'tax',
+        'tax_id',
+        'tax_rate',
     ];
 
     public $timestamps = false;
@@ -32,13 +34,13 @@ class Turnover extends Model
         return $this->belongsTo('App\Models\User', 'user_id');
     }
 
+    public function taxType(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\TradeType', 'tax_id');
+    }
+
     public function type(): BelongsTo
     {
         return $this->belongsTo('App\Models\TradeType', 'type_id');
-    }
-
-    public function children(): hasOne
-    {
-        return $this->hasOne(self::class, 'parent_id', 'id');
     }
 }

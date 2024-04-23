@@ -22,7 +22,7 @@ class TypeController extends Controller
      */
     public function index(): View
     {
-        $types = TradeType::getTypes();
+        $types = TradeType::getTypesToshow();
         return view('admin.pages.change.index', compact('types'));
     }
 

@@ -16,12 +16,6 @@
 
                         <div class="col-12 col-xl-6">
                             @if($results) {{  Form::hidden('id', $results->id)  }} @endif
-                            @if($results && $results->children)
-                                <input name="exist_extend" type="hidden" id="exist_extend" value="{{ $results->children->id }}">
-                                <input name="extend_id" type="hidden" id="extend_id" value="{{ $results->children->id }}">
-                            @else
-                                <input name="exist_extend" type="hidden" id="exist_extend" value="0">
-                            @endif
 
                             <div class="form-group " @error('user_id') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror>
                                 <label class="form-label">用户</label>
@@ -53,19 +47,17 @@
                                        step="0.001"/>
                             </div>
 
-                            <div class="form-group"  id="extend_content" style="@if($results && $results->children) display:block @else display:none @endif">
-                                <input name="extend_type_id" type="hidden" id="extend_type_id" value="4">
-
+                            <div class="form-group"  id="extend_content">
                                 <label class="form-label">手续费 费率</label>
                                 <div class="input-group">
                                     <input
-                                        name="extend_data"
+                                        name="tax_rate"
                                         type="number"
                                         class="form-control @error('extend_data') border-danger @enderror"
                                         min="0.01"
                                         max="100"
                                         @error('extend_data') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror
-                                        value="@if(!$results){{ old('extend_data') }}@elseif($results->children && $results->children->data != 0){{ floatval(abs($results->children->data) /abs($results->data)) * 100 }}@endif"
+                                        value="@if(!$results){{ old('extend_data') }}@elseif($results->dtax_rate>0){{ $results->dtax_rate * 100 }}@endif"
                                         step="0.01"
                                     />
                                     <div class="input-group-append">
@@ -96,24 +88,7 @@
 @section('script')
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     <script>
-        let hidden = function (){
-            $('#extend_content').css("display","none");
-        }
-        let show = function () {
-            $('#extend_content').css("display","block");
-        }
-
         $(document).ready(function () {
-            $('#type_id').on('change', function() {
-                let k = $(this).find(":selected").val();
-                if(k == 2 || k == 3){
-                    show();
-                    $("#exist_extend").attr('value', 1);
-                } else {
-                    hidden();
-                    $("#exist_extend").attr('value', 0);
-                }
-            });
 
             $(".js-data-ajax").select2({
                 ajax: {
