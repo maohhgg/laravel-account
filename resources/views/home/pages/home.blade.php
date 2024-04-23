@@ -4,32 +4,46 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        <!-- [ bitcoin-wallet section ] start-->
-        <div class="col-md-12">
-            <div class="card theme-bg bitcoin-wallet">
-                <div class="card-block">
-                    <h5 class="text-white mb-2">余额</h5>
-                    <h2 class="text-white mb-2 f-w-300">{{ auth()->user()->balance }}</h2>
-                    <i class="fas fa-yen-sign f-70 text-white"></i>
+    <div class="container">
+        <div class="row">
+                <div class="col-12">
+                    <div class="card theme-bg bitcoin-wallet">
+                        <div class="card-block" >
+                            <h5 class="text-white mb-2">余额</h5>
+                            <h2 class="text-white mb-2 f-w-300">{{ auth()->user()->balance }}</h2>
+                            <i class="fas fa-yen-sign f-70 text-white"></i>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="col-6">
+                    @if(!$results->isEmpty())
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>历史</h4>
+                            </div>
+                            <div class="card-block no-padding">
+                                <canvas id="chart-area-1" style="width: 100%; height: 300px"></canvas>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>在线充值</h4>
+                        </div>
+                        <div class="card-block">
+                            <div align="center">
+                                <image src="/qrcode.jpg"></image>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
         </div>
-
-        @if(!$results->isEmpty())
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>历史</h5>
-                </div>
-                <div class="card-block">
-                    <canvas id="chart-area-1" style="width: 100%; height: 300px"></canvas>
-                </div>
-            </div>
-        </div>
-        @endif
-
-
     </div>
 @endsection
 
