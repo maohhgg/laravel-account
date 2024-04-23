@@ -14,7 +14,7 @@
                         @csrf
                         {{  Form::hidden('url',URL::previous())  }}
 
-                        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                        <div class="col-12 col-xl-6">
                             @if($results) {{  Form::hidden('id', $results->id)  }} @endif
                             @if($results && $results->children)
                                 <input name="exist_extend" type="hidden" id="exist_extend" value="{{ $results->children->id }}">

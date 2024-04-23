@@ -9,7 +9,7 @@
                     <span class="d-block m-t-5">编辑 <code>会员</code> 信息</span>
                 </div>
                 <div class="card-block">
-                    <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="col-12 col-xl-6">
                         <form action="{{ route('admin.users.create') }}" method="post">
                             @csrf
                             {{  Form::hidden('url',URL::previous())  }}
