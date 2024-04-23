@@ -98,19 +98,18 @@ class DataController extends Controller
         ]);
 
         $tax = 0;
+        $type = (int)$request->input('type_id');
         if ($request->input('tax_rate')) {
             $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
         }
 
-        if ((int)$request->input('type_id') == TradeType::CREDIT_CARD){
-            if ($tax > 20) {
-                $tax = 20;
-            }
+        if ($type == TradeType::CREDIT_CARD && $tax > 20){
+            $tax = 20;
         }
-        
+
         DB::beginTransaction();
         try {
-            if ((int)$request->input('type_id') == TradeType::ADD_CREDIT) {
+            if ($type == TradeType::ADD_CREDIT) {
                 Turnover::create(
                     $this->saveToUser([
                         ...$request->only('user_id', 'type_id', 'data'),

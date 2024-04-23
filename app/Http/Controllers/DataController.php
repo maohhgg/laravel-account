@@ -22,7 +22,7 @@ class DataController extends Controller
             'history' => '余额(元)',
         ];
 
-        $results = Turnover::where([['user_id', auth()->user()->id], ['parent_id', null]])
+        $results = Turnover::where('user_id', '=', auth()->user()->id)
             ->orderBy('id', 'desc')
             ->Paginate(15);
 

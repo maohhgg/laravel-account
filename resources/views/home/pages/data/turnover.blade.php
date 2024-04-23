@@ -15,12 +15,12 @@
                     <td><h6 class="m-0 text-c-purple">{{ sprintf('%0.2f',$v->data) }}</h6></td>
 
                     <td>
-                        @if($v->children)
+                        @if($v->tax)
                             <h6 class="m-0 text-c-purple">
-                                @if($v->children->data == 0)
+                                @if($v->tax_rate == 0)
                                     0%
                                 @else
-                                    {{ round((abs($v->children->data)/$v->data)*100, 2) }}%
+                                    {{ $v->tax_rate }}%
                                 @endif
                             </h6>
                         @else
@@ -28,21 +28,22 @@
                         @endif
                     </td>
                     <td>
-                        @if($v->children)
+                        @if($v->tax)
                             <h6 class="m-0 text-c-purple">
-                                {{ sprintf('%0.2f',$v->children->data) }}
+                                {{ sprintf('%0.2f',$v->tax) }}
                             </h6>
                         @endif
                     </td>
                     <td>
                         <h6 class="m-0 text-c-blue">
-                            @if($v->children)
-                                <i class="feather @if($v->children->history+$v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
-                                {{ sprintf('%0.2f',$v->children->history) }}
-                            @else
-                                <i class="feather @if($v->data > 0) icon-arrow-up text-c-green  @else icon-arrow-down text-c-red @endif"></i>
+                            <h6 class="m-0 text-c-blue">
+                                @if($v->tax)
+                                    <i class="feather icon-arrow-down text-c-red"></i>
+                                @else
+                                    <i class="feather icon-arrow-up text-c-green"></i>
+                                @endif
                                 {{ sprintf('%0.2f',$v->history) }}
-                            @endif
+                            </h6>
                         </h6>
                     </td>
 
