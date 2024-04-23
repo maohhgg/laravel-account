@@ -103,8 +103,9 @@ class DataController extends Controller
             $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
         }
 
-        if ($type == TradeType::CREDIT_CARD && $tax > 20){
-            $tax = 20;
+        //储蓄卡交易 封顶20
+        if ($type == TradeType::CREDIT_CARD && $tax < -20){
+            $tax = -20;
         }
 
         DB::beginTransaction();
