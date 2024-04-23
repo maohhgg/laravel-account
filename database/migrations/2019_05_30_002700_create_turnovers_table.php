@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->decimal('data',10,4);
             $table->decimal('history',10,4);
-            $table->integer('tax_rate')->nullable();
+            $table->decimal('tax_rate',8,4)->nullable();
             $table->decimal('tax',10,4)->nullable();
             $table->integer('tax_id')->nullable();
             $table->string('description')->nullable();
