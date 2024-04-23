@@ -24,9 +24,9 @@
                                                         重命名
                                                     </button>
 
-                                                    <button class="btn btn-danger deleteChangeType" type="button" data-type="{{ $v }}">
-                                                        删除
-                                                    </button>
+{{--                                                    <button class="btn btn-danger deleteChangeType" type="button" data-type="{{ $v }}">--}}
+{{--                                                        删除--}}
+{{--                                                    </button>--}}
 
                                                 </div>
                                             </div>
