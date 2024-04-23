@@ -13,6 +13,7 @@ class TradeType extends model
 
     const ADD_CREDIT = 1;
     const CHARGES = 2;
+    const CREDIT_CARD = 3;
 
     protected $fillable = [
         'name',
