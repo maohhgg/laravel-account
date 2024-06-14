@@ -20,7 +20,7 @@
                                 @if($v->tax_rate == 0)
                                     0%
                                 @else
-                                    {{ $v->tax_rate }}%
+                                    {{ sprintf('%0.2f', $v->tax_rate) }}%
                                 @endif
                             </h6>
                         @else
