@@ -105,6 +105,7 @@ class DataController extends Controller
 
         $type = (int)$request->input('type_id'); // 交易类型
         $created_at = Carbon::createFromFormat('Y-m-d',  $request->input('created_at')); // 创建时间
+        $tax = -$request->input('tax');
 
         //储蓄卡交易 封顶20
         /*
@@ -122,7 +123,8 @@ class DataController extends Controller
                 ];
             } else {
                 $data = [
-                    ...$request->only('user_id', 'type_id', 'data', 'third_tax', 'tax', 'tax_rate'),
+                    ...$request->only('user_id', 'type_id', 'data', 'third_tax', 'tax_rate'),
+                    'tax' => $tax,
                     'tax_id' => TradeType::CHARGES,
                     'created_at' => $created_at
                 ];
@@ -162,6 +164,7 @@ class DataController extends Controller
 
 
         $type = (int)$request->input('type_id'); //交易类型
+        $tax = -$request->input('tax');
         $created_at = Carbon::createFromFormat('Y-m-d',  $request->input('created_at')); // 更新时间
         $cache = Turnover::find($request->input('id'));
 
@@ -183,7 +186,8 @@ class DataController extends Controller
             if ($type == TradeType::ADD_CREDIT) {
                 $data = [...$request->only('user_id', 'type_id', 'data'), 'created_at' => $created_at];
             } else {
-                $data = [...$request->only('user_id', 'type_id', 'data', 'tax_rate', 'third_tax', 'tax'),
+                $data = [...$request->only('user_id', 'type_id', 'data', 'third_tax', 'tax_rate'),
+                    'tax' => $tax,
                     'tax_id' => TradeType::CHARGES,
                     'created_at' => $created_at
                 ];
