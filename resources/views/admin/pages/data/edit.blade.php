@@ -44,7 +44,7 @@
                                        @error('data') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
                                        value="@if(!$results){{ old('data') }}@else{{ abs(floatval($results->data)) }}@endif"
-                                       step="0.001"/>
+                                       step="0.0001"/>
                             </div>
 
                             <div class="form-group">
@@ -54,7 +54,7 @@
                                        @error('third_tax') data-toggle="tooltip" data-placement="top"
                                        title="{{ $message }}" @enderror
                                        value="@if(!$results){{ 0 }}@else{{ abs(floatval($results->third_tax)) }}@endif"
-                                       step="0.001"/>
+                                       step="0.0001"/>
                             </div>
 
                             <div class="form-group"  id="extend_content">
@@ -68,7 +68,7 @@
                                         max="100"
                                         @error('extend_data') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror
                                         value="@if(!$results){{ 0 }}@elseif($results->tax_rate>0){{ $results->tax_rate }}@endif"
-                                        step="0.01"
+                                        step="0.0001"
                                     />
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
