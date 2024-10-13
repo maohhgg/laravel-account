@@ -39,9 +39,8 @@ class DatabaseSeeder extends Seeder
 
         TradeType::factory()->create(['name' => '充值', 'is_increase' => true, 'is_trade' => true]);
         TradeType::factory()->create(['name' => '手续费', 'is_increase' => false, 'is_trade' => true, 'visible' => false]);
-        TradeType::factory()->create(['name' => '刷卡交易(借记卡) 封顶']);
-        TradeType::factory()->create(['name' => '刷卡交易(贷记卡)']);
         TradeType::factory()->create(['name' => '二维码']);
+        TradeType::factory()->create(['name' => '刷卡交易(贷记卡)']);
         TradeType::factory()->create(['name' => '刷卡交易(借记卡)']);
 
         Navigation::factory()->create(['action' => 'home','icon' => 'home','name' => '首页','url' => 'admin','parent_id' => '0','is_admin' => '1']);

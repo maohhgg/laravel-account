@@ -11,9 +11,10 @@ class TradeType extends model
 
     public $timestamps = false;
 
-    const ADD_CREDIT = 1;
-    const CHARGES = 2;
-    const CREDIT_CARD = 3;
+
+    const ADD_CREDIT = 1; //充值
+    const CHARGES = 2; //
+    const CREDIT_CARD = 5; // 储蓄卡手续费封顶
 
     protected $fillable = [
         'name',

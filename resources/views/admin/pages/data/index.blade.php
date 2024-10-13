@@ -22,7 +22,11 @@
                     </td>
 
                     <td>
-                        <h6 class="m-0 text-c-purple">{{ $v->type->name }}</h6>
+                        @if($v->tax_rate)
+                            <h6 class="m-0 text-c-purple">{{ $v->type->name }}</h6>
+                        @else
+                            <h6 class="m-0 text-c-green">{{ $v->type->name }}</h6>
+                        @endif
                     </td>
 
 
@@ -37,6 +41,21 @@
                             <h6 class="m-0 text-c-red">
                                 {{ $v->taxType->name }}
                             </h6>
+                        @else
+                            -
+                        @endif
+                    </td>
+
+                    <td>
+                        @if($v->third_tax)
+                            <h6 class="m-0 text-c-red">{{ sprintf('%0.2f', $v->third_tax ) }}</h6>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if($v->tax_rate)
+                            <h6 class="m-0 text-c-red">{{ sprintf('%0.2f', $v->tax_rate ) }}%</h6>
                         @else
                             -
                         @endif
@@ -64,7 +83,7 @@
                         </h6>
                     </td>
 
-                    <td><h6 class="m-0">{{ date('Y-m-d',strtotime($v->created_at)) }}</h6></td>
+                    <td><h6 class="m-0">{{ $v->created_at }}</h6></td>
 
                     <td>
                         <a class="text-white label bg-c-blue f-16 toolbar" href="#"

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\TradeType;
 use App\Models\Turnover;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -31,8 +32,10 @@ class DataController extends Controller
             'avatar' => '用户',
             'type' => '行为',
             'data' => '交易金额(元)',
-            'other' => '其他费用',
-            'extend_data' => '其他费用金额(元)',
+            'other' => '费用类型',
+            'third_tax' => '第三方手续费(元)',
+            'tax_rate' => '费率',
+            'extend_data' => '手续费总计(元)',
             'true_data' => '余额(元)',
             'created_at' => '时间',
             'action' => '操作'
@@ -94,46 +97,43 @@ class DataController extends Controller
             'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
             'data' => 'required|numeric|min:0.001',
+            'third_tax' => 'nullable|numeric|min:0',
+            'tax' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0.001',
+            'created_at' => 'required|string',
         ]);
 
-        $tax = 0;
-
-        if ($request->input('tax_rate')) {
-            $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
-        }
+        $type = (int)$request->input('type_id'); // 交易类型
+        $created_at = Carbon::createFromFormat('Y-m-d',  $request->input('created_at')); // 创建时间
 
         //储蓄卡交易 封顶20
-        $type = (int)$request->input('type_id');
+        /*
         if ($type == TradeType::CREDIT_CARD && $tax < -20){
             $tax = -20;
         }
+        */
 
         DB::beginTransaction();
         try {
             if ($type == TradeType::ADD_CREDIT) {
-                Turnover::create(
-                    $this->saveToUser([
-                        ...$request->only('user_id', 'type_id', 'data'),
-                    ])
-                );
+                $data = [
+                    ...$request->only('user_id', 'type_id', 'data'),
+                    'created_at' => $created_at
+                ];
             } else {
-                Turnover::create(
-                    $this->saveToUser([
-                        ...$request->only('user_id', 'type_id', 'data', 'tax_rate'),
-                        'tax' => $tax,
-                        'tax_id' => TradeType::CHARGES,
-                    ])
-                );
+                $data = [
+                    ...$request->only('user_id', 'type_id', 'data', 'third_tax', 'tax', 'tax_rate'),
+                    'tax_id' => TradeType::CHARGES,
+                    'created_at' => $created_at
+                ];
             }
+
+            Turnover::create($this->saveToUser($data));
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('toast','创建失败');
-        }
-
-        if($request->input('method')){
-            return redirect()->back()->with('toast','创建完成');
+            return redirect()->back()->with('toast',$e->getMessage());
         }
 
         return redirect($request->input('url'))->with('toast','创建完成');
@@ -154,44 +154,42 @@ class DataController extends Controller
             'user_id' => 'required|numeric',
             'type_id' => 'required|numeric',
             'data' => 'required|numeric|min:0.001',
+            'third_tax' => 'nullable|numeric|min:0',
+            'tax' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0.001',
+            'created_at' => 'required|string',
         ]);
 
+
+        $type = (int)$request->input('type_id'); //交易类型
+        $created_at = Carbon::createFromFormat('Y-m-d',  $request->input('created_at')); // 更新时间
+        $cache = Turnover::find($request->input('id'));
+
         //储蓄卡交易 封顶20
-        $type = (int)$request->input('type_id');
-        if ($request->input('tax_rate')) {
-            $tax = -(abs($request->only('data')['data']) * abs($request->input('tax_rate')) / 100);
-        }
+        /*
         if ($type == TradeType::CREDIT_CARD && $tax < -20){
             $tax = -20;
         }
-
-        $cache = Turnover::find($request->input('id'));
+        */
 
         if (!$cache->id){
             return redirect()->back()->with('toast','完成');
         }
-        
 
         DB::beginTransaction();
         try {
             $this->recoveryUser($cache->id);
 
-            if ((int)$request->input('type_id') == TradeType::ADD_CREDIT) {
-                $cache->update(
-                    $this->saveToUser([
-                        ...$request->only('user_id', 'type_id', 'data'),
-                    ])
-                );
+            if ($type == TradeType::ADD_CREDIT) {
+                $data = [...$request->only('user_id', 'type_id', 'data'), 'created_at' => $created_at];
             } else {
-                $cache->update(
-                    $this->saveToUser([
-                        ...$request->only('user_id', 'type_id', 'data', 'tax_rate'),
-                        'tax' => $tax,
-                        'tax_id' => TradeType::CHARGES,
-                    ])
-                );
+                $data = [...$request->only('user_id', 'type_id', 'data', 'tax_rate', 'third_tax', 'tax'),
+                    'tax_id' => TradeType::CHARGES,
+                    'created_at' => $created_at
+                ];
             }
+
+            $cache->update($this->saveToUser($data));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
