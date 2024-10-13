@@ -81,6 +81,7 @@
                                         <input
                                             name="tax"
                                             type="number"
+                                            step="0.0001"
                                             class="form-control disabled @error('tax') border-danger @enderror"
                                             @error('tax') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror
                                             value="@if(!$results){{ 0 }}@else{{ abs(floatval($results->tax)) }}@endif"
