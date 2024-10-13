@@ -131,8 +131,8 @@
         $(document).ready(function () {
 
             let func = function (){
-                let data = parseInt($("input[name=data]").val());
-                let third_tax = parseInt($("input[name=third_tax]").val());
+                let data = parseFloat($("input[name=data]").val());
+                let third_tax = parseFloat($("input[name=third_tax]").val());
                 let tax_rate = parseFloat($("input[name=tax_rate]").val());
                 let tax = 0;
 
