@@ -64,7 +64,7 @@
                                         name="tax_rate"
                                         type="number"
                                         class="form-control onCheck @error('extend_data') border-danger @enderror"
-                                        min="0.01"
+                                        min="0"
                                         max="100"
                                         @error('extend_data') data-toggle="tooltip" data-placement="top" title="{{ $message }}" @enderror
                                         value="@if(!$results){{ 0 }}@elseif($results->tax_rate>0){{ $results->tax_rate }}@endif"

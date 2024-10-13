@@ -133,7 +133,7 @@ class DataController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('toast',$e->getMessage());
+            return redirect()->back()->with('toast',"创建失败");
         }
 
         return redirect($request->input('url'))->with('toast','创建完成');
