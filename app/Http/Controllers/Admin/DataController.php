@@ -99,7 +99,7 @@ class DataController extends Controller
             'data' => 'required|numeric|min:0.001',
             'third_tax' => 'nullable|numeric|min:0',
             'tax' => 'nullable|numeric|min:0',
-            'tax_rate' => 'nullable|numeric|min:0.001',
+            'tax_rate' => 'nullable|numeric|min:0',
             'created_at' => 'required|string',
         ]);
 
@@ -158,7 +158,7 @@ class DataController extends Controller
             'data' => 'required|numeric|min:0.001',
             'third_tax' => 'nullable|numeric|min:0',
             'tax' => 'nullable|numeric|min:0',
-            'tax_rate' => 'nullable|numeric|min:0.001',
+            'tax_rate' => 'nullable|numeric|min:0',
             'created_at' => 'required|string',
         ]);
 
