@@ -28,10 +28,19 @@
                         @endif
                     </td>
                     <td>
+                        @if($v->third_tax)
+                            <h6 class="m-0 text-c-red">{{ sprintf('%0.2f', $v->third_tax ) }}</h6>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
                         @if($v->tax)
                             <h6 class="m-0 text-c-purple">
                                 {{ sprintf('%0.2f',$v->tax) }}
                             </h6>
+                        @else
+                            -
                         @endif
                     </td>
                     <td>

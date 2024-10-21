@@ -18,7 +18,8 @@ class DataController extends Controller
             'type' => '类型',
             'data' => '交易金额(元)',
             'extend_tax' => '费率',
-            'true_data' => '手续费(元)',
+            'third_tax' => '第三方手续费(元)',
+            'true_data' => '手续费总计(元)',
             'history' => '余额(元)',
         ];
 
