@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exports\TurnoverExport;
 use App\Models\TradeType;
 use App\Models\Turnover;
 use App\Models\User;
@@ -47,6 +48,16 @@ class DataController extends Controller
         $results = $cache->orderBy('id', 'desc')->Paginate(10);
 
         return view('admin.pages.data.index', compact('items', 'results'));
+    }
+
+    /**
+     * download all turnover data
+     *
+     * @return
+     */
+    public function download()
+    {
+        return (new TurnoverExport())->download('data.xlsx');
     }
 
     /**

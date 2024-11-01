@@ -2,7 +2,7 @@
 @section('content')
     <!-- [ Main Content ] start -->
     @if(!$results->isEmpty())
-        @component('component.table',['items' => $items,'results' => $results,'target' => 'data'])
+        @component('component.table',['items' => $items,'results' => $results,'target' => 'data', 'url' => 'admin.download.data'])
             @slot('title')
                 数据
             @endslot

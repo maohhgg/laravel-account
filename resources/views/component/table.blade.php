@@ -2,6 +2,13 @@
     <div class="card-header">
         <h5>{{ $title }}</h5>
         <div class="card-header-right">
+
+            <div class="btn-group card-option">
+                @if(isset($url))
+                    <a href="{{ route($url) }}" class="btn"><i class="feather icon-download"></i></a>
+                @endif
+            </div>
+
             <div class="btn-group card-option">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">

@@ -77,6 +77,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin', 'namespace' => 
         $router->get('name', 'UsersController@autocomplete')->name('users.autocomplete');
     });
 
+    Route::prefix('download')->group(function ($router) {
+        $router->get('data', 'DataController@download')->name('admin.download.data');
+    });
+
 });
 
 
